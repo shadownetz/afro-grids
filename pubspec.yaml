@@ -44,6 +44,7 @@ dependencies:
   geoflutterfire: ^3.0.2
   flutter_native_splash: ^2.2.4
   carousel_slider: ^4.1.1
+  ionicons: ^0.1.2
 
 dev_dependencies:
   flutter_test:
