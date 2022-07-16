@@ -1,11 +1,15 @@
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 
-Widget appBarLogo(){
-  return const Image(
+Widget appBarLogo({
+  theme='light'
+}){
+  return Image(
       width: 130,
       height: 130,
-      image: AssetImage("assets/splash_light.png")
+      image: AssetImage(
+          theme=='light'?"assets/splash_light.png":"assets/splash.png"
+      )
   );
 }
 

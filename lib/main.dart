@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:afro_grids/screens/auth/provider_signup_screen.dart';
 import 'package:afro_grids/screens/auth/signin_screen.dart';
 import 'package:afro_grids/screens/auth/user_signup_screen.dart';
 import 'package:afro_grids/screens/onboard_screen.dart';
+import 'package:afro_grids/screens/user/user_dashboard_screen.dart';
 import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -77,7 +79,9 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/': (context)=>const OnboardScreen(),
                 '/user-signup': (context)=>const UserSignUpScreen(),
-                '/signin': (context)=>const SignInScreen()
+                '/provider-signup': (context)=>const ProviderSignupScreen(),
+                '/signin': (context)=>const SignInScreen(),
+                '/user-dashboard': (context)=>const UserDashboardScreen()
               },
             );
           }

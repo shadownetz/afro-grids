@@ -1,18 +1,19 @@
-import 'package:afro_grids/utilities/colours.dart';
-import 'package:afro_grids/utilities/widgets/widgets.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../utilities/colours.dart';
 import '../../utilities/widgets/button_styles.dart';
+import '../../utilities/widgets/widgets.dart';
 
-class UserSignUpScreen extends StatefulWidget {
-  const UserSignUpScreen({Key? key}) : super(key: key);
+class ProviderSignupScreen extends StatefulWidget {
+  const ProviderSignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserSignUpScreen> createState() => _UserSignUpScreenState();
+  State<ProviderSignupScreen> createState() => _ProviderSignupScreenState();
 }
 
-class _UserSignUpScreenState extends State<UserSignUpScreen> {
+class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   var middleNameController = TextEditingController();
@@ -20,6 +21,9 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
   var phoneController = TextEditingController();
   var passwordController = TextEditingController();
   var password2Controller = TextEditingController();
+  var currencyController = TextEditingController(text: 'NGN');
+  var serviceTypeController = TextEditingController(text: ServiceType.single);
+  var serviceCategoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +43,19 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                 const AuthTab(activeTab: 'signup'),
                 const SizedBox(height: 40,),
                 const Text(
-                  "Get Started",
+                  "Get Started as a Service Provider",
                   style: TextStyle(
-                    fontSize: 35,
+                    fontSize: 30,
                   ),
                 ),
                 signUpForm(),
                 TextButton(
                     onPressed: ()=>{
-                      Navigator.of(context).pushReplacementNamed('/provider-signup')
+                      Navigator.of(context).pushReplacementNamed('/user-signup')
                     },
                     child: const Center(
                       child: Text(
-                        "Sign up as a service provider instead",
+                        "Sign up as a service seeker instead",
                         textAlign: TextAlign.center,
                       ),
                     )
@@ -69,7 +73,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                   children: [
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
+                            primary: Colors.white,
                             minimumSize: const Size(170, 40),
                             textStyle: const TextStyle(
                                 fontSize: 20,
@@ -85,7 +89,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                             Text(
                               "Facebook",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.bold,
                               ),
                             )
                           ],
@@ -109,7 +113,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                             Text(
                               "Google",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.bold,
                               ),
                             )
                           ],
@@ -199,6 +203,63 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                 }
                 return null;
               },
+            ),
+            TextFormField(
+              // controller: lastNameController,
+              decoration: const InputDecoration(
+                  labelText: "Location",
+                  hintText: "enter your address"
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty || value.length <= 3) {
+                  return 'Please enter a valid address';
+                }
+                return null;
+              },
+            ),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                  labelText: "Currency"
+              ),
+              value: currencyController.text,
+              onChanged: (value)=>{
+                setState(()=>{
+                  currencyController.text = value!
+                })
+              },
+              items: ['NGN'].map((code) => DropdownMenuItem<String>(
+                value: code,
+                child: Text(code),
+              )).toList(),
+            ),
+            TextFormField(
+              controller: serviceCategoryController,
+              decoration: const InputDecoration(
+                  labelText: "Select or enter your service category",
+                  hintText: "e.g fashion"
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty || value.length <= 3) {
+                  return 'Please enter a valid service category';
+                }
+                return null;
+              },
+            ),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                  labelText: "Select your service type"
+              ),
+              value: serviceTypeController.text,
+              onChanged: (value)=>{
+                setState(()=>{
+                  serviceTypeController.text = value!
+                })
+              },
+              items: [ServiceType.single, ServiceType.multiple]
+                  .map((serviceType) => DropdownMenuItem<String>(
+                value: serviceType,
+                child: Text(serviceType),
+              )).toList(),
             ),
             TextFormField(
               controller: passwordController,
