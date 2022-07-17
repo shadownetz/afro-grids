@@ -22,6 +22,7 @@ class UserModel{
   late AccessStatus accessStatus;
   late Reviews reviews;
   late List<String> favorites;
+  late String avatar;
 
   UserModel({
     required this.id,
@@ -41,7 +42,8 @@ class UserModel{
     required this.ratings,
     required this.accessStatus,
     required this.reviews,
-    required this.favorites
+    required this.favorites,
+    required this.avatar
   });
 
   UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> user):
@@ -49,6 +51,7 @@ class UserModel{
         firstName = user.data()!['firstName'],
         lastName = user.data()!['lastName'],
         middleName = user.data()!['middleName'],
+        avatar = user.data()!['avatar'],
         email = user.data()!['email'],
         phone = user.data()!['phone'],
         authType = user.data()!['authType'],
@@ -69,6 +72,7 @@ class UserModel{
       'firstName': firstName,
       'lastName': lastName,
       'middleName': middleName,
+      'avatar': avatar,
       'email': email,
       'phone': phone,
       'authType': authType,
