@@ -45,6 +45,11 @@ dependencies:
   flutter_native_splash: ^2.2.4
   carousel_slider: ^4.1.1
   ionicons: ^0.1.2
+  google_maps_flutter: ^2.1.8
+  geolocator: ^9.0.1
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:

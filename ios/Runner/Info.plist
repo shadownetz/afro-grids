@@ -47,5 +47,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+        <string>AfroGrids needs access to your location to function properly.</string>
+        <key>NSLocationAlwaysUsageDescription</key>
+        <string>AfroGrids needs access to your location when running in the background.</string>
 	</dict>
 </plist>
