@@ -35,7 +35,7 @@ class DeviceRepo{
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
+      // Permissions are denied forever, inform user to update in app settings, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }

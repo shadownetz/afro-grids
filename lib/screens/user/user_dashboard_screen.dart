@@ -313,9 +313,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       ),
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,
+                        myLocationEnabled: true,
                         initialCameraPosition: CameraPosition(
                           target: _mapCenter,
-                          zoom: 11.0,
+                          zoom: 15.0,
                         ),
                       ),
                     ),
