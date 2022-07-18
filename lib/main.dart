@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return FutureBuilder(
-      future: delayLoading,
+        future: delayLoading,
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
             return MaterialApp(
@@ -57,7 +57,8 @@ class MyApp extends StatelessWidget {
                     background: Colours.tertiary,
                   ),
                   appBarTheme: const AppBarTheme(
-                      backgroundColor: Colours.primary
+                      backgroundColor: Colours.primary,
+                      foregroundColor: Colors.white
                   ),
                   elevatedButtonTheme: ElevatedButtonThemeData(
                       style: ElevatedButton.styleFrom(

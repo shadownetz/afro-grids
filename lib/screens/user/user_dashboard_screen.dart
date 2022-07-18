@@ -1,5 +1,6 @@
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
+import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -278,28 +279,32 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20)
                       ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 10,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("Find a Provider", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                              Text("locate the closest service provider around you", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
-                            ],
-                          ),
-                          const Expanded(
-                            child: Image(
-                              width: 40,
-                              height: 40,
-                              alignment: Alignment.centerRight,
-                              image: AssetImage("assets/icons/locationPin.png"),
-                              fit: BoxFit.contain,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: ()=>Navigator.of(context).push(createRoute(const ServiceSearchScreen())),
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 10,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text("Find a Provider", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                Text("locate the closest service provider around you", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 10,),
-                        ],
+                            const Expanded(
+                              child: Image(
+                                width: 40,
+                                height: 40,
+                                alignment: Alignment.centerRight,
+                                image: AssetImage("assets/icons/locationPin.png"),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(width: 10,),
+                          ],
+                        ),
                       ),
                     ),
                     // map section
