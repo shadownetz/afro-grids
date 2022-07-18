@@ -21,7 +21,7 @@ class UserDashboardScreen extends StatefulWidget {
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   late GoogleMapController mapController;
 
-  final LatLng _mapCenter = const LatLng(45.521563, -122.677433);
+  final LatLng _mapCenter = const LatLng(6.465422, 3.406448);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -321,7 +321,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         myLocationEnabled: true,
                         initialCameraPosition: CameraPosition(
                           target: _mapCenter,
-                          zoom: 15.0,
+                          zoom: 5.0,
                         ),
                       ),
                     ),

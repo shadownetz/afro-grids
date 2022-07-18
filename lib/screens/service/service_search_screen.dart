@@ -1,4 +1,6 @@
 import 'package:afro_grids/models/service_model.dart';
+import 'package:afro_grids/screens/service/service_map_select_screen.dart';
+import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -155,16 +157,18 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                 height: 40,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(color: Colors.black26, spreadRadius: 3, blurRadius: 5, offset: Offset.fromDirection(1))
-                    ]
+                    boxShadow: [boxShadow1()]
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.location_on_sharp, color: Colours.primary, size: 15,),
-                    Text("Choose on map", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),)
-                  ],
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: ()=>Navigator.of(context).push(createRoute(const ServiceMapSelectScreen())),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.location_on_sharp, color: Colours.primary, size: 15,),
+                      Text("Choose on map", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),)
+                    ],
+                  ),
                 ),
               ),
             )

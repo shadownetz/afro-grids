@@ -82,3 +82,7 @@ Route createRoute(Widget page) {
     },
   );
 }
+
+BoxShadow boxShadow1(){
+  return BoxShadow(color: Colors.black26, spreadRadius: 3, blurRadius: 5, offset: Offset.fromDirection(1));
+}
