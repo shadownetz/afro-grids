@@ -1,5 +1,6 @@
 import 'package:afro_grids/models/service_model.dart';
 import 'package:afro_grids/screens/service/service_map_select_screen.dart';
+import 'package:afro_grids/screens/service/service_search_result_screen.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -143,6 +144,7 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                           );
                         },
                         onSelected: (ServiceModel selection) {
+                          Navigator.of(context).push(createRoute(ServiceSearchResultScreen(serviceModel: selection)));
                           debugPrint('You just selected $selection');
                         },
                       ),
