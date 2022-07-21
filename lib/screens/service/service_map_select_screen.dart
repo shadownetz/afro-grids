@@ -10,6 +10,7 @@ import '../../blocs/device/device_event.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/widgets/button_styles.dart';
 import '../../utilities/widgets/widgets.dart';
+import '../provider/provider_info_screen.dart';
 
 class ServiceMapSelectScreen extends StatefulWidget {
   const ServiceMapSelectScreen({Key? key}) : super(key: key);
@@ -103,56 +104,9 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
                           const SizedBox(height: 20,),
                           const Text("Confirm selection", style: TextStyle(fontSize: 17, color: Colors.grey),),
                           const SizedBox(height: 25,),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                boxShadow: [boxShadow1()],
-                                color: Colours.tertiary
-                            ),
-                            child: Row(
-                              children: [
-                                // provider icon
-                                Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.pinkAccent,
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/avatars/woman.png')
-                                      )
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Mary Yvonne", style: TextStyle(fontSize: 20),),
-                                    Row(
-                                      children: const [
-                                        Icon(Icons.star, color: Colors.green, size: 15,),
-                                        Icon(Icons.star, color: Colors.green, size: 15),
-                                        Icon(Icons.star, color: Colors.green, size: 15),
-                                        Icon(Icons.star, color: Colors.green, size: 15),
-                                        Icon(Icons.star, color: Colors.green, size: 15),
-                                        SizedBox(width: 10,),
-                                        Text("5.0 [1k+ reviews]", style: TextStyle(color: Colors.grey),)
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: const [
-                                        Text("Hair Dresser", style: TextStyle(color: Colors.grey),),
-                                        Text("0.3 km", style: TextStyle(color: Colors.grey))
-                                      ],
-                                    )
-                                )
-                              ],
-                            ),
-                          ),
+
+                          providerInfoItem(),
+
                           SizedBox(height: 20,),
                           // confirm button
                           ElevatedButton(
@@ -170,6 +124,62 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
           },
         ),
       )
+    );
+  }
+
+  Widget providerInfoItem(){
+    return GestureDetector(
+      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoScreen())),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            boxShadow: [boxShadow1()],
+            color: Colours.tertiary
+        ),
+        child: Row(
+          children: [
+            // provider icon
+            Container(
+              width: 30,
+              height: 30,
+              decoration: const BoxDecoration(
+                  color: Colors.pinkAccent,
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: AssetImage('assets/avatars/woman.png')
+                  )
+              ),
+            ),
+            SizedBox(width: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Mary Yvonne", style: TextStyle(fontSize: 20),),
+                Row(
+                  children: const [
+                    Icon(Icons.star, color: Colors.green, size: 15,),
+                    Icon(Icons.star, color: Colors.green, size: 15),
+                    Icon(Icons.star, color: Colors.green, size: 15),
+                    Icon(Icons.star, color: Colors.green, size: 15),
+                    Icon(Icons.star, color: Colors.green, size: 15),
+                    SizedBox(width: 10,),
+                    Text("5.0 [1k+ reviews]", style: TextStyle(color: Colors.grey),)
+                  ],
+                )
+              ],
+            ),
+            Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: const [
+                    Text("Hair Dresser", style: TextStyle(color: Colors.grey),),
+                    Text("0.3 km", style: TextStyle(color: Colors.grey))
+                  ],
+                )
+            )
+          ],
+        ),
+      ),
     );
   }
 }

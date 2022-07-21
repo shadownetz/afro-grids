@@ -74,6 +74,9 @@ class MyApp extends StatelessWidget {
                   ),
                   textTheme: Theme.of(context).textTheme.apply(
                       bodyColor: Colours.primary
+                  ),
+                  iconTheme: Theme.of(context).iconTheme.copyWith(
+                      color: Colours.primary
                   )
               ),
               debugShowCheckedModeBanner: false,

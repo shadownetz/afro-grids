@@ -1,7 +1,7 @@
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../utilities/custom_types.dart';
+import 'model_types.dart';
 
 class OrderModel{
   late String id;

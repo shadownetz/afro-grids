@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/service_model.dart';
+import 'package:afro_grids/screens/provider/provider_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -214,9 +215,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                         crossFadeState: dragIsMidScreen? CrossFadeState.showSecond: CrossFadeState.showFirst,
                         duration: const Duration(seconds: 1)
                     ),
-
                     const SizedBox(height: 25,),
-
                     Column(
                       children: [
                         providerListItem(dragIsMidScreen: dragIsMidScreen),
@@ -235,60 +234,64 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
   }
 
   Widget providerListItem({required dragIsMidScreen}){
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: dragIsMidScreen? null : BoxDecoration(
-          boxShadow: [boxShadow1()],
-          color: Colours.tertiary
-      ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoScreen())),
       child: Container(
-        padding: const EdgeInsets.only(bottom: 10),
-        decoration: !dragIsMidScreen? null : const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))
-            )
+        padding: const EdgeInsets.all(10),
+        decoration: dragIsMidScreen? null : BoxDecoration(
+            boxShadow: [boxShadow1()],
+            color: Colours.tertiary
         ),
-        child: Row(
-          children: [
-            // Item 1
-            // provider icon
-            Container(
-              width: 30,
-              height: 30,
-              decoration: const BoxDecoration(
-                  color: Colors.pinkAccent,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('assets/avatars/woman.png')
-                  )
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 10),
+          decoration: !dragIsMidScreen? null : const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(color: Color.fromRGBO(200, 200, 200, 1))
+              )
+          ),
+          child: Row(
+            children: [
+              // Item 1
+              // provider icon
+              Container(
+                width: 30,
+                height: 30,
+                decoration: const BoxDecoration(
+                    color: Colors.pinkAccent,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage('assets/avatars/woman.png')
+                    )
+                ),
               ),
-            ),
-            const SizedBox(width: 10,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Mary Yvonne", style: TextStyle(fontSize: 20),),
-                Row(
-                  children: const [
-                    Icon(Icons.star, color: Colors.green, size: 15,),
-                    Icon(Icons.star, color: Colors.green, size: 15),
-                    Icon(Icons.star, color: Colors.green, size: 15),
-                    Icon(Icons.star, color: Colors.green, size: 15),
-                    Icon(Icons.star, color: Colors.green, size: 15),
-                    SizedBox(width: 10,),
-                    Text("5.0 [1k+ reviews]", style: TextStyle(color: Colors.grey),)
-                  ],
-                )
-              ],
-            ),
-            const Expanded(
-                child: Text(
-                  "0.3 km",
-                  textAlign: TextAlign.end,
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
-                )
-            )
-          ],
+              const SizedBox(width: 10,),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Mary Yvonne", style: TextStyle(fontSize: 20),),
+                  Row(
+                    children: const [
+                      Icon(Icons.star, color: Colors.green, size: 15,),
+                      Icon(Icons.star, color: Colors.green, size: 15),
+                      Icon(Icons.star, color: Colors.green, size: 15),
+                      Icon(Icons.star, color: Colors.green, size: 15),
+                      Icon(Icons.star, color: Colors.green, size: 15),
+                      SizedBox(width: 10,),
+                      Text("5.0 [1k+ reviews]", style: TextStyle(color: Colors.grey),)
+                    ],
+                  )
+                ],
+              ),
+              const Expanded(
+                  child: Text(
+                    "0.3 km",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(color: Colors.grey, fontSize: 20),
+                  )
+              )
+            ],
+          ),
         ),
       ),
     );
