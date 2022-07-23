@@ -3,7 +3,7 @@ import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../utilities/widgets/button_styles.dart';
+import '../../utilities/widgets/button_widget.dart';
 
 class UserSignUpScreen extends StatefulWidget {
   const UserSignUpScreen({Key? key}) : super(key: key);

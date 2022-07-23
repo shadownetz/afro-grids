@@ -1,5 +1,5 @@
 import 'package:afro_grids/models/service_model.dart';
-import 'package:afro_grids/screens/provider/provider_info_screen.dart';
+import 'package:afro_grids/screens/provider/provider_info_single_service_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,7 +10,7 @@ import '../../blocs/device/device_event.dart';
 import '../../blocs/device/device_state.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
-import '../../utilities/widgets/button_styles.dart';
+import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
 class ServiceSearchResultScreen extends StatefulWidget {
@@ -236,7 +236,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
   Widget providerListItem({required dragIsMidScreen}){
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoScreen())),
+      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: dragIsMidScreen? null : BoxDecoration(

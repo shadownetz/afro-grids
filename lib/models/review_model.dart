@@ -13,6 +13,7 @@ class ReviewModel{
     required this.createdBy,
     required this.createdFor,
     required this.createdAt,
+    required this.message,
     required this.rating
   });
 

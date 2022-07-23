@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../utilities/colours.dart';
-import '../../utilities/widgets/button_styles.dart';
+import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {

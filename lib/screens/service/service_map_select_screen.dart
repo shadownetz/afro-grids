@@ -8,9 +8,9 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../blocs/device/device_event.dart';
 import '../../utilities/alerts.dart';
-import '../../utilities/widgets/button_styles.dart';
+import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
-import '../provider/provider_info_screen.dart';
+import '../provider/provider_info_single_service_screen.dart';
 
 class ServiceMapSelectScreen extends StatefulWidget {
   const ServiceMapSelectScreen({Key? key}) : super(key: key);
@@ -110,7 +110,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
                           SizedBox(height: 20,),
                           // confirm button
                           ElevatedButton(
-                              onPressed: ()=>{},
+                              onPressed: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
                               style: buttonPrimaryMdStyle(),
                               child: Text("Confirm selection")
                           )
@@ -129,7 +129,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
 
   Widget providerInfoItem(){
     return GestureDetector(
-      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoScreen())),
+      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
