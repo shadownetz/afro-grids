@@ -1,4 +1,4 @@
-import 'package:afro_grids/screens/provider/leave_a_review_screen.dart';
+import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +44,16 @@ ButtonStyle buttonSmStyle(){
           fontSize: 20,
           fontWeight: FontWeight.w500
       )
+  );
+}
+
+ButtonStyle buttonMdStyle(){
+  return ElevatedButton.styleFrom(
+      minimumSize: const Size(300, 50),
+      textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500
+      ),
   );
 }
 

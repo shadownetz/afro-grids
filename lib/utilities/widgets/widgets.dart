@@ -205,3 +205,15 @@ Widget halfWhiteOverlay2({double height=50}){
     ),
   );
 }
+
+Widget modalDragIndicator(){
+  return Container(
+    width: 60,
+    height: 10,
+    margin: const EdgeInsets.only(top: 10),
+    decoration: BoxDecoration(
+        color: Color.fromRGBO(220, 220, 220, 1),
+        borderRadius: BorderRadius.circular(20)
+    ),
+  );
+}

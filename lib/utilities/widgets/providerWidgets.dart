@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/screens/user/view_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -289,7 +290,7 @@ class InventoryView extends StatefulWidget {
 
 class _InventoryViewState extends State<InventoryView> {
   List<InventoryModel> items = [
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300"], visible: true),
+    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300","https://picsum.photos/id/119/200/300", "https://picsum.photos/id/133/200/300"], visible: true),
     InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Apple MacBook", price: 150000, currency: Currency.ngn, description: "Refurbished", images: ["https://picsum.photos/id/119/200/300"], visible: true),
     InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Cars", price: 250000, currency: Currency.ngn, description: "Working condition", images: ["https://picsum.photos/id/133/200/300"], visible: true),
     InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Skate Board", price: 3500, currency: Currency.ngn, description: "Antique (the best)", images: ["https://picsum.photos/id/157/200/300"], visible: true),
@@ -309,51 +310,61 @@ class _InventoryViewState extends State<InventoryView> {
         runSpacing: 20,
         // alignment: WrapAlignment.center,
         children: items.map((item){
-          return Container(
-            width: 170,
-            height: 170,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: NetworkImage(item.images.first),
-                          fit: BoxFit.cover
-                      )
+          return GestureDetector(
+            onTap: (){
+              showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context)=>ViewItemScreen(inventory: item)
+              );
+            },
+            child: Container(
+              width: 180,
+              height: 170,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: NetworkImage(item.images.first),
+                            fit: BoxFit.cover
+                        )
+                    ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: halfWhiteOverlay2(height: 120),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(item.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, overflow: TextOverflow.ellipsis),),
-                      const SizedBox(height: 10,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                        child: Row(
-                          children: [
-                            Text(item.description, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, overflow: TextOverflow.ellipsis),),
-                            Expanded(
-                                child: Text("${item.currency}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: halfWhiteOverlay2(height: 120),
                   ),
-                )
-              ],
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(item.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, overflow: TextOverflow.ellipsis),),
+                        const SizedBox(height: 10,),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Row(
+                            children: [
+                              Text(item.description, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, overflow: TextOverflow.ellipsis),),
+                              Expanded(
+                                  child: Text("${item.currency}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         }).toList(),

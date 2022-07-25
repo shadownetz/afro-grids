@@ -191,15 +191,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                         firstChild: Column(
                           children: [
                             // drag indicator
-                            Container(
-                              width: 60,
-                              height: 10,
-                              margin: const EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(220, 220, 220, 1),
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                            ),
+                            modalDragIndicator(),
                             const SizedBox(height: 20,),
                             const SizedBox(
                               width: 250,
