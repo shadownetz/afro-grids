@@ -7,7 +7,7 @@ class InventoryModel{
   late DateTime createdAt;
   late String name;
   late num price;
-  late Currency currency;
+  late String currency;
   late String description;
   late List<String> images;
   late bool visible;

@@ -1,5 +1,6 @@
 import 'package:afro_grids/blocs/device/device_bloc.dart';
 import 'package:afro_grids/blocs/device/device_state.dart';
+import 'package:afro_grids/screens/provider/provider_info_multiple_service_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
                           SizedBox(height: 20,),
                           // confirm button
                           ElevatedButton(
-                              onPressed: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
+                              onPressed: ()=>Navigator.of(context).push(createRoute(const ProviderInfoMultipleServiceScreen())),
                               style: buttonPrimaryMdStyle(),
                               child: Text("Confirm selection")
                           )

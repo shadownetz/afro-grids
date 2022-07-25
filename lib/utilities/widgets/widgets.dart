@@ -166,3 +166,42 @@ Widget getRatingIcons(int ratingValue, {double iconSize=30}){
   );
 }
 
+Widget halfWhiteOverlay({double height=50}){
+  return Container(
+    width: double.infinity,
+    height: height,
+    decoration: BoxDecoration(
+        color: Colors.grey,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white.withOpacity(0),
+            Colors.white.withOpacity(0.5),
+            Colors.white.withOpacity(0.9),
+            Colors.white,
+          ],
+        )
+    ),
+  );
+}
+
+Widget halfWhiteOverlay2({double height=50}){
+  return Container(
+    width: double.infinity,
+    height: height,
+    decoration: BoxDecoration(
+        color: Colors.grey,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white.withOpacity(0),
+            Colors.white.withOpacity(0.5),
+            Colors.white.withOpacity(1),
+            Colors.white,
+          ],
+        )
+    ),
+  );
+}

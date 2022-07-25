@@ -56,7 +56,7 @@ class _ProviderInfoSingleServiceScreenState extends State<ProviderInfoSingleServ
                               Text("Reviews", style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           ),
-                          child: reviewsTabView(context)
+                          child: const PortfolioReviewsTabView()
                       )
                     ],
                     onClick: (value){
@@ -94,49 +94,4 @@ class _ProviderInfoSingleServiceScreenState extends State<ProviderInfoSingleServ
   }
 
 
-  Widget reviewsTabView(BuildContext context){
-    List<ReviewModel> reviews = [
-      ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 3, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-      ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 1, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-      ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 5, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-      ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 2, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort.")
-
-    ];
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: reviews.map((review){
-        return Container(
-          margin: EdgeInsets.only(bottom: 20, top: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              roundImage(image: AssetImage('assets/avatars/woman.png'), width: 40, height: 40),
-              SizedBox(width: 10,),
-              Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text("Royal Rox", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-                          Expanded(
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: getRatingIcons(review.rating.toInt(), iconSize: 15),
-                              )
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10,),
-                      Text("The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-
-                    ],
-                  )
-              )
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  }
 }

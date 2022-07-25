@@ -23,6 +23,20 @@ Widget leaveAReviewButton(BuildContext context){
   );
 }
 
+Widget checkoutButton(BuildContext context){
+  return ElevatedButton(
+      style: buttonPrimaryLgStyle(),
+      onPressed: (){},
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.shopping_cart_checkout, size: 20,),
+          Text("Checkout")
+        ],
+      )
+  );
+}
+
 ButtonStyle buttonSmStyle(){
   return ElevatedButton.styleFrom(
       minimumSize: const Size(200, 50),
