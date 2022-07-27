@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/view_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -9,15 +10,15 @@ import '../colours.dart';
 import 'widget_models.dart';
 import 'widgets.dart';
 
-AppBar portfolioAppBar(){
+AppBar portfolioAppBar(BuildContext context){
   return AppBar(
-    backgroundColor: Colours.tertiary,
-    foregroundColor: Colours.primary,
+    // backgroundColor: Colours.tertiary,
+    // foregroundColor: Colours.primary,
     title: const Text("Provider Portfolio"),
     actions: [
       IconButton(
           padding: const EdgeInsets.all(0),
-          onPressed: ()=>{},
+          onPressed: ()=>Navigator.of(context).push(createRoute(const CartScreen())),
           icon: cartIcon(itemCount: 30)
       )
     ],

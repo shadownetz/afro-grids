@@ -23,7 +23,7 @@ class _ProviderInfoSingleServiceScreenState extends State<ProviderInfoSingleServ
 
     return Scaffold(
       backgroundColor: Colours.tertiary,
-      appBar: portfolioAppBar(),
+      appBar: portfolioAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Stack(

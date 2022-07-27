@@ -42,6 +42,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               onPressed: ()=>{},
               icon: const Icon(
                 Ionicons.settings_outline,
+                color: Colours.primary,
               )
           )
         ],

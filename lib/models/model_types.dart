@@ -1,4 +1,6 @@
 
+import 'package:afro_grids/models/inventory_model.dart';
+
 class Ratings{
   final num total;
   final num count;
