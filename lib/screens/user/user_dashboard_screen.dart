@@ -10,6 +10,7 @@ import 'package:ionicons/ionicons.dart';
 import '../../blocs/dashboard/dashboard_state.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/widgets.dart';
+import 'chat/chats_screen.dart';
 
 class UserDashboardScreen extends StatefulWidget {
   const UserDashboardScreen({Key? key}) : super(key: key);
@@ -138,103 +139,108 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                               margin: const EdgeInsets.only(bottom: 20),
                               height: 90,
                               width: 170,
-                              decoration: BoxDecoration(
+                              child: GestureDetector(
+                                child: Card(
+                                  surfaceTintColor: Colors.white,
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                child:  Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: const [
-                                        Icon(Ionicons.bookmark, size: 10, color: Colors.grey,),
-                                        Text("Favorites", style: TextStyle(color: Colors.grey,),),
-                                        Expanded(
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Icon(Ionicons.chevron_forward_outline, size: 15,color: Colors.grey,),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                    child:  Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: const [
+                                            Icon(Ionicons.bookmark, size: 10, color: Colors.grey,),
+                                            Text("Favorites", style: TextStyle(color: Colors.grey,),),
+                                            Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: Icon(Ionicons.chevron_forward_outline, size: 15,color: Colors.grey,),
+                                                )
                                             )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Text("120", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                            Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        width: 20,
+                                                        height: 20,
+                                                        decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape: BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: AssetImage('assets/avatars/man.png')
+                                                            )
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 20,
+                                                        height: 20,
+                                                        margin: EdgeInsets.only(left: 12),
+                                                        decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape: BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: AssetImage('assets/avatars/woman.png')
+                                                            )
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 20,
+                                                        height: 20,
+                                                        margin: EdgeInsets.only(left: 24),
+                                                        decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape: BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: AssetImage('assets/avatars/man.png')
+                                                            )
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                            )
+                                          ],
                                         )
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        const Text("120", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                                        Expanded(
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Stack(
-                                                children: [
-                                                  Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    decoration: const BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            image: AssetImage('assets/avatars/man.png')
-                                                        )
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    margin: EdgeInsets.only(left: 12),
-                                                    decoration: const BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            image: AssetImage('assets/avatars/woman.png')
-                                                        )
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: 20,
-                                                    height: 20,
-                                                    margin: EdgeInsets.only(left: 24),
-                                                    decoration: const BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            image: AssetImage('assets/avatars/man.png')
-                                                        )
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                        )
-                                      ],
-                                    )
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
                             // chats
-                            Container(
+                            SizedBox(
                                 height: 90,
                                 width: 170,
-                                decoration: BoxDecoration(
+                                child: GestureDetector(
+                                  onTap: ()=>Navigator.of(context).push(createRoute(const ChatScreen())),
+                                  child: Card(
+                                    surfaceTintColor: Colors.white,
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Image(
-                                        width: 50,
-                                        height: 50,
-                                        image: AssetImage('assets/icons/message.png'),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: const [
+                                          Image(
+                                            width: 50,
+                                            height: 50,
+                                            image: AssetImage('assets/icons/message.png'),
+                                          ),
+                                          Text(
+                                            "Chats",
+                                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        "Chats",
-                                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                                      )
-                                    ],
+                                    ),
                                   ),
                                 )
                             ),

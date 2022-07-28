@@ -23,7 +23,10 @@ class CartModel{
   Map<String, dynamic> toMap(){
     return {
       'createdBy': createdBy,
-      'items': items,
+      'items': items.map((item) => {
+        'inventoryId': item.inventoryId,
+        'count': item.count
+      }),
       'createdAt': Timestamp.fromDate(createdAt)
     };
   }

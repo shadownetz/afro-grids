@@ -1,6 +1,6 @@
 
-import '../utilities/func_utils.dart';
-import 'inventory_model.dart';
+import '../../utilities/func_utils.dart';
+import '../inventory_model.dart';
 
 class LocalCartItem{
   InventoryModel inventory;

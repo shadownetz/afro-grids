@@ -4,10 +4,12 @@ import 'package:afro_grids/screens/auth/provider_signup_screen.dart';
 import 'package:afro_grids/screens/auth/signin_screen.dart';
 import 'package:afro_grids/screens/auth/user_signup_screen.dart';
 import 'package:afro_grids/screens/onboard_screen.dart';
+import 'package:afro_grids/screens/user/chat/chats_screen.dart';
 import 'package:afro_grids/screens/user/user_dashboard_screen.dart';
 import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -27,6 +29,11 @@ void main() {
     );
     FlutterError.onError =
         FirebaseCrashlytics.instance.recordFlutterFatalError;
+    if(kDebugMode){
+      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    }else{
+      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    }
     runApp(MyApp());
   }, (error, stack) =>
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
@@ -85,7 +92,8 @@ class MyApp extends StatelessWidget {
                 '/user-signup': (context)=>const UserSignUpScreen(),
                 '/provider-signup': (context)=>const ProviderSignupScreen(),
                 '/signin': (context)=>const SignInScreen(),
-                '/user-dashboard': (context)=>const UserDashboardScreen()
+                '/user-dashboard': (context)=>const UserDashboardScreen(),
+                '/chat': (context)=> const ChatScreen()
               },
             );
           }

@@ -10,9 +10,9 @@ class UserModel{
   late String middleName;
   late String email;
   late String phone;
-  late AuthType authType;
-  late AccessLevel accessLevel;
-  late Currency currency;
+  late AuthType authType; // AuthType values
+  late AccessLevel accessLevel; // AccessLevel
+  late Currency currency; // Currency
   late GeoPoint location;
   late DateTime createdAt;
   late DateTime updatedAt;

@@ -8,7 +8,7 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../blocs/cart/cart_state.dart';
 import '../../models/inventory_model.dart';
-import '../../models/local_cart_model.dart';
+import '../../models/local/local_cart_model.dart';
 import '../../utilities/class_constants.dart';
 import '../../utilities/widgets/button_widget.dart';
 
