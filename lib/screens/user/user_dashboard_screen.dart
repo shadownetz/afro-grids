@@ -1,5 +1,6 @@
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
+import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:flutter/material.dart';
@@ -249,32 +250,35 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       ],
                     ),
                     // history section
-                    Container(
-                      height: 90,
-                      width: deviceWidth-20,
-                      margin: const EdgeInsets.only(top: 30),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 10,),
-                          const Image(
-                            width: 40,
-                            height: 40,
-                            image: AssetImage("assets/icons/history.png"),
-                          ),
-                          const SizedBox(width: 10,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("History", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                              Text("view your past orders", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                    GestureDetector(
+                      onTap: ()=>Navigator.of(context).push(createRoute(const OrderScreen())),
+                      child: Card(
+                        color: Colors.white,
+                        surfaceTintColor: Colors.white,
+                        margin: const EdgeInsets.only(top: 30),
+                        child: SizedBox(
+                          height: 90,
+                          width: deviceWidth-20,
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 10,),
+                              const Image(
+                                width: 40,
+                                height: 40,
+                                image: AssetImage("assets/icons/history.png"),
+                              ),
+                              const SizedBox(width: 10,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text("History", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                  Text("view your past orders", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                                ],
+                              )
                             ],
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                     // find a provider section

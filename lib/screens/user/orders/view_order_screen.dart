@@ -1,27 +1,30 @@
 import 'dart:ui';
 
-import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/models/local/local_order_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/colours.dart';
-import '../../utilities/widgets/button_widget.dart';
-import '../../utilities/widgets/widgets.dart';
+import '../../../utilities/colours.dart';
+import '../../../utilities/widgets/button_widget.dart';
+import '../../../utilities/widgets/widgets.dart';
 
-class ViewItemScreen extends StatefulWidget {
-  final InventoryModel inventory;
-  const ViewItemScreen({Key? key, required this.inventory}) : super(key: key);
+class ViewOrderScreen extends StatefulWidget {
+  final LocalOrderModel localOrder;
+
+  const ViewOrderScreen({Key? key, required this.localOrder}) : super(key: key);
 
   @override
-  State<ViewItemScreen> createState() => _ViewItemScreenState();
+  State<ViewOrderScreen> createState() => _ViewOrderScreenState();
 }
 
-class _ViewItemScreenState extends State<ViewItemScreen> {
+class _ViewOrderScreenState extends State<ViewOrderScreen> {
   var currentScreenIndex = 0;
   CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
       child: SingleChildScrollView(
@@ -29,7 +32,6 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
             bottom: MediaQuery.of(context).viewInsets.bottom
         ),
         child: Container(
-          // alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.only(bottom: 20),
           decoration: const BoxDecoration(
               color: Colors.white,
@@ -83,9 +85,9 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
                       width: 100,
                       margin: EdgeInsets.symmetric(vertical: 20),
                       child: Row(
-                        children: widget.inventory.images.map((image){
-                          final isActive = (widget.inventory.images.indexOf(image)==currentScreenIndex);
-                          if(widget.inventory.images.length != 1){
+                        children: widget.localOrder.inventory.images.map((image){
+                          final isActive = (widget.localOrder.inventory.images.indexOf(image)==currentScreenIndex);
+                          if(widget.localOrder.inventory.images.length != 1){
                             return AnimatedContainer(
                               duration: const Duration(milliseconds: 400),
                               curve: Curves.fastOutSlowIn,
@@ -107,13 +109,50 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
               ),
               Container(
                 padding: EdgeInsets.all(20),
+                width: deviceWidth,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.inventory.name, style: TextStyle(fontSize: 30),),
-                    Text('# ${widget.inventory.description}', style: TextStyle(fontSize: 20, color: Colors.grey),),
-                    SizedBox(height: 10,),
-                    Text('${widget.inventory.currency}${widget.inventory.price}', style: TextStyle(fontSize: 25, color: Colours.secondary),)
+                    Text(widget.localOrder.inventory.name, style: TextStyle(fontSize: 20,),),
+                    // order
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('${widget.localOrder.orderModel.orderNo}', style: TextStyle(fontSize: 15),),
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Order',textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    ),
+                    const SizedBox(height: 10,),
+                    // price
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('${widget.localOrder.inventory.currency}${widget.localOrder.inventory.price}', style: TextStyle(fontSize: 15),),
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Price',textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    ),
+                    const SizedBox(height: 10,),
+                    // quantity
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('${widget.localOrder.count}', style: TextStyle(fontSize: 15),),
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Quantity',textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    ),
+                    const SizedBox(height: 10,),
+                    // created
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('${widget.localOrder.orderModel.createdAt}', style: TextStyle(fontSize: 15),),
+                    ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Created',textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Colors.grey),),
+                    ),
                   ],
                 ),
               ),
@@ -122,12 +161,12 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                     onPressed: ()=>Navigator.of(context).pop(),
-                    style: buttonLgStyle(),
+                    style: buttonPrimaryLgStyle(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_shopping_cart_outlined),
-                        Text("Add to cart")
+                        Icon(Icons.person),
+                        Text("View provider")
                       ],
                     )
                 ),
@@ -140,8 +179,8 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
   }
 
   List<Widget> itemsView(){
-    if(widget.inventory.images.isNotEmpty){
-      return widget.inventory.images.map((image){
+    if(widget.localOrder.inventory.images.isNotEmpty){
+      return widget.localOrder.inventory.images.map((image){
         return Container(
           height: 50,
           decoration: BoxDecoration(
@@ -153,10 +192,9 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
         );
       }).toList();
     }
-    return [const SizedBox(
-      height: 100,
+    return [Container(
+      alignment: Alignment.center,
       child: Text("No items available to display", textAlign: TextAlign.center,),
     )];
   }
-
 }

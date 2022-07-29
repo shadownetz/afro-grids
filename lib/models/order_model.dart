@@ -1,20 +1,21 @@
-import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'model_types.dart';
 
 class OrderModel{
   late String id;
+  late String orderNo;
   late String createdBy;
   late List<OrderItem> items;
   late String deliveryAddress;
   late num totalPrice;
   late dynamic paymentResponse;
-  late OrderStatus status;
+  late String status; // OrderStatus model type
   late DateTime createdAt;
 
   OrderModel({
     required this.id,
+    required this.orderNo,
     required this.createdBy,
     required this.items,
     required this.deliveryAddress,
@@ -26,6 +27,7 @@ class OrderModel{
 
   OrderModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> order):
         id = order.id,
+        orderNo = order.data()!['orderNo'],
         createdBy = order.data()!['createdBy'],
         items = order.data()!['items'],
         deliveryAddress = order.data()!['deliveryAddress'],
@@ -37,7 +39,11 @@ class OrderModel{
   Map<String, dynamic> toMap(){
     return {
       'createdBy': createdBy,
-      'items': items,
+      'orderNo': orderNo,
+      'items': items.map((item) => {
+        'inventoryId': item.inventoryId,
+        'count': item.count
+      }),
       'deliveryAddress': deliveryAddress,
       'totalPrice': totalPrice,
       'paymentResponse': paymentResponse,

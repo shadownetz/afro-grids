@@ -1,6 +1,6 @@
 import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
-import 'package:afro_grids/screens/user/view_item_screen.dart';
+import 'package:afro_grids/screens/provider/view_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -334,7 +334,9 @@ class _InventoryViewState extends State<InventoryView> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                            image: NetworkImage(item.images.first),
+                            image: (item.images.isNotEmpty?
+                            NetworkImage(item.images.first):
+                            AssetImage("assets/icons/cart.png")) as ImageProvider,
                             fit: BoxFit.cover
                         )
                     ),
