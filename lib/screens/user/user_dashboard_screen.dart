@@ -2,6 +2,7 @@ import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
 import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
+import 'package:afro_grids/screens/user/user_profile_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,17 +32,21 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     double deviceWidth = MediaQuery. of(context). size. width ;
     double deviceHeight = MediaQuery. of(context). size. height;
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
         backgroundColor: Colours.tertiary,
         title: appBarLogo(theme: 'dark'),
         actions: [
           IconButton(
-              onPressed: ()=>{},
+              onPressed: ()=>scaffoldKey.currentState!.isEndDrawerOpen?
+              scaffoldKey.currentState!.closeEndDrawer():
+              scaffoldKey.currentState!.openEndDrawer(),
               icon: const Icon(
                 Ionicons.settings_outline,
                 color: Colours.primary,
@@ -349,6 +354,59 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               );
             },
           ),
+        ),
+      ),
+      endDrawer: Drawer(
+        backgroundColor: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+                child: DrawerHeader(
+                  padding: EdgeInsets.all(0),
+                  margin: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                      color: Colours.primary,
+                      border: Border.all(style: BorderStyle.none, color: Colors.transparent, width: 0)
+                  ),
+                  child: Stack(
+                    children: [
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Lintang C",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white, fontSize: 30,
+                          ),),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: halfWhiteOverlay2(),
+                      )
+                    ],
+                  ),
+                ),
+            ),
+            Expanded(
+              flex: 2,
+                child: ListView(
+                  padding: EdgeInsets.only(top: 0),
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.person, color: Colours.primary),
+                      title: const Text("Profile", style: TextStyle(fontSize: 20),),
+                      onTap: ()=>Navigator.of(context).push(createRoute(const UserProfileScreen())),
+                    ),
+                    const Divider(),
+                    const ListTile(
+                      leading: Icon(Ionicons.bag_handle, color: Colours.primary),
+                      title: Text("Inventory", style: TextStyle(fontSize: 20),),
+                    )
+                  ],
+                )
+            )
+          ],
         ),
       ),
     );
