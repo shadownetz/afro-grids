@@ -10,16 +10,16 @@ class UserModel{
   late String middleName;
   late String email;
   late String phone;
-  late AuthType authType; // AuthType values
-  late AccessLevel accessLevel; // AccessLevel
-  late Currency currency; // Currency
+  late String authType; // AuthType values
+  late String accessLevel; // AccessLevel values
+  late String currency; // Currency values
   late GeoPoint location;
   late DateTime createdAt;
   late DateTime updatedAt;
   late String serviceId;
-  late ServiceType serviceType;
+  late String serviceType; // ServiceType values
   late Ratings ratings;
-  late AccessStatus accessStatus;
+  late String accessStatus; // AccessStatus values
   late Reviews reviews;
   late List<String> favorites;
   late String avatar;

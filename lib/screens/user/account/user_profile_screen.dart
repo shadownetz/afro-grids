@@ -1,7 +1,8 @@
+import 'package:afro_grids/screens/user/account/edit_profile_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/widgets/widgets.dart';
+import '../../../utilities/widgets/widgets.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class UserProfileScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: (){},
+        onPressed: ()=>Navigator.of(context).push(createRoute(const EditProfileScreen())),
         style: ElevatedButton.styleFrom(
           elevation: 5,
           minimumSize: Size(50, 50),

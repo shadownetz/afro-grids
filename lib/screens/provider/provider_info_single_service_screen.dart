@@ -5,7 +5,7 @@ import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../utilities/colours.dart';
-import '../../utilities/widgets/providerWidgets.dart';
+import '../../utilities/widgets/provider_widgets.dart';
 
 
 class ProviderInfoSingleServiceScreen extends StatefulWidget {

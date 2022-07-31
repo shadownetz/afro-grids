@@ -1,8 +1,9 @@
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
+import 'package:afro_grids/screens/provider/account/inventory_screen.dart';
 import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
-import 'package:afro_grids/screens/user/user_profile_screen.dart';
+import 'package:afro_grids/screens/user/account/user_profile_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -399,9 +400,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       onTap: ()=>Navigator.of(context).push(createRoute(const UserProfileScreen())),
                     ),
                     const Divider(),
-                    const ListTile(
+                    ListTile(
                       leading: Icon(Ionicons.bag_handle, color: Colours.primary),
                       title: Text("Inventory", style: TextStyle(fontSize: 20),),
+                      onTap: ()=>Navigator.of(context).push(createRoute(const InventoryScreen())),
                     )
                   ],
                 )

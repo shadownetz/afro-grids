@@ -1,11 +1,9 @@
 import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
-import 'package:afro_grids/screens/provider/view_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../models/review_model.dart';
-import '../class_constants.dart';
 import '../colours.dart';
 import 'widget_models.dart';
 import 'widgets.dart';
@@ -283,25 +281,15 @@ class _PortfolioReviewsTabViewState extends State<PortfolioReviewsTabView> {
 }
 
 class InventoryView extends StatefulWidget {
-  const InventoryView({Key? key}) : super(key: key);
+  final List<InventoryModel> items;
+  final void Function(InventoryModel inventory)? onClick;
+  const InventoryView({Key? key, required this.items, this.onClick}) : super(key: key);
 
   @override
   State<InventoryView> createState() => _InventoryViewState();
 }
 
 class _InventoryViewState extends State<InventoryView> {
-  List<InventoryModel> items = [
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300","https://picsum.photos/id/119/200/300", "https://picsum.photos/id/133/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Apple MacBook", price: 150000, currency: Currency.ngn, description: "Refurbished", images: ["https://picsum.photos/id/119/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Cars", price: 250000, currency: Currency.ngn, description: "Working condition", images: ["https://picsum.photos/id/133/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Skate Board", price: 3500, currency: Currency.ngn, description: "Antique (the best)", images: ["https://picsum.photos/id/157/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Apple MacBook", price: 150000, currency: Currency.ngn, description: "Refurbished", images: ["https://picsum.photos/id/119/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Cars", price: 250000, currency: Currency.ngn, description: "Working condition", images: ["https://picsum.photos/id/133/200/300"], visible: true),
-    InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Skate Board", price: 3500, currency: Currency.ngn, description: "Antique (the best)", images: ["https://picsum.photos/id/157/200/300"], visible: true),
-
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -310,15 +298,12 @@ class _InventoryViewState extends State<InventoryView> {
         spacing: 20,
         runSpacing: 20,
         // alignment: WrapAlignment.center,
-        children: items.map((item){
+        children: widget.items.map((item){
           return GestureDetector(
             onTap: (){
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context)=>ViewItemScreen(inventory: item)
-              );
+              if(widget.onClick != null){
+                widget.onClick!(item);
+              }
             },
             child: Container(
               width: 180,
