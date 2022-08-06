@@ -1,5 +1,7 @@
+import 'package:afro_grids/screens/provider/account/add_inventory_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/forms/account_forms.dart';
+import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/inventory_model.dart';
@@ -46,10 +48,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("showing 26 of 26 items", style: TextStyle(color: Colours.secondary),),
+                  Text("showing 26 of 26 items"),
                   PopupMenuButton(
                       position: PopupMenuPosition.under,
-                      icon: const Icon(Icons.filter_list, color: Colours.secondary,),
+                      icon: const Icon(Icons.filter_list),
                       onSelected: (String item){
                         print(item);
                       },
@@ -109,7 +111,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: (){},
+        onPressed: ()=>Navigator.of(context).push(createRoute(const AddInventoryScreen())),
         style: ElevatedButton.styleFrom(
             elevation: 5,
             minimumSize: Size(50, 50),
