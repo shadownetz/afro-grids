@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../blocs/inventory/inventory_state.dart';
+import '../../../blocs/inventory/inventory_state.dart';
 
 class UpdateServiceCategoryForm extends StatefulWidget {
   const UpdateServiceCategoryForm({Key? key}) : super(key: key);
@@ -39,17 +39,20 @@ class _UpdateServiceCategoryFormState extends State<UpdateServiceCategoryForm> {
 }
 
 class UpdateServiceTypeForm extends StatefulWidget {
-  const UpdateServiceTypeForm({Key? key}) : super(key: key);
+  final void Function(String value)? onChanged;
+  const UpdateServiceTypeForm({Key? key, this.onChanged}) : super(key: key);
 
   @override
   State<UpdateServiceTypeForm> createState() => _UpdateServiceTypeFormState();
 }
 
 class _UpdateServiceTypeFormState extends State<UpdateServiceTypeForm> {
+  String serviceType = ServiceType.multiple;
+
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-        value: ServiceType.multiple,
+        value: serviceType,
         items: [
           DropdownMenuItem(
               value: ServiceType.multiple,
@@ -60,41 +63,14 @@ class _UpdateServiceTypeFormState extends State<UpdateServiceTypeForm> {
               child: Text(ServiceType.single.toLowerCase())
           )
         ],
-        onChanged: (value){}
-    );
-  }
-}
-
-class NewInventoryForm extends StatefulWidget {
-  const NewInventoryForm({Key? key}) : super(key: key);
-
-  @override
-  State<NewInventoryForm> createState() => _NewInventoryFormState();
-}
-
-class _NewInventoryFormState extends State<NewInventoryForm> {
-  CarouselController carouselController = CarouselController();
-  List<XFile>? _itemImages = [];
-
-
-  @override
-  Widget build(BuildContext context) {
-    final deviceWidth = MediaQuery.of(context).size.width;
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: ItemImageSelector(
-              onUpdated: (imageList){
-                _itemImages = imageList;
-              },
-            ),
-          ),
-
-        ],
-      ),
+        onChanged: (value){
+          setState((){
+            serviceType = value!;
+          });
+          if(widget.onChanged != null){
+            widget.onChanged!(value!);
+          }
+        }
     );
   }
 }
