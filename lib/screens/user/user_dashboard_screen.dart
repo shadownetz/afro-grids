@@ -288,41 +288,41 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                       ),
                     ),
                     // find a provider section
-                    Container(
-                      height: 90,
-                      width: deviceWidth-20,
-                      margin: const EdgeInsets.only(top: 30),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: GestureDetector(
+                    GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: ()=>Navigator.of(context).push(createRoute(const ServiceSearchScreen())),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Text("Find a Provider", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                                Text("locate the closest service provider around you", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                        child: Card(
+                          color: Colors.white,
+                          surfaceTintColor: Colors.white,
+                          margin: const EdgeInsets.only(top: 30),
+                          child: SizedBox(
+                            height: 90,
+                            width: deviceWidth-20,
+                            child:Row(
+                              children: [
+                                const SizedBox(width: 10,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text("Find a Provider", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                    Text("locate the closest service provider around you", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                                  ],
+                                ),
+                                const Expanded(
+                                  child: Image(
+                                    width: 40,
+                                    height: 40,
+                                    alignment: Alignment.centerRight,
+                                    image: AssetImage("assets/icons/locationPin.png"),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                const SizedBox(width: 10,),
                               ],
                             ),
-                            const Expanded(
-                              child: Image(
-                                width: 40,
-                                height: 40,
-                                alignment: Alignment.centerRight,
-                                image: AssetImage("assets/icons/locationPin.png"),
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            const SizedBox(width: 10,),
-                          ],
-                        ),
-                      ),
+                          ),
+                        )
                     ),
                     // map section
                     Container(
@@ -363,34 +363,34 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           children: [
             Expanded(
               flex: 1,
-                child: DrawerHeader(
-                  padding: EdgeInsets.all(0),
-                  margin: EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                      color: Colours.primary,
-                      border: Border.all(style: BorderStyle.none, color: Colors.transparent, width: 0)
-                  ),
-                  child: Stack(
-                    children: [
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Lintang C",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white, fontSize: 30,
-                          ),),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: halfWhiteOverlay2(),
-                      )
-                    ],
-                  ),
+              child: DrawerHeader(
+                padding: EdgeInsets.all(0),
+                margin: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    color: Colours.primary,
+                    border: Border.all(style: BorderStyle.none, color: Colors.transparent, width: 0)
                 ),
+                child: Stack(
+                  children: [
+                    const Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Lintang C",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white, fontSize: 30,
+                        ),),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: halfWhiteOverlay2(),
+                    )
+                  ],
+                ),
+              ),
             ),
             Expanded(
-              flex: 2,
+                flex: 2,
                 child: ListView(
                   padding: EdgeInsets.only(top: 0),
                   children: [
