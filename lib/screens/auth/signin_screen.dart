@@ -1,3 +1,4 @@
+import 'package:afro_grids/screens/auth/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -157,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: (){
                   if(formKey.currentState != null){
                     if(formKey.currentState!.validate()){
-
+                      Navigator.of(context).push(createRoute(const OTPScreen()));
                     }
                   }
                 },
