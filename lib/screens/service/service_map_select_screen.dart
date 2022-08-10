@@ -34,7 +34,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
     final deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: BlocProvider(
-        create: (BuildContext context)=>DeviceBloc()..add(FetchDeviceLocation()),
+        create: (BuildContext context)=>DeviceBloc()..add(FetchDeviceLocationEvent()),
         child: BlocConsumer<DeviceBloc, DeviceState>(
           listener: (context, state){
             if(state is DeviceLoadedState){

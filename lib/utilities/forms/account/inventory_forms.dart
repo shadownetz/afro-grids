@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'account_forms.dart';
+import '../../widgets/selectors/item_image_selector.dart';
 
 // Creation Form
 class NewMultiServiceInventoryForm extends StatefulWidget {

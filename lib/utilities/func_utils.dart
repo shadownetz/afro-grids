@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
 
-String currencyFormatter(num value){
-  return NumberFormat("#,000").format(value);
+bool validateEmail(String email){
+  return RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+      .hasMatch(email);
 }

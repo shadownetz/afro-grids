@@ -1,6 +1,7 @@
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 Widget appBarLogo({
   theme='light'
@@ -73,63 +74,12 @@ Widget cartIcon({int? itemCount}){
   );
 }
 
-class AuthTab extends StatelessWidget {
-  final String activeTab;
-
-  const AuthTab({
-    Key? key,
-    this.activeTab = 'signin'
-  }) : super(key: key);
-
-  ButtonStyle tabBtnStyle(String tab){
-    return ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-            activeTab == tab?Colours.tertiary: Colors.white
-        ),
-        minimumSize: MaterialStateProperty.all(const Size(180, 40)),
-        shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
-            )
-        )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20)
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton(
-              style: tabBtnStyle('signin'),
-              onPressed: ()=>Navigator.of(context).pushReplacementNamed("/signin"),
-              child: const Text(
-                "Sign in",
-              )
-          ),
-          TextButton(
-              style: tabBtnStyle('signup'),
-              onPressed: ()=>Navigator.of(context).pushReplacementNamed("/user-signup"),
-              child: const Text(
-                "Sign up",
-              )
-          )
-        ],
-      ),
-    );
-  }
-}
-
 Widget roundImage({
   required ImageProvider image,
   double width=50,
   double height=50,
-  bool hasShadow=false
+  bool hasShadow=false,
+  BoxFit? fit
 }){
   return Container(
     width: width,
@@ -138,7 +88,8 @@ Widget roundImage({
         color: Colors.white,
         shape: BoxShape.circle,
         image: DecorationImage(
-            image: image
+            image: image,
+            fit: fit
         ),
         boxShadow: hasShadow? [
           boxShadow2()
@@ -215,4 +166,75 @@ Widget modalDragIndicator(){
         borderRadius: BorderRadius.circular(20)
     ),
   );
+}
+
+class AuthTab extends StatelessWidget {
+  final String activeTab;
+
+  const AuthTab({
+    Key? key,
+    this.activeTab = 'signin'
+  }) : super(key: key);
+
+  ButtonStyle tabBtnStyle(String tab){
+    return ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+            activeTab == tab?Colours.tertiary: Colors.white
+        ),
+        minimumSize: MaterialStateProperty.all(const Size(180, 40)),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+            )
+        )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20)
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton(
+              style: tabBtnStyle('signin'),
+              onPressed: ()=>Navigator.of(context).pushReplacementNamed("/signin"),
+              child: const Text(
+                "Sign in",
+              )
+          ),
+          TextButton(
+              style: tabBtnStyle('signup'),
+              onPressed: ()=>Navigator.of(context).pushReplacementNamed("/user-signup"),
+              child: const Text(
+                "Sign up",
+              )
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CustomLoadingOverlay extends StatelessWidget {
+  final Widget widget;
+  const CustomLoadingOverlay({Key? key, required this.widget}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LoaderOverlay(
+        useDefaultLoading: false,
+        overlayColor: Colors.white,
+        overlayWidget: const Center(
+          child: Image(
+            image: AssetImage('assets/icons/animated/afro-grid-logo-dark.gif'),
+          ),
+        ),
+        child: widget
+    );
+  }
 }

@@ -1,4 +1,6 @@
 
+import 'package:afro_grids/utilities/currency.dart';
+
 import '../../utilities/func_utils.dart';
 import '../inventory_model.dart';
 
@@ -8,7 +10,7 @@ class LocalCartItem{
   LocalCartItem(this.inventory, this.count);
 
   get priceStr{
-    return currencyFormatter(inventory.price);
+    return CurrencyUtil().format(inventory.price);
   }
 }
 
@@ -31,7 +33,7 @@ class LocalCartModel{
   }
 
   get totalPriceStr{
-    return currencyFormatter(totalPrice);
+    return CurrencyUtil().format(totalPrice);
   }
 
 }

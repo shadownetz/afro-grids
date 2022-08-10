@@ -56,7 +56,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
     return Scaffold(
         appBar: _appBar,
         body: BlocProvider(
-          create: (BuildContext context)=>DeviceBloc()..add(FetchDeviceLocation()),
+          create: (BuildContext context)=>DeviceBloc()..add(FetchDeviceLocationEvent()),
           child: BlocConsumer<DeviceBloc, DeviceState>(
             listener: (context, state){
               if(state is DeviceLoadedState){

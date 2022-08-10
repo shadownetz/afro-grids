@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
-import '../utilities/class_constants.dart';
 import 'model_types.dart';
 
 class UserModel{
@@ -13,7 +13,7 @@ class UserModel{
   late String authType; // AuthType values
   late String accessLevel; // AccessLevel values
   late String currency; // Currency values
-  late GeoPoint location;
+  late GeoFirePoint location;
   late DateTime createdAt;
   late DateTime updatedAt;
   late String serviceId;
@@ -78,7 +78,7 @@ class UserModel{
       'authType': authType,
       'accessLevel': accessLevel,
       'currency': currency,
-      'location': location,
+      'location': location.data,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
       'serviceId': serviceId,

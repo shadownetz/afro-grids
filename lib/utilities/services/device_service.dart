@@ -1,8 +1,8 @@
 import 'package:geolocator/geolocator.dart';
 
-class DeviceRepo{
+class DeviceService{
 
-  DeviceRepo();
+  DeviceService();
 
   /// Determine the current position of the device.
   ///

@@ -13,20 +13,26 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
+import 'blocs/auth/auth_bloc.dart';
+import 'blocs/auth/auth_event.dart';
 import 'firebase_options.dart';
 
 void main() {
   runZonedGuarded<Future<void>>(() async {
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    await dotenv.load();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await FirebaseAppCheck.instance.activate(
       webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     );
+
     FlutterError.onError =
         FirebaseCrashlytics.instance.recordFlutterFatalError;
     if(kDebugMode){
@@ -54,47 +60,50 @@ class MyApp extends StatelessWidget {
         future: delayLoading,
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
-            return MaterialApp(
-              title: 'AfroGrids',
-              theme: Theme.of(context).copyWith(
-                  useMaterial3: true,
-                  colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: Colours.primary,
-                    secondary: Colours.secondary,
-                    background: Colours.tertiary,
-                  ),
-                  appBarTheme: const AppBarTheme(
-                      backgroundColor: Colours.primary,
-                      foregroundColor: Colors.white
-                  ),
-                  elevatedButtonTheme: ElevatedButtonThemeData(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colours.secondary,
-                          onPrimary: Colours.primary,
-                          textStyle: const TextStyle(color: Colours.secondary)
-                      )
-                  ),
-                  textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                          primary: Colours.primary
-                      )
-                  ),
-                  textTheme: Theme.of(context).textTheme.apply(
-                      bodyColor: Colours.primary
-                  ),
-                  iconTheme: Theme.of(context).iconTheme.copyWith(
-                      color: Colours.primary
-                  )
+            return BlocProvider(
+              create: (context)=>AuthBloc()..add(CheckAuthEvent()),
+              child: MaterialApp(
+                title: 'AfroGrids',
+                theme: Theme.of(context).copyWith(
+                    useMaterial3: true,
+                    colorScheme: Theme.of(context).colorScheme.copyWith(
+                      primary: Colours.primary,
+                      secondary: Colours.secondary,
+                      background: Colours.tertiary,
+                    ),
+                    appBarTheme: const AppBarTheme(
+                        backgroundColor: Colours.primary,
+                        foregroundColor: Colors.white
+                    ),
+                    elevatedButtonTheme: ElevatedButtonThemeData(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colours.secondary,
+                            onPrimary: Colours.primary,
+                            textStyle: const TextStyle(color: Colours.secondary)
+                        )
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                            primary: Colours.primary
+                        )
+                    ),
+                    textTheme: Theme.of(context).textTheme.apply(
+                        bodyColor: Colours.primary
+                    ),
+                    iconTheme: Theme.of(context).iconTheme.copyWith(
+                        color: Colours.primary
+                    )
+                ),
+                debugShowCheckedModeBanner: false,
+                routes: {
+                  '/': (context)=>const OnboardScreen(),
+                  '/user-signup': (context)=>const UserSignUpScreen(),
+                  '/provider-signup': (context)=>const ProviderSignupScreen(),
+                  '/signin': (context)=>const SignInScreen(),
+                  '/user-dashboard': (context)=>const UserDashboardScreen(),
+                  '/chat': (context)=> const ChatScreen()
+                },
               ),
-              debugShowCheckedModeBanner: false,
-              routes: {
-                '/': (context)=>const OnboardScreen(),
-                '/user-signup': (context)=>const UserSignUpScreen(),
-                '/provider-signup': (context)=>const ProviderSignupScreen(),
-                '/signin': (context)=>const SignInScreen(),
-                '/user-dashboard': (context)=>const UserDashboardScreen(),
-                '/chat': (context)=> const ChatScreen()
-              },
             );
           }
           else{

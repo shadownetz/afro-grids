@@ -26,21 +26,3 @@ class InventoryErrorState extends InventoryState{
   @override
   List<Object?> get props => [];
 }
-
-class NewInventoryItemImagesSelected extends InventoryState{
-  final List<XFile>? images;
-  NewInventoryItemImagesSelected({
-    this.images
-  });
-  @override
-  List<Object?> get props => [images];
-}
-
-class NewInventoryItemImagesUpdated extends InventoryState{
-  final List<XFile> images;
-  NewInventoryItemImagesUpdated({
-    required this.images
-  });
-  @override
-  List<Object?> get props => [images];
-}
