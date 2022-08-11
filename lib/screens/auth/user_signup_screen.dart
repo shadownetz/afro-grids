@@ -1,5 +1,6 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
 import 'package:afro_grids/blocs/auth/auth_event.dart';
+import 'package:afro_grids/screens/auth/otp_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/forms/auth_forms.dart';
@@ -36,7 +37,10 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                 context.loaderOverlay.hide();
               }
               if(state is AuthErrorState){
-                Alerts(context).showToast(state.message);
+                Alerts(context).showErrorDialog(title: "Road Block", message: state.message);
+              }
+              if(state is PhoneVerificationState){
+                Navigator.of(context).push(createRoute(const OTPScreen()));
               }
             },
             builder: (context, state){
@@ -57,8 +61,8 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                         ),
                       ),
                       UserSignUpForm(
-                        onComplete: (user, placeId){
-                          // BlocProvider.of<AuthBloc>(context).add(SignUpEvent(user: user, placeId: placeId));
+                        onComplete: (user, placeId, password){
+                          BlocProvider.of<AuthBloc>(context).add(SignUpWithEmailPasswordEvent(user: user, placeId: placeId, password: password));
                         },
                       ),
                       TextButton(

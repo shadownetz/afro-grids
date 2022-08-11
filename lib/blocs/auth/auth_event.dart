@@ -10,13 +10,36 @@ class CheckAuthEvent extends AuthEvent{
   List<Object?> get props => [];
 }
 
-class SignUpEvent extends AuthEvent{
+class SignUpWithEmailPasswordEvent extends AuthEvent{
   final UserModel user;
+  final String password;
   final String placeId;
-  SignUpEvent({
+  SignUpWithEmailPasswordEvent({
     required this.user,
-    required this.placeId
+    required this.placeId,
+    required this.password
   });
+  @override
+  List<Object?> get props => [];
+}
+
+class LoginWithEmailPasswordEvent extends AuthEvent{
+  final String email;
+  final String password;
+  LoginWithEmailPasswordEvent({required this.email, required this.password});
+  @override
+  List<Object?> get props => [];
+}
+
+class SendPhoneVerificationEvent extends AuthEvent{
+  @override
+  List<Object?> get props => [];
+}
+
+class PostPhoneVerificationLoginEvent extends AuthEvent{
+  final String generatedCode;
+  final String inputCode;
+  PostPhoneVerificationLoginEvent(this.generatedCode, this.inputCode);
   @override
   List<Object?> get props => [];
 }

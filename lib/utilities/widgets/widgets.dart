@@ -228,6 +228,7 @@ class CustomLoadingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoaderOverlay(
         useDefaultLoading: false,
+        overlayOpacity: 0.5,
         overlayColor: Colors.white,
         overlayWidget: const Center(
           child: Image(

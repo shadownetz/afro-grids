@@ -31,6 +31,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
                 if(state is AuthenticatedState){
                   Navigator.of(context).pushReplacementNamed('/user-dashboard');
                 }
+                if(state is PhoneVerificationState){
+                  Navigator.of(context).pushReplacementNamed('/phone-verification');
+                }
               },
               builder: (context, state){
                 if(state is UnAuthenticatedState){

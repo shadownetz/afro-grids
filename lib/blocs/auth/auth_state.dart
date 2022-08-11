@@ -1,3 +1,4 @@
+import 'package:afro_grids/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -27,11 +28,26 @@ class AuthErrorState extends AuthState{
 }
 
 class AuthenticatedState extends AuthState{
+  final UserModel? user;
+  AuthenticatedState({this.user});
   @override
   List<Object?> get props => [];
 }
 
 class UnAuthenticatedState extends AuthState{
+  @override
+  List<Object?> get props => [];
+}
+
+class PhoneVerificationState extends AuthState{
+  PhoneVerificationState();
+  @override
+  List<Object?> get props => [];
+}
+
+class SentPhoneVerificationState extends AuthState{
+  final String? verificationCode;
+  SentPhoneVerificationState(this.verificationCode);
   @override
   List<Object?> get props => [];
 }

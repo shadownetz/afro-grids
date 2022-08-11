@@ -17,7 +17,7 @@ class GMapService{
       Uri.parse("https://maps.googleapis.com/maps/api/geocode/json?place_id=$placeId&key=$geocodeAPIKey")
     );
     if(response.statusCode == 200){
-      List<Map<String, dynamic>> decoded = json.decode(response.body)['results'];
+      var decoded = json.decode(response.body)['results'];
       if(decoded.isNotEmpty){
         result = GeocodeResponse.fromJSON(decoded[0]);
       }

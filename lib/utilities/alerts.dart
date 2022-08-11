@@ -2,6 +2,7 @@ import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ionicons/ionicons.dart';
 
 class Alerts{
   final BuildContext context;
@@ -36,6 +37,138 @@ class Alerts{
         });
   }
 
+  showInfoDialog({required String title, required String message}){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: const TextStyle(fontSize: 16),),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.only(left: 20),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Icon(Icons.info_outline, color: Colours.primary, size: 60,),
+                const SizedBox(height: 30,),
+                Text(message, style: const TextStyle(fontSize: 18),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: buttonPrimarySmStyle(),
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  showSuccessDialog({required String title, required String message}){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: TextStyle(fontSize: 16),),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: EdgeInsets.only(left: 20),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Icon(Icons.check_circle, color: Colours.secondary, size: 60,),
+                const SizedBox(height: 30,),
+                Text(message, style: const TextStyle(fontSize: 18),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: buttonPrimarySmStyle(),
+              child: const Text('Continue'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  showErrorDialog({required String title, required String message}){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: TextStyle(fontSize: 16),),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: EdgeInsets.only(left: 20),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Icon(Ionicons.ban_outline, color: Colors.redAccent, size: 60,),
+                const SizedBox(height: 30,),
+                Text(message, style: const TextStyle(fontSize: 18),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: buttonPrimarySmStyle(),
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  showConfirmDialog({required String title, required String message, required void Function() onConfirm}){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: const TextStyle(fontSize: 16),),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Icon(Ionicons.infinite_outline, color: Colors.yellow, size: 60,),
+                const SizedBox(height: 30,),
+                Text(message, style: const TextStyle(fontSize: 18),),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Proceed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colours.primary),),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirm();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black54),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 
   Widget _toast (String message){
     return Container(

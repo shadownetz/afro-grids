@@ -240,7 +240,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
 }
 
 class UserSignUpForm extends StatefulWidget {
-  final void Function(UserModel user, String placeId) onComplete;
+  final void Function(UserModel user, String placeId, String password) onComplete;
 
   const UserSignUpForm({Key? key, required this.onComplete}) : super(key: key);
 
@@ -421,12 +421,12 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
         serviceId: "",
         serviceType: "",
         ratings: Ratings(0,0,0),
-        accessStatus: AccessStatus.approved,
+        accessStatus: AccessStatus.pending,
         reviews: Reviews(0,0),
         favorites: [],
         avatar: ""
     );
-    widget.onComplete(user, locationPlaceId);
+    widget.onComplete(user, locationPlaceId, passwordController.text);
   }
 }
 

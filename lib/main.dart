@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:afro_grids/models/local/local_storage_model.dart';
+import 'package:afro_grids/screens/auth/otp_screen.dart';
 import 'package:afro_grids/screens/auth/provider_signup_screen.dart';
 import 'package:afro_grids/screens/auth/signin_screen.dart';
 import 'package:afro_grids/screens/auth/user_signup_screen.dart';
@@ -20,6 +22,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'blocs/auth/auth_bloc.dart';
 import 'blocs/auth/auth_event.dart';
 import 'firebase_options.dart';
+
+LocalStorageModel localStorage = LocalStorageModel();
 
 void main() {
   runZonedGuarded<Future<void>>(() async {
@@ -100,6 +104,7 @@ class MyApp extends StatelessWidget {
                   '/user-signup': (context)=>const UserSignUpScreen(),
                   '/provider-signup': (context)=>const ProviderSignupScreen(),
                   '/signin': (context)=>const SignInScreen(),
+                  '/phone-verification': (context)=>const OTPScreen(),
                   '/user-dashboard': (context)=>const UserDashboardScreen(),
                   '/chat': (context)=> const ChatScreen()
                 },

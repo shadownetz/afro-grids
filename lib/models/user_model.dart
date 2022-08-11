@@ -1,3 +1,4 @@
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -23,6 +24,8 @@ class UserModel{
   late Reviews reviews;
   late List<String> favorites;
   late String avatar;
+  late bool phoneVerified;
+  late bool emailVerified;
 
   UserModel({
     required this.id,
@@ -43,7 +46,9 @@ class UserModel{
     required this.accessStatus,
     required this.reviews,
     required this.favorites,
-    required this.avatar
+    required this.avatar,
+    this.phoneVerified=false,
+    this.emailVerified=false,
   });
 
   UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> user):
@@ -65,7 +70,9 @@ class UserModel{
         ratings = user.data()!['ratings'],
         accessStatus = user.data()!['accessStatus'],
         reviews = user.data()!['reviews'],
-        favorites = user.data()!['favorites'];
+        favorites = user.data()!['favorites'],
+        emailVerified = user.data()!['emailVerified'],
+        phoneVerified = user.data()!['phoneVerified'];
 
   Map<String, dynamic> toMap(){
     return {
@@ -83,10 +90,16 @@ class UserModel{
       'updatedAt': Timestamp.fromDate(updatedAt),
       'serviceId': serviceId,
       'serviceType': serviceType,
-      'ratings': ratings,
+      'ratings': ratings.toMap(),
       'accessStatus': accessStatus,
-      'reviews': reviews,
-      'favorites': favorites
+      'reviews': reviews.toMap(),
+      'favorites': favorites,
+      'emailVerified': emailVerified,
+      'phoneVerified': phoneVerified,
     };
+  }
+
+  bool get isProvider{
+    return accessLevel == AccessLevel.provider;
   }
 }
