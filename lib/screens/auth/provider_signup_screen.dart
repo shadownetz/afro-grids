@@ -51,6 +51,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                       child: Text(
                         "Sign up as a service seeker instead",
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colours.secondary),
                       ),
                     )
                 ),

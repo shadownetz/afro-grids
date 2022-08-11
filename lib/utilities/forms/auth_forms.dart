@@ -34,6 +34,9 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
   var serviceTypeController = TextEditingController(text: ServiceType.single);
   var serviceCategoryController = TextEditingController();
   XFile? avatarFile;
+  String locationPlaceId = "";
+  bool obscurePassword = true;
+  bool obscurePassword2 = true;
   
   final formKey = GlobalKey<FormState>();
 
@@ -100,7 +103,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                   hintText: "enter your email address"
               ),
               validator: (value) {
-                if (value == null || value.isEmpty || value.length <= 3) {
+                if (value == null || value.isEmpty || value.length <= 3 || !validateEmail(value)) {
                   return 'Please enter a valid email';
                 }
                 return null;
@@ -120,17 +123,9 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                 return null;
               },
             ),
-            TextFormField(
-              // controller: lastNameController,
-              decoration: const InputDecoration(
-                  labelText: "Location",
-                  hintText: "enter your address"
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length <= 3) {
-                  return 'Please enter a valid address';
-                }
-                return null;
+            GPlaceAutoComplete(
+              onSelected: (placeId){
+                locationPlaceId=placeId;
               },
             ),
             DropdownButtonFormField<String>(
@@ -179,13 +174,15 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
             ),
             TextFormField(
               controller: passwordController,
-              obscureText: true,
+              obscureText: obscurePassword,
               decoration: InputDecoration(
                   labelText: "Password",
                   hintText: "setup a password for your account",
                   suffix: IconButton(
-                      onPressed: (){},
-                      icon: const Icon(Ionicons.eye_off_sharp)
+                      onPressed: ()=>setState(()=>obscurePassword = !obscurePassword),
+                      icon: Icon(
+                          obscurePassword? Ionicons.eye: Ionicons.eye_off_sharp
+                      )
                   )
               ),
               validator: (value) {
@@ -199,13 +196,15 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
             ),
             TextFormField(
               controller: password2Controller,
-              obscureText: true,
+              obscureText: obscurePassword2,
               decoration: InputDecoration(
                   labelText: "Re-enter Password",
                   hintText: "verify your password for your account",
                   suffix: IconButton(
-                      onPressed: (){},
-                      icon: const Icon(Ionicons.eye_off_sharp)
+                      onPressed: ()=>setState(()=>obscurePassword2 = !obscurePassword2),
+                      icon: Icon(
+                          obscurePassword2? Ionicons.eye: Ionicons.eye_off_sharp
+                      )
                   )
               ),
               validator: (value) {
@@ -224,12 +223,15 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
             ElevatedButton(
                 style: buttonLgStyle(),
                 onPressed: (){
-                  Navigator.of(context).pushReplacementNamed('/user-dashboard');
-                  // if(formKey.currentState != null){
-                  //   if(formKey.currentState!.validate()){
-                  //
-                  //   }
-                  // }
+                  if(formKey.currentState != null){
+                    if(formKey.currentState!.validate()){
+                      if(locationPlaceId.isEmpty){
+                        Alerts(context).showToast("Select your location");
+                      }else{
+
+                      }
+                    }
+                  }
                 },
                 child: const Text("Sign up")
             )

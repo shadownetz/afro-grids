@@ -68,7 +68,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state){
             if(state is UnAuthenticatedState){
-              Navigator.of(context).pushReplacementNamed("/signin");
+              Navigator.of(context).pushNamedAndRemoveUntil("/signin", (route)=>false);
             }else if(state is AuthErrorState){
               Alerts(context).showToast(state.message);
             }

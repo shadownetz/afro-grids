@@ -91,7 +91,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
         final user = await UserRepo().getUser(credential.user!.uid);
         localStorage.user = user;
         if(user.phoneVerified){
-          emit(AuthenticatedState());
+          emit(AuthenticatedState(user: user));
         }else{
           emit(PhoneVerificationState());
         }
@@ -100,9 +100,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
       }
     }on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        emit(AuthErrorState('No user found for that email.'));
+        emit(AuthErrorState('The specified email address or password may be incorrect'));
       } else if (e.code == 'wrong-password') {
-        emit(AuthErrorState('Wrong password provided for that user.'));
+        emit(AuthErrorState('The specified email address or password may be incorrect'));
       }else{
         emit(AuthErrorState(e.toString()));
       }

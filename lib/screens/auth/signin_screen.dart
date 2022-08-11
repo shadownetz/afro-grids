@@ -1,7 +1,13 @@
+import 'package:afro_grids/blocs/auth/auth_bloc.dart';
+import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/screens/auth/otp_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
+import '../../blocs/auth/auth_state.dart';
+import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
@@ -16,6 +22,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  AuthBloc? _authBlocProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -24,88 +31,116 @@ class _SignInScreenState extends State<SignInScreen> {
         appBar: AppBar(
           title: appBarLogo(),
         ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(height: 20,),
-                const AuthTab(activeTab: 'signin'),
-                const SizedBox(height: 40,),
-                const Text(
-                  "Sign in",
-                  style: TextStyle(
-                    fontSize: 35,
+        body: CustomLoadingOverlay(
+          widget: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state){
+              if(state is AuthLoadingState){
+                context.loaderOverlay.show();
+              }else{
+                context.loaderOverlay.hide();
+              }
+              if(state is AuthErrorState){
+                Alerts(context).showErrorDialog(title: "Oops!", message: state.message);
+              }
+              if(state is PhoneVerificationState){
+                Navigator.of(context).push(createRoute(const OTPScreen()));
+              }
+              if(state is AuthenticatedState){
+                if(state.user!.isProvider){
+                  Navigator.of(context).pushReplacementNamed("/provider-dashboard");
+                }else{
+                  Navigator.of(context).pushReplacementNamed("/user-dashboard");
+                }
+                Alerts(context).showToast("Logged in");
+              }
+            },
+            builder: (context, state){
+              _authBlocProvider = BlocProvider.of<AuthBloc>(context);
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(height: 20,),
+                      const AuthTab(activeTab: 'signin'),
+                      const SizedBox(height: 40,),
+                      const Text(
+                        "Sign in",
+                        style: TextStyle(
+                          fontSize: 35,
+                        ),
+                      ),
+                      const SizedBox(height: 40,),
+                      loginInForm(),
+                      const SizedBox(height: 40,),
+                      Row(
+                        children: const [
+                          Expanded(child: Divider(height: 10, color: Colors.black26,)),
+                          Expanded(child: Text("or sign in with", textAlign: TextAlign.center,)),
+                          Expanded(child: Divider(height: 10, color: Colors.black26,))
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  minimumSize: const Size(170, 40),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200
+                                  )
+                              ),
+                              onPressed: ()=>{},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: const [
+                                  Icon(Ionicons.logo_facebook, size: 20, color: Colors.blueAccent,),
+                                  SizedBox(width: 10,),
+                                  Text(
+                                    "Facebook",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              )
+                          ),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  minimumSize: const Size(170, 40),
+                                  textStyle: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200
+                                  )
+                              ),
+                              onPressed: ()=>{},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: const [
+                                  Icon(Ionicons.logo_google, size: 20, color: Colors.red,),
+                                  SizedBox(width: 10,),
+                                  Text(
+                                    "Google",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              )
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(height: 40,),
-                loginInForm(),
-                const SizedBox(height: 40,),
-                Row(
-                  children: const [
-                    Expanded(child: Divider(height: 10, color: Colors.black26,)),
-                    Expanded(child: Text("or sign in with", textAlign: TextAlign.center,)),
-                    Expanded(child: Divider(height: 10, color: Colors.black26,))
-                  ],
-                ),
-                SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            minimumSize: const Size(170, 40),
-                            textStyle: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w200
-                            )
-                        ),
-                        onPressed: ()=>{},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Icon(Ionicons.logo_facebook, size: 20, color: Colors.blueAccent,),
-                            SizedBox(width: 10,),
-                            Text(
-                              "Facebook",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        )
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            minimumSize: const Size(170, 40),
-                            textStyle: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w200
-                            )
-                        ),
-                        onPressed: ()=>{},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Icon(Ionicons.logo_google, size: 20, color: Colors.red,),
-                            SizedBox(width: 10,),
-                            Text(
-                              "Google",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        )
-                    )
-                  ],
-                )
-              ],
-            ),
+              );
+            },
           ),
         )
     );
@@ -158,7 +193,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: (){
                   if(formKey.currentState != null){
                     if(formKey.currentState!.validate()){
-                      Navigator.of(context).push(createRoute(const OTPScreen()));
+                      _authBlocProvider!.add(
+                          LoginWithEmailPasswordEvent(
+                              email: emailController.text, password: passwordController.text
+                          )
+                      );
                     }
                   }
                 },

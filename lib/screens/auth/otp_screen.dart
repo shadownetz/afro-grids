@@ -268,15 +268,17 @@ class _OTPScreenState extends State<OTPScreen> {
     _runningTimer = true;
     _minuteTimer = 60;
     Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState((){
-        if(_runningTimer && _minuteTimer > 0){
-          _minuteTimer--;
-        }else{
-          _minuteTimer = 0;
-          _runningTimer = false;
-          timer.cancel();
-        }
-      });
+      if(mounted){
+        setState((){
+          if(_runningTimer && _minuteTimer > 0){
+            _minuteTimer--;
+          }else{
+            _minuteTimer = 0;
+            _runningTimer = false;
+            timer.cancel();
+          }
+        });
+      }
     });
   }
 }

@@ -73,6 +73,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
                             child: Text(
                               "Sign up as a service provider instead",
                               textAlign: TextAlign.center,
+                              style: TextStyle(color: Colours.secondary),
                             ),
                           )
                       ),
