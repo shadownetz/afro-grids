@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     on<LoginWithEmailPasswordEvent>(_mapLoginWithEmailPasswordEventToEvent);
     on<SendPhoneVerificationEvent>(_mapSendPhoneVerificationEventToEvent);
     on<PostPhoneVerificationLoginEvent>(_mapPostPhoneVerificationLoginEventToEvent);
+    on<LogoutEvent>(_mapLogoutEventToEvent);
   }
 
   void _mapCheckAuthEventToEvent(CheckAuthEvent event, Emitter<AuthState> emit)async{
@@ -137,5 +138,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     }catch(e){
       emit(AuthErrorState(e.toString()));
     }
+  }
+  void _mapLogoutEventToEvent(LogoutEvent event, Emitter<AuthState> emit)async{
+    try{
+      await FirebaseAuth.instance.signOut();
+      localStorage.user = null;
+      emit(UnAuthenticatedState());
+    }catch(e){
+      emit(AuthErrorState(e.toString()));
+    }
+
   }
 }

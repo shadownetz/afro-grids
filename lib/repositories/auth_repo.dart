@@ -26,12 +26,12 @@ class AuthRepo{
     http.Response response = await http.post(
       Uri.parse("${APIConfig().APIURL}/auth/verify-phone"),
       headers: APIConfig().header(accessToken: await getAccessToken()),
-      body: jsonEncode({
+      body: {
         'phone': user.phone
-      }),
+      },
     );
     if(response.statusCode == 200){
-      return jsonDecode(response.body);
+      return jsonDecode(response.body).toString();
     }
     return null;
   }

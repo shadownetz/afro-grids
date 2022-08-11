@@ -1,9 +1,10 @@
 import 'package:afro_grids/utilities/credentials.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class APIConfig{
   static bool testMode = true;
-  final String _TEST_API_ENDPOINT="http://localhost:5001/afrogrids/us-central1/api/v1";
-  final String _PROD_API_ENDPOINT="http://localhost:5001/afrogrids/us-central1/api/v1";
+  final String _TEST_API_ENDPOINT="${dotenv.env['DEV_DOMAIN']!}/v1";
+  final String _PROD_API_ENDPOINT="${dotenv.env['PROD_DOMAIN']!}/v1";
   final String _TEST_PAYMENT_URL='';
   final String _PROD_PAYMENT_URL='';
 

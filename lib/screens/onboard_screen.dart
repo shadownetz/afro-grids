@@ -1,12 +1,15 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
 import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/blocs/auth/auth_state.dart';
+import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../utilities/colours.dart';
+import '../utilities/widgets/widgets.dart';
 
 class OnboardScreen extends StatefulWidget {
   const OnboardScreen({Key? key}) : super(key: key);
@@ -22,98 +25,105 @@ class _OnboardScreenState extends State<OnboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            color: Colours.tertiary,
-            height: double.infinity,
-            width: double.infinity,
-            child: BlocConsumer<AuthBloc, AuthState>(
-              listener: (context, state){
-                if(state is AuthenticatedState){
-                  Navigator.of(context).pushReplacementNamed('/user-dashboard');
-                }
-                if(state is PhoneVerificationState){
-                  Navigator.of(context).pushReplacementNamed('/phone-verification');
-                }
-              },
-              builder: (context, state){
-                if(state is UnAuthenticatedState){
-                  return Stack(
-                    children: [
-                      CarouselSlider(
-                        carouselController: carouselController,
-                        items: [
-                          onboardScreenOne(),
-                          onboardScreenTwo(),
-                          onboardScreenThree()
-                        ],
-                        options: CarouselOptions(
-                            height: double.infinity,
-                            viewportFraction: 1,
-                            enableInfiniteScroll: false,
-                            onPageChanged: (pageNo, reason){
-                              setState((){
-                                currentScreenIndex = pageNo;
-                              });
-                            }
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        heightFactor: 50.5,
-                        child: SizedBox(
-                          width: 100,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Icon(
-                                    Icons.circle,
-                                    size: 15,
-                                    color: currentScreenIndex == 0? Colours.secondary: Colours.primary,
-                                  )
-                              ),
-                              Expanded(
-                                  child: Icon(
-                                      Icons.circle,
-                                      size: 15,
-                                      color: currentScreenIndex == 1? Colours.secondary: Colours.primary
-                                  )
-                              ),
-                              Expanded(
-                                  child: Icon(
-                                      Icons.circle,
-                                      size: 15,
-                                      color: currentScreenIndex == 2? Colours.secondary: Colours.primary
-                                  )
-                              )
-                            ],
+        body: CustomLoadingOverlay(
+          widget: Container(
+              color: Colours.tertiary,
+              height: double.infinity,
+              width: double.infinity,
+              child: BlocConsumer<AuthBloc, AuthState>(
+                listener: (context, state){
+                  if(state is AuthenticatedState){
+                    Navigator.of(context).pushReplacementNamed('/user-dashboard');
+                  }
+                  if(state is PhoneVerificationState){
+                    Navigator.of(context).pushReplacementNamed('/phone-verification');
+                  }
+                  if(state is AuthLoadingState){
+                    context.loaderOverlay.show();
+                  }else{
+                    context.loaderOverlay.hide();
+                  }
+                },
+                builder: (context, state){
+                  if(state is UnAuthenticatedState){
+                    return Stack(
+                      children: [
+                        CarouselSlider(
+                          carouselController: carouselController,
+                          items: [
+                            onboardScreenOne(),
+                            onboardScreenTwo(),
+                            onboardScreenThree()
+                          ],
+                          options: CarouselOptions(
+                              height: double.infinity,
+                              viewportFraction: 1,
+                              enableInfiniteScroll: false,
+                              onPageChanged: (pageNo, reason){
+                                setState((){
+                                  currentScreenIndex = pageNo;
+                                });
+                              }
                           ),
                         ),
-                      ),
-                      currentScreenIndex != 2 ?
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: ElevatedButton(
-                          onPressed: ()=>carouselController.nextPage(),
-                          style: buttonSmStyle(),
-                          child: const Text("Next"),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          heightFactor: 50.5,
+                          child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Icon(
+                                      Icons.circle,
+                                      size: 15,
+                                      color: currentScreenIndex == 0? Colours.secondary: Colours.primary,
+                                    )
+                                ),
+                                Expanded(
+                                    child: Icon(
+                                        Icons.circle,
+                                        size: 15,
+                                        color: currentScreenIndex == 1? Colours.secondary: Colours.primary
+                                    )
+                                ),
+                                Expanded(
+                                    child: Icon(
+                                        Icons.circle,
+                                        size: 15,
+                                        color: currentScreenIndex == 2? Colours.secondary: Colours.primary
+                                    )
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ):
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: ElevatedButton(
-                          onPressed: ()=>{
-                            Navigator.of(context).pushReplacementNamed("/user-signup")
-                          },
-                          style: buttonSmStyle(),
-                          child: const Text("Continue"),
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return Container();
-              },
-            )
+                        currentScreenIndex != 2 ?
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ElevatedButton(
+                            onPressed: ()=>carouselController.nextPage(),
+                            style: buttonSmStyle(),
+                            child: const Text("Next"),
+                          ),
+                        ):
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ElevatedButton(
+                            onPressed: ()=>{
+                              Navigator.of(context).pushReplacementNamed("/user-signup")
+                            },
+                            style: buttonSmStyle(),
+                            child: const Text("Continue"),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  return const WelcomeScreen();
+                },
+              )
+          ),
         )
     );
   }

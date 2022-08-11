@@ -17,6 +17,7 @@ class UserRepo{
   }
 
   Future<void> updateUser() async{
+    _user!.updatedAt = DateTime.now();
     return await FirestoreRef().usersRef.doc(_user!.id).update(_user!.toMap());
   }
 

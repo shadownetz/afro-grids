@@ -49,9 +49,11 @@ class Alerts{
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Icon(Icons.info_outline, color: Colours.primary, size: 60,),
+                const Icon(Icons.info_outline, color: Colours.primary, size: 50,),
                 const SizedBox(height: 30,),
-                Text(message, style: const TextStyle(fontSize: 18),),
+                Center(
+                  child: Text(message, style: const TextStyle(fontSize: 18),),
+                ),
               ],
             ),
           ),
@@ -81,9 +83,11 @@ class Alerts{
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Icon(Icons.check_circle, color: Colours.secondary, size: 60,),
+                const Icon(Icons.check_circle, color: Colours.secondary, size: 50,),
                 const SizedBox(height: 30,),
-                Text(message, style: const TextStyle(fontSize: 18),),
+                Center(
+                  child: Text(message, style: const TextStyle(fontSize: 18),),
+                ),
               ],
             ),
           ),
@@ -113,9 +117,11 @@ class Alerts{
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Icon(Ionicons.ban_outline, color: Colors.redAccent, size: 60,),
+                const Icon(Ionicons.ban_outline, color: Colors.redAccent, size: 50,),
                 const SizedBox(height: 30,),
-                Text(message, style: const TextStyle(fontSize: 18),),
+                Center(
+                  child: Text(message, style: const TextStyle(fontSize: 18),),
+                ),
               ],
             ),
           ),
@@ -144,9 +150,11 @@ class Alerts{
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Icon(Ionicons.infinite_outline, color: Colors.yellow, size: 60,),
+                const Icon(Ionicons.infinite_outline, color: Colors.yellow, size: 50,),
                 const SizedBox(height: 30,),
-                Text(message, style: const TextStyle(fontSize: 18),),
+                Center(
+                  child: Text(message, style: const TextStyle(fontSize: 18),),
+                ),
               ],
             ),
           ),

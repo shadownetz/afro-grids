@@ -23,7 +23,7 @@ class Credentials{
     return "";
   }
   static String get aPIKey{
-    return dotenv.env['API-KEY']!;
+    return dotenv.env['API_KEY']!;
   }
 
 }
