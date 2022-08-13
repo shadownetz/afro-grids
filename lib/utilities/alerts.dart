@@ -13,14 +13,14 @@ class Alerts{
   }
 
 
-  showToast(String message, {Duration? duration}) {
+  void showToast(String message, {Duration? duration}) {
     _fToast.showToast(
       child: _toast(message),
       gravity: ToastGravity.BOTTOM,
       toastDuration: duration ?? const Duration(seconds: 2),
     );
   }
-  showPositionedToast(String message, {Duration? duration, double? top, double? left, double? right, double? bottom, double? width, double? height}){
+  void showPositionedToast(String message, {Duration? duration, double? top, double? left, double? right, double? bottom, double? width, double? height}){
     _fToast.showToast(
         child: _toast(message),
         toastDuration: duration,

@@ -39,7 +39,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                   ),
                 ),
                 ProviderSignUpForm(
-                  onComplete: (user){
+                  onComplete: (user, placeId, password){
                     //
                   },
                 ),
