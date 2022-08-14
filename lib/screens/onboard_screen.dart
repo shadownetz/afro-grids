@@ -120,7 +120,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       ],
                     );
                   }
-                  return const WelcomeScreen();
+                  return const WelcomeScreen(isLoading: true,);
                 },
               )
           ),

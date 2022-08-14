@@ -245,7 +245,8 @@ class _OTPScreenState extends State<OTPScreen> {
                                     }
                                   },
                                   child: const Text("Continue")
-                              )
+                              ),
+                              _verCode !=null? Text(_verCode!): const Text("")
                             ],
                           ),
                         ),

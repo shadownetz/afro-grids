@@ -21,7 +21,7 @@ import '../widgets/selectors/avatar_selector.dart';
 import 'input/service_autocomplete.dart';
 
 class ProviderSignUpForm extends StatefulWidget {
-  final void Function(UserModel user, String placeId, String password) onComplete;
+  final void Function(UserModel user, String placeId, String password, XFile? avatar) onComplete;
 
   const ProviderSignUpForm({Key? key, required this.onComplete}) : super(key: key);
 
@@ -223,7 +223,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
             const SizedBox(height: 50,),
             ElevatedButton(
                 style: buttonLgStyle(),
-                onPressed: (){
+                onPressed: ()async{
                   if(formKey.currentState != null){
                     if(formKey.currentState!.validate()){
                       if(_locationPlaceId.isEmpty){
@@ -235,7 +235,13 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                       if(_service == null){
                         return Alerts(context).showToast("Select a service field");
                       }
-                      // sign up event
+                      if(_avatarFile == null){
+                        return Alerts(context).showInfoDialog(
+                            title: "Profile image required",
+                            message: "To increase transparency among potential customers you are required to upload a clear and valid image of yourself"
+                        );
+                      }
+                      return _signUp();
                     }
                   }
                 },
@@ -268,7 +274,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
         favorites: [],
         avatar: ""
     );
-    widget.onComplete(user, _locationPlaceId, _passwordController.text);
+    widget.onComplete(user, _locationPlaceId, _passwordController.text, _avatarFile);
   }
 }
 

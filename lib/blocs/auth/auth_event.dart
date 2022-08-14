@@ -1,6 +1,7 @@
 import 'package:afro_grids/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 @immutable
 abstract class AuthEvent extends Equatable{}
@@ -14,10 +15,12 @@ class SignUpWithEmailPasswordEvent extends AuthEvent{
   final UserModel user;
   final String password;
   final String placeId;
+  final XFile? avatar;
   SignUpWithEmailPasswordEvent({
     required this.user,
     required this.placeId,
-    required this.password
+    required this.password,
+    this.avatar
   });
   @override
   List<Object?> get props => [];

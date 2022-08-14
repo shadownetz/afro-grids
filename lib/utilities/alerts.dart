@@ -37,7 +37,7 @@ class Alerts{
         });
   }
 
-  showInfoDialog({required String title, required String message}){
+  Future<void> showInfoDialog({required String title, required String message}){
     return showDialog<void>(
       context: context,
       barrierDismissible: false,

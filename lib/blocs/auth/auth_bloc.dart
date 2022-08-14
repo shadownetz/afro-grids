@@ -56,7 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
         );
         if(credential.user != null){
           event.user.id = credential.user!.uid;
-          await UserRepo(user: event.user).addUser();
+          await UserRepo(user: event.user).addUser(avatar: event.avatar);
         }else{
           throw Exception("We were unable to complete the signup process. Please try again");
         }
@@ -142,7 +142,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
   void _mapLogoutEventToEvent(LogoutEvent event, Emitter<AuthState> emit)async{
     try{
       await FirebaseAuth.instance.signOut();
-      localStorage.user = null;
       emit(UnAuthenticatedState());
     }catch(e){
       emit(AuthErrorState(e.toString()));

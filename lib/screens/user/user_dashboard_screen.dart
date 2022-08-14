@@ -7,6 +7,7 @@ import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/screens/user/account/user_profile_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
+import 'package:afro_grids/utilities/asset_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +15,7 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../blocs/auth/auth_state.dart';
 import '../../blocs/dashboard/dashboard_state.dart';
+import '../../main.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/widgets.dart';
 import 'chat/chats_screen.dart';
@@ -28,7 +30,7 @@ class UserDashboardScreen extends StatefulWidget {
 class _UserDashboardScreenState extends State<UserDashboardScreen> {
   late GoogleMapController mapController;
 
-  final LatLng _mapCenter = const LatLng(6.465422, 3.406448);
+  final LatLng _mapCenter = LatLng(localStorage.user!.location.latitude, localStorage.user!.location.longitude);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -37,8 +39,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    double deviceWidth = MediaQuery. of(context). size. width ;
-    double deviceHeight = MediaQuery. of(context). size. height;
+    double deviceWidth = MediaQuery.of(context).size.width ;
     AuthBloc? authBlocProvider;
     DashboardBloc? dashboardBlocProvider;
 
@@ -103,18 +104,14 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                               width: 200,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20)
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                      image: AssetResources().userAvatar(localStorage.user),
+                                    fit: BoxFit.cover
+                                  )
                               ),
                               child: Stack(
                                 children: [
-                                  const Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Image(
-                                      image: AssetImage('assets/avatars/man.png'), // or woman image depending on gender
-                                      width: 170,
-                                      height: 170,
-                                    ),
-                                  ),
                                   Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Container(
@@ -122,7 +119,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                         height: 70,
                                         decoration: BoxDecoration(
                                             color: Colors.grey,
-                                            borderRadius: BorderRadius.circular(20),
+                                            // borderRadius: BorderRadius.circular(20),
                                             gradient: LinearGradient(
                                               begin: Alignment.topCenter,
                                               end: Alignment.bottomCenter,
@@ -138,13 +135,13 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                           padding: EdgeInsets.only(left: 10, top: 15),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: const [
+                                            children: [
                                               Text(
-                                                "Lintang C",
+                                                "${localStorage.user!.firstName} ${localStorage.user!.lastName}",
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                                               ),
-                                              Text(
+                                              const Text(
                                                 "user",
                                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
                                               )
