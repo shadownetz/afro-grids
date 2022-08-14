@@ -2,6 +2,7 @@ import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
+import '../utilities/currency.dart';
 import 'model_types.dart';
 
 class UserModel{
@@ -74,6 +75,52 @@ class UserModel{
         emailVerified = user.data()!['emailVerified'],
         phoneVerified = user.data()!['phoneVerified'];
 
+  UserModel.providerInstance():
+    id = "",
+    firstName = "",
+    lastName = "",
+    middleName = "",
+    avatar = "",
+    email = "",
+    phone = "",
+    authType = AuthType.email,
+    accessLevel = AccessLevel.provider,
+    currency = CurrencyUtil().currencyName,
+    location = GeoFirePoint(6.465422, 3.406448),
+    createdAt = DateTime.now(),
+    updatedAt = DateTime.now(),
+    serviceId = "",
+    serviceType = ServiceType.multiple,
+    ratings = Ratings(0, 0, 0),
+    accessStatus = AccessStatus.pending,
+    reviews = Reviews(0, 0),
+    favorites = [],
+    emailVerified = false,
+    phoneVerified = false;
+
+  UserModel.userInstance():
+        id = "",
+        firstName = "",
+        lastName = "",
+        middleName = "",
+        avatar = "",
+        email = "",
+        phone = "",
+        authType = AuthType.email,
+        accessLevel = AccessLevel.user,
+        currency = CurrencyUtil().currencyName,
+        location = GeoFirePoint(6.465422, 3.406448),
+        createdAt = DateTime.now(),
+        updatedAt = DateTime.now(),
+        serviceId = "",
+        serviceType = ServiceType.single,
+        ratings = Ratings(0, 0, 0),
+        accessStatus = AccessStatus.approved,
+        reviews = Reviews(0, 0),
+        favorites = [],
+        emailVerified = false,
+        phoneVerified = false;
+
   Map<String, dynamic> toMap(){
     return {
       'firstName': firstName,
@@ -101,5 +148,15 @@ class UserModel{
 
   bool get isProvider{
     return accessLevel == AccessLevel.provider;
+  }
+
+  setLocation(double lat, double lng){
+    location = GeoFirePoint(lat, lng);
+  }
+  setAvatar(String? url){
+    avatar = url ?? "";
+  }
+  setPhone(String? phoneNum){
+    phone = phoneNum ?? "";
   }
 }

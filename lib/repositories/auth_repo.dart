@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:afro_grids/configs/api_config.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepo{
@@ -34,5 +35,23 @@ class AuthRepo{
       return jsonDecode(response.body).toString();
     }
     return null;
+  }
+
+  Future<UserCredential?> signInWithGoogle() async{
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    if(googleAuth != null){
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
+  }
+
+  Future<void> signOut() async{
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
   }
 }

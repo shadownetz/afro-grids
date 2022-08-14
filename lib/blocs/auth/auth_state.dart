@@ -51,3 +51,10 @@ class SentPhoneVerificationState extends AuthState{
   @override
   List<Object?> get props => [];
 }
+
+class PhoneUpdatedState extends AuthState{
+  final String phone;
+  PhoneUpdatedState({required this.phone});
+  @override
+  List<Object?> get props => [];
+}

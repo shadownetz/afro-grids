@@ -3,6 +3,7 @@ import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 Widget leaveAReviewButton(BuildContext context){
   return ElevatedButton(
@@ -121,4 +122,78 @@ ButtonStyle cartCountBtnStyle(){
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap
   );
+}
+
+class GoogleSignInButton extends StatelessWidget {
+  final void Function()? onClick;
+  const GoogleSignInButton({Key? key, this.onClick}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            minimumSize: const Size(170, 40),
+            textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w200
+            )
+        ),
+        onPressed: (){
+          if(onClick != null){
+            onClick!();
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            Icon(Ionicons.logo_google, size: 20, color: Colors.red,),
+            SizedBox(width: 10,),
+            Text(
+              "Google",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        )
+    );
+  }
+}
+
+class FacebookSignInButton extends StatelessWidget {
+  final void Function()? onClick;
+  const FacebookSignInButton({Key? key, this.onClick}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            minimumSize: const Size(170, 40),
+            textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w200
+            )
+        ),
+        onPressed: (){
+          if(onClick != null){
+            onClick!();
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            Icon(Ionicons.logo_facebook, size: 20, color: Colors.blueAccent,),
+            SizedBox(width: 10,),
+            Text(
+              "Facebook",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        )
+    );
+  }
 }

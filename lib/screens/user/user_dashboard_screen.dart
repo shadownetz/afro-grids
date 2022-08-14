@@ -76,6 +76,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           },
           builder: (context, state){
             authBlocProvider = BlocProvider.of<AuthBloc>(context);
+            Future.delayed(const Duration(seconds: 2), _displayAlerts);
             return SingleChildScrollView(
               child: BlocConsumer<DashboardBloc, DashboardState>(
                 listener: (context, state){
@@ -141,8 +142,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                                               ),
-                                              const Text(
-                                                "user",
+                                              Text(
+                                                localStorage.user!.accessLevel.toLowerCase(),
                                                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
                                               )
                                             ],
@@ -436,5 +437,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         ),
       ),
     );
+  }
+  void _displayAlerts()async{
+    for(var g=localStorage.getNextNotification; g!=null;){
+      await Alerts(context).showInfoDialog(title: "Information", message: g);
+    }
   }
 }

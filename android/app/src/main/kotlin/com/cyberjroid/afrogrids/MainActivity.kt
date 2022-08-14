@@ -1,4 +1,4 @@
-package com.shadownetz.afro_grids
+package com.cyberjroid.afrogrids
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,8 @@
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/utilities/forms/auth_forms.dart';
+import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../blocs/auth/auth_bloc.dart';
@@ -9,6 +10,7 @@ import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
+import '../../utilities/navigation_guards.dart';
 import '../../utilities/widgets/widgets.dart';
 import 'otp_screen.dart';
 
@@ -42,6 +44,10 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
               }
               if(state is PhoneVerificationState){
                 Navigator.of(context).push(createRoute(const OTPScreen()));
+              }
+              if(state is AuthenticatedState){
+                NavigationGuards(context, user: state.user!).navigateToDashboard();
+                Alerts(context).showToast("Logged in");
               }
             },
             builder: (context, state){
@@ -89,53 +95,13 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  minimumSize: const Size(170, 40),
-                                  textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200
-                                  )
-                              ),
-                              onPressed: ()=>{},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Icon(Ionicons.logo_facebook, size: 20, color: Colors.blueAccent,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    "Facebook",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              )
+                          FacebookSignInButton(
+                            onClick: (){},
                           ),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  minimumSize: const Size(170, 40),
-                                  textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200
-                                  )
-                              ),
-                              onPressed: ()=>{},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Icon(Ionicons.logo_google, size: 20, color: Colors.red,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    "Google",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              )
+                          GoogleSignInButton(
+                            onClick: ()=>BlocProvider
+                                .of<AuthBloc>(context)
+                                .add(SignInWithGoogleEvent(user: UserModel.providerInstance())),
                           )
                         ],
                       )

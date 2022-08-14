@@ -1,4 +1,3 @@
-import 'package:afro_grids/blocs/service/service_bloc.dart';
 import 'package:afro_grids/models/model_types.dart';
 import 'package:afro_grids/models/service_category_model.dart';
 import 'package:afro_grids/models/service_model.dart';
@@ -14,8 +13,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../../models/user_model.dart';
-import '../../blocs/service/service_event.dart';
 import '../class_constants.dart';
+import '../colours.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/selectors/avatar_selector.dart';
 import 'input/service_autocomplete.dart';
@@ -466,6 +465,71 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
         avatar: ""
     );
     widget.onComplete(user, locationPlaceId, passwordController.text);
+  }
+}
+
+class PhoneUpdateForm extends StatefulWidget {
+  final void Function(String phone) onComplete;
+  const PhoneUpdateForm({Key? key, required this.onComplete}) : super(key: key);
+
+  @override
+  State<PhoneUpdateForm> createState() => _PhoneUpdateFormState();
+}
+
+class _PhoneUpdateFormState extends State<PhoneUpdateForm> {
+  final formKey = GlobalKey<FormState>();
+  var phoneController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(height: 20,),
+            const Text(
+              "Your mobile number is needed to complete the verification process",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 10,),
+            TextFormField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelText: "Phone",
+                hintText: "enter your phone number",
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty || value.length <= 3) {
+                  return 'Please enter a valid phone number';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 50,),
+            const  Text(
+              "An OTP will be sent after this step to verify your mobile number",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colours.secondary, fontSize: 17),
+            ),
+            const SizedBox(height: 50,),
+            ElevatedButton(
+                style: buttonLgStyle(),
+                onPressed: (){
+                  // Navigator.of(context).pushReplacementNamed('/user-dashboard');
+                  if(formKey.currentState != null){
+                    if(formKey.currentState!.validate()){
+                      widget.onComplete(phoneController.text);
+                    }
+                  }
+                },
+                child: const Text("Proceed")
+            )
+          ],
+        )
+    );
   }
 }
 

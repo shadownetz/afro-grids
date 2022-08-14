@@ -47,7 +47,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.shadownetz.afro_grids"
+        applicationId "com.cyberjroid.afrogrids"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

@@ -7,8 +7,10 @@ import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../blocs/auth/auth_state.dart';
+import '../../models/user_model.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
+import '../../utilities/navigation_guards.dart';
 import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
@@ -46,11 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Navigator.of(context).push(createRoute(const OTPScreen()));
               }
               if(state is AuthenticatedState){
-                if(state.user!.isProvider){
-                  Navigator.of(context).pushReplacementNamed("/provider-dashboard");
-                }else{
-                  Navigator.of(context).pushReplacementNamed("/user-dashboard");
-                }
+                NavigationGuards(context, user: state.user!).navigateToDashboard();
                 Alerts(context).showToast("Logged in");
               }
             },
@@ -86,53 +84,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  minimumSize: const Size(170, 40),
-                                  textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200
-                                  )
-                              ),
-                              onPressed: ()=>{},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Icon(Ionicons.logo_facebook, size: 20, color: Colors.blueAccent,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    "Facebook",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              )
+                          FacebookSignInButton(
+                            onClick: (){},
                           ),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  minimumSize: const Size(170, 40),
-                                  textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200
-                                  )
-                              ),
-                              onPressed: ()=>{},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: const [
-                                  Icon(Ionicons.logo_google, size: 20, color: Colors.red,),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    "Google",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              )
+                          GoogleSignInButton(
+                            onClick: ()=>BlocProvider
+                                .of<AuthBloc>(context)
+                                .add(SignInWithGoogleEvent(user: UserModel.userInstance())),
                           )
                         ],
                       )

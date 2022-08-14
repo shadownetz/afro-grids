@@ -3,7 +3,7 @@ import 'package:afro_grids/blocs/auth/auth_state.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/repositories/auth_repo.dart';
 import 'package:afro_grids/repositories/user_repo.dart';
-import 'package:afro_grids/utilities/services/geofire_service.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +15,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     on<LoginWithEmailPasswordEvent>(_mapLoginWithEmailPasswordEventToEvent);
     on<SendPhoneVerificationEvent>(_mapSendPhoneVerificationEventToEvent);
     on<PostPhoneVerificationLoginEvent>(_mapPostPhoneVerificationLoginEventToEvent);
+    on<SignInWithGoogleEvent>(_mapSignInWithGoogleEventToEvent);
+    on<UpdatePhoneEvent>(_mapUpdatePhoneEventToEvent);
     on<LogoutEvent>(_mapLogoutEventToEvent);
   }
 
@@ -47,16 +49,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     try{
       var response = await GMapService().getAddressFromPlaceId(event.placeId);
       if(response != null){
-        event.user.location = GeoFireService().geo.point(
-            latitude: response.geometry.location.lat,
-            longitude: response.geometry.location.lng
-        );
+        event.user.setLocation(response.geometry.location.lat, response.geometry.location.lng);
         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: event.user.email, password: event.password
         );
         if(credential.user != null){
           event.user.id = credential.user!.uid;
-          await UserRepo(user: event.user).addUser(avatar: event.avatar);
+          var userRepo = UserRepo(user: event.user);
+          if(event.avatar != null){
+            await userRepo.uploadAvatar(event.avatar!);
+          }
+          await userRepo.addUser();
         }else{
           throw Exception("We were unable to complete the signup process. Please try again");
         }
@@ -114,16 +117,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
   void _mapSendPhoneVerificationEventToEvent(SendPhoneVerificationEvent event, Emitter<AuthState> emit)async{
     emit(AuthLoadingState());
     try{
-      if(localStorage.user != null){
-        var code = await AuthRepo().verifyPhone(localStorage.user!);
+      if(event.user.phone.isNotEmpty){
+        var code = await AuthRepo().verifyPhone(event.user);
         emit(SentPhoneVerificationState(code));
       }else{
-        emit(AuthErrorState("We are unable to send a verification code at this time"));
+        emit(AuthInitialState());
       }
     }catch(e){
       emit(AuthErrorState(e.toString()));
     }
   }
+
   void _mapPostPhoneVerificationLoginEventToEvent(PostPhoneVerificationLoginEvent event, Emitter<AuthState> emit)async{
     emit(AuthLoadingState());
     try{
@@ -139,13 +143,71 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
       emit(AuthErrorState(e.toString()));
     }
   }
+
   void _mapLogoutEventToEvent(LogoutEvent event, Emitter<AuthState> emit)async{
     try{
-      await FirebaseAuth.instance.signOut();
+      await AuthRepo().signOut();
       emit(UnAuthenticatedState());
     }catch(e){
       emit(AuthErrorState(e.toString()));
     }
 
+  }
+
+  void _mapSignInWithGoogleEventToEvent(SignInWithGoogleEvent event, Emitter<AuthState> emit)async{
+    emit(AuthLoadingState());
+    final authRepo = AuthRepo();
+    String? authMessage;
+    try{
+      var credential = await authRepo.signInWithGoogle();
+      if(credential != null){
+        if(credential.user != null){
+          final user = await UserRepo().getUserByEmail(credential.user!.email!);
+          if(user != null){
+            // login the user
+            if(user.authType != AuthType.google){
+              localStorage.addNotification("Hi ${user.firstName}. You signed in using google and this has been set to your new login method.");
+              user.authType = AuthType.google;
+              await UserRepo(user: user).updateUser();
+            }
+            localStorage.user = user;
+          }
+          else{
+            // signup the user
+            event.user.id = credential.user!.uid;
+            event.user.authType = AuthType.google;
+            event.user.firstName = credential.user!.displayName??"";
+            event.user.email = credential.user!.email??"";
+            event.user.setAvatar(credential.user!.photoURL);
+            event.user.setPhone(credential.user!.phoneNumber);
+            var userRepo = UserRepo(user: event.user);
+            userRepo.trySetLocation();
+            localStorage.user = await userRepo.addUser();
+          }
+          if(localStorage.user!.phoneVerified){
+            emit(AuthenticatedState(user: localStorage.user!));
+          }else{
+            emit(PhoneVerificationState());
+          }
+        }else{
+          emit(AuthErrorState("There was an issue signing into your account"));
+        }
+      }else{
+        emit(AuthErrorState("We could not complete the sign in process"));
+      }
+    }catch(e){
+      emit(AuthErrorState(e.toString()));
+    }
+  }
+
+  void _mapUpdatePhoneEventToEvent(UpdatePhoneEvent event, Emitter<AuthState> emit) async{
+    emit(AuthLoadingState());
+    try{
+      await UserRepo(user: event.user).updatePhone(event.phone);
+      emit(PhoneUpdatedState(phone: event.phone));
+      await Future.delayed(Duration(seconds: 1));
+    }catch(e){
+      emit(AuthErrorState(e.toString()));
+    }
   }
 }

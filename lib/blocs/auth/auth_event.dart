@@ -35,6 +35,8 @@ class LoginWithEmailPasswordEvent extends AuthEvent{
 }
 
 class SendPhoneVerificationEvent extends AuthEvent{
+  final UserModel user;
+  SendPhoneVerificationEvent({required this.user});
   @override
   List<Object?> get props => [];
 }
@@ -46,6 +48,22 @@ class PostPhoneVerificationLoginEvent extends AuthEvent{
   @override
   List<Object?> get props => [];
 }
+
+class SignInWithGoogleEvent extends AuthEvent{
+  final UserModel user;
+  SignInWithGoogleEvent({required this.user});
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdatePhoneEvent extends AuthEvent{
+  final UserModel user;
+  final String phone;
+  UpdatePhoneEvent({required this.user, required this.phone});
+  @override
+  List<Object?> get props => [];
+}
+
 
 class LogoutEvent extends AuthEvent{
   @override
