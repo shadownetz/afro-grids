@@ -50,20 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB33_Zj7Np3ztlGDipoqFtjELI8OQPdePU',
-    appId: '1:1090572091531:android:b7292316786acff0d2948e',
+    apiKey: 'AIzaSyArXQCLWNYNl52N3pDeuAf2xxBhnst2PWY',
+    appId: '1:1090572091531:android:24895c3b4824ed92d2948e',
     messagingSenderId: '1090572091531',
     projectId: 'afrogrids',
     storageBucket: 'afrogrids.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAtcqxe0GeWIRasNRjUktB2LXn3gAVxOSA',
-    appId: '1:1090572091531:ios:b6720d4cea92d402d2948e',
+    apiKey: 'AIzaSyBNFOVKSh6YE4KhVZDMWCaZJRYzeM_9sv0',
+    appId: '1:1090572091531:ios:7cf7b08bbf298af1d2948e',
     messagingSenderId: '1090572091531',
     projectId: 'afrogrids',
     storageBucket: 'afrogrids.appspot.com',
-    iosClientId: '1090572091531-lnmdn65539cel05gqtp2gpk1blmq1qp8.apps.googleusercontent.com',
-    iosBundleId: 'com.shadownetz.afroGrids',
+    androidClientId: '1090572091531-6b96jtn87rabvb5gno5c1k2g6891s1sf.apps.googleusercontent.com',
+    iosClientId: '1090572091531-6j5hg59h408bms22q2g4n9in0sm2b34f.apps.googleusercontent.com',
+    iosBundleId: 'com.cyberjroid.afrogrids',
   );
 }
