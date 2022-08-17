@@ -22,12 +22,15 @@ class _GPlaceAutoCompleteState extends State<GPlaceAutoComplete> {
   }
 
   void _autoCompleteSearch(String value) async {
-    var result = await _googlePlace.autocomplete.get(value);
-    if (result != null && result.predictions != null && mounted) {
-      setState(() {
-        _predictions = result.predictions!;
-      });
+    if(value.isNotEmpty){
+      var result = await _googlePlace.autocomplete.get(value);
+      if (result != null && result.predictions != null && mounted) {
+        setState(() {
+          _predictions = result.predictions!;
+        });
+      }
     }
+
   }
 
   @override

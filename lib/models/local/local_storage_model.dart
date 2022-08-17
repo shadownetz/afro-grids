@@ -6,11 +6,12 @@ class LocalStorageModel{
 
   LocalStorageModel({this.user});
 
-  String? get getNextNotification{
-    if(_notifications.isNotEmpty){
-      return _notifications.removeAt(0);
-    }
-    return null;
+  String get getNextNotification{
+    return _notifications.removeAt(0);
+  }
+
+  List<String>? get notifications{
+    return _notifications.isEmpty? null: _notifications;
   }
 
   void addNotification(String value){

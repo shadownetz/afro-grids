@@ -95,9 +95,9 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          FacebookSignInButton(
-                            onClick: (){},
-                          ),
+                          // FacebookSignInButton(
+                          //   onClick: (){},
+                          // ),
                           GoogleSignInButton(
                             onClick: ()=>BlocProvider
                                 .of<AuthBloc>(context)

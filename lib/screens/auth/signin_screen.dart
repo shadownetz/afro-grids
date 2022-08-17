@@ -24,6 +24,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  bool _obscurePassword = true;
   AuthBloc? _authBlocProvider;
 
   @override
@@ -84,9 +85,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          FacebookSignInButton(
-                            onClick: (){},
-                          ),
+                          // FacebookSignInButton(
+                          //   onClick: (){},
+                          // ),
                           GoogleSignInButton(
                             onClick: ()=>BlocProvider
                                 .of<AuthBloc>(context)
@@ -129,13 +130,15 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             TextFormField(
               controller: passwordController,
-              obscureText: true,
+              obscureText: _obscurePassword,
               decoration: InputDecoration(
                   labelText: "Password",
                   hintText: "enter your account's password",
                   suffix: IconButton(
-                      onPressed: (){},
-                      icon: const Icon(Ionicons.eye_off_sharp)
+                      onPressed: ()=>setState(()=>_obscurePassword = !_obscurePassword),
+                      icon: Icon(
+                          _obscurePassword? Ionicons.eye: Ionicons.eye_off_sharp
+                      )
                   )
               ),
               validator: (value) {

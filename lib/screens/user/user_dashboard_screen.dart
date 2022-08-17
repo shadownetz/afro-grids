@@ -439,8 +439,8 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     );
   }
   void _displayAlerts()async{
-    for(var g=localStorage.getNextNotification; g!=null;){
-      await Alerts(context).showInfoDialog(title: "Information", message: g);
+    while(localStorage.notifications != null){
+      await Alerts(context).showInfoDialog(title: "Information", message: localStorage.getNextNotification);
     }
   }
 }
