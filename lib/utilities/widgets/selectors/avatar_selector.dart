@@ -49,7 +49,7 @@ class _AvatarSelectorState extends State<AvatarSelector> {
                 onTap: ()=>deviceBlocProvider!.add(ChooseImageEvent()),
                 child: Stack(
                   children: [
-                    roundImage(
+                    RoundImage(
                         image: const AssetImage("assets/avatars/man.png"),
                         width: 130,
                         height: 130
@@ -86,7 +86,7 @@ class _AvatarSelectorState extends State<AvatarSelector> {
       children: [
         GestureDetector(
           onTap: ()=>deviceBlocProvider!.add(ChooseImageEvent()),
-          child: roundImage(
+          child: RoundImage(
               image: FileImage(File(image.path)),
               width: 130,
               height: 130,

@@ -38,7 +38,7 @@ class _LeaveAReviewScreenState extends State<LeaveAReviewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // provider avatar
-                  roundImage(
+                  RoundImage(
                     image: AssetImage('assets/avatars/man.png'),
                     hasShadow: true
                   ),

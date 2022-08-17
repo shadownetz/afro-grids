@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:afro_grids/configs/firestorage_references.dart';
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -64,6 +65,16 @@ class UserRepo{
     }catch(e){
       //
     }
+  }
+
+  Future<List<UserModel>> fetchUsersByServiceID(String serviceID) async {
+    var querySnapshot = await FirestoreRef().usersRef
+        .where("serviceId", isEqualTo: serviceID)
+        .where("accessStatus", isEqualTo: AccessStatus.approved)
+        .get();
+    return querySnapshot.docs.map((doc){
+      return UserModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>);
+    }).toList();
   }
 
 

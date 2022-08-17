@@ -1,5 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:afro_grids/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:flutter/services.dart';
+
 
 class AssetResources{
   ImageProvider userAvatar(UserModel? user){
@@ -9,5 +15,16 @@ class AssetResources{
       }
     }
     return const AssetImage('assets/avatars/man.png');
+  }
+
+  Future<Uint8List> gMapMarkerIcon()async{
+    return await getBytesFromAsset("assets/logo.png", 50);
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    Codec codec = await instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ImageByteFormat.png))!.buffer.asUint8List();
   }
 }

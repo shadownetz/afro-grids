@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
           itemBuilder: (context, msgIndex){
             final message = localMessages[msgIndex];
             return ListTile(
-              leading: roundImage(image: const AssetImage("assets/avatars/woman.png")),
+              leading: RoundImage(image: const AssetImage("assets/avatars/woman.png")),
               title: Text(message.userId, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
               subtitle: Text(message.messages.last.content, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),),
               trailing: Text('${message.messages.last.createdAt}', style: const TextStyle(color: Colors.grey),),

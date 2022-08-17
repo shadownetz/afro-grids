@@ -94,12 +94,6 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                   labelText: "Middle name (optional)",
                   hintText: "enter your middle name"
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length <= 3) {
-                  return 'Please enter a valid name';
-                }
-                return null;
-              },
             ),
             TextFormField(
               controller: _emailController,

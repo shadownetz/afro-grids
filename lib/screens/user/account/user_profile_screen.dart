@@ -24,7 +24,7 @@ class UserProfileScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
-                  roundImage(
+                  RoundImage(
                       image: AssetImage("assets/avatars/man.png"),
                       width: 130,
                       height: 130

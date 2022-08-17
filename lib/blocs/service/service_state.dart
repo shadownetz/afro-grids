@@ -1,3 +1,4 @@
+import 'package:afro_grids/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,16 @@ class ServiceErrorState extends ServiceState{
   final String message;
 
   ServiceErrorState(this.message);
+
+  @override
+  List<Object?> get props => [];
+
+}
+
+class FetchedServiceProvidersState extends ServiceState{
+  final List<UserModel> users;
+
+  FetchedServiceProvidersState(this.users);
 
   @override
   List<Object?> get props => [];

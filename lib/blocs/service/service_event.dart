@@ -20,3 +20,11 @@ class AddServiceEvent extends ServiceEvent{
   List<Object?> get props => [];
 
 }
+
+class FetchServiceProvidersEvent extends ServiceEvent{
+  final ServiceModel service;
+  FetchServiceProvidersEvent(this.service);
+  
+  @override
+  List<Object?> get props => [];
+}

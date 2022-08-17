@@ -61,7 +61,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       ),
       body: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (BuildContext context)=>DashboardBloc()..add(FetchDashboardInfo())),
+          BlocProvider(create: (BuildContext context)=>DashboardBloc()
+            // ..add(FetchDashboardInfo())
+          ),
           BlocProvider(create: (BuildContext context)=>AuthBloc())
         ],
         child: BlocConsumer<AuthBloc, AuthState>(

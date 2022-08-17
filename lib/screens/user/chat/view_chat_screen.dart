@@ -23,7 +23,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            roundImage(
+            RoundImage(
                 width: 40,
                 height: 40,
                 image: const AssetImage("assets/avatars/woman.png")

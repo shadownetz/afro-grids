@@ -1,16 +1,18 @@
+import 'package:afro_grids/blocs/service/service_bloc.dart';
+import 'package:afro_grids/blocs/service/service_event.dart';
+import 'package:afro_grids/blocs/service/service_state.dart';
 import 'package:afro_grids/models/service_model.dart';
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/provider/provider_info_single_service_screen.dart';
+import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
-import '../../blocs/device/device_bloc.dart';
-import '../../blocs/device/device_event.dart';
-import '../../blocs/device/device_state.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
-import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
 class ServiceSearchResultScreen extends StatefulWidget {
@@ -22,12 +24,27 @@ class ServiceSearchResultScreen extends StatefulWidget {
 }
 
 class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
+  List<UserModel> _users = [];
+  Set<Marker> _usersMarker = {};
   late GoogleMapController mapController;
   double _verticalH = 0;
 
   final LatLng _mapCenter = const LatLng(6.465422, 3.406448);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+  void _initMapValues({required List<UserModel> users})async{
+    var markers = await GMapService.getUsersMarker(users);
+    setState((){
+      _users = users;
+      _usersMarker = markers;
+    });
+    if(users.isNotEmpty){
+      mapController.animateCamera(CameraUpdate.newLatLngBounds(
+          GMapService.boundsFromLatLngList(users),
+          50
+      ));
+    }
   }
 
   @override
@@ -55,53 +72,57 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
 
     return Scaffold(
         appBar: _appBar,
-        body: BlocProvider(
-          create: (BuildContext context)=>DeviceBloc()..add(FetchDeviceLocationEvent()),
-          child: BlocConsumer<DeviceBloc, DeviceState>(
-            listener: (context, state){
-              if(state is DeviceLoadedState){
-                if(state.devicePosition != null){
-                  mapController.animateCamera(
-                      CameraUpdate.newLatLng(LatLng(state.devicePosition!.latitude, state.devicePosition!.longitude))
-                  );
+        body: CustomLoadingOverlay(
+          widget: BlocProvider<ServiceBloc>(
+            create: (BuildContext context)=>ServiceBloc()..add(FetchServiceProvidersEvent(widget.serviceModel)),
+            child: BlocConsumer<ServiceBloc, ServiceState>(
+              listener: (context, state){
+                if(state is ServiceLoadingState){
+                  context.loaderOverlay.show();
+                }else{
+                  context.loaderOverlay.hide();
                 }
-              }
-              if(state is DeviceErrorState){
-                Alerts(context).showToast(state.message);
-              }
-            },
-            builder: (context, state){
-              return Stack(
-                children: [
-                  SizedBox(
-                    height: deviceHeight-deviceMargin,
-                    child: GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      myLocationEnabled: true,
-                      initialCameraPosition: CameraPosition(
-                        target: _mapCenter,
-                        zoom: 15.0,
+                if(state is FetchedServiceProvidersState){
+                  _initMapValues(users: state.users);
+                }
+                if(state is ServiceErrorState){
+                  Alerts(context).showToast(state.message);
+                }
+              },
+              builder: (context, state){
+                return Stack(
+                  children: [
+                    SizedBox(
+                      height: deviceHeight-deviceMargin,
+                      child: GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        myLocationEnabled: true,
+                        initialCameraPosition: CameraPosition(
+                          target: _mapCenter,
+                          zoom: 12.0,
+                        ),
+                        markers: _usersMarker,
                       ),
                     ),
-                  ),
-                  // search bar
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 100),
-                    firstChild: searchBar(deviceWidth: deviceWidth),
-                    secondChild: Container(),
-                    crossFadeState: dragIsMidScreen? CrossFadeState.showSecond: CrossFadeState.showFirst,
-                  ),
-                  // provider list container
-                  providerList(
-                      height: _height,
-                      deviceHeight: deviceHeight,
-                      deviceMargin: deviceMargin,
-                      deviceWidth: deviceWidth,
-                      dragIsMidScreen: dragIsMidScreen
-                  )
-                ],
-              );
-            },
+                    // search bar
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 100),
+                      firstChild: searchBar(deviceWidth: deviceWidth),
+                      secondChild: Container(),
+                      crossFadeState: dragIsMidScreen? CrossFadeState.showSecond: CrossFadeState.showFirst,
+                    ),
+                    // provider list container
+                    providerList(
+                        height: _height,
+                        deviceHeight: deviceHeight,
+                        deviceMargin: deviceMargin,
+                        deviceWidth: deviceWidth,
+                        dragIsMidScreen: dragIsMidScreen
+                    )
+                  ],
+                );
+              },
+            ),
           ),
         )
     );
@@ -183,41 +204,59 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                   ]
               ),
               height: height,
-              child: SingleChildScrollView(
-                physics: dragIsMidScreen? AlwaysScrollableScrollPhysics(): NeverScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    AnimatedCrossFade(
-                        firstChild: Column(
-                          children: [
-                            // drag indicator
-                            modalDragIndicator(),
-                            const SizedBox(height: 20,),
-                            const SizedBox(
-                              width: 250,
-                              child: Text(
-                                "Select a provider to continue or swipe up to view complete list",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 17, color: Colors.grey),
-                              ),
-                            )
-                          ],
-                        ),
-                        secondChild: Container(),
-                        crossFadeState: dragIsMidScreen? CrossFadeState.showSecond: CrossFadeState.showFirst,
-                        duration: const Duration(seconds: 1)
-                    ),
-                    const SizedBox(height: 25,),
-                    Column(
+              child: Column(
+                children: [
+                  AnimatedCrossFade(
+                      firstChild: Column(
+                        children: [
+                          // drag indicator
+                          modalDragIndicator(),
+                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            width: 250,
+                            child: Text(
+                              "Select a provider to continue or swipe up to view complete list",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 17, color: Colors.grey),
+                            ),
+                          )
+                        ],
+                      ),
+                      secondChild: Container(),
+                      crossFadeState: dragIsMidScreen? CrossFadeState.showSecond: CrossFadeState.showFirst,
+                      duration: const Duration(seconds: 1)
+                  ),
+                  const SizedBox(height: 25,),
+                  _users.isEmpty?
+                  Column(
                       children: [
-                        providerListItem(dragIsMidScreen: dragIsMidScreen),
-                        providerListItem(dragIsMidScreen: dragIsMidScreen),
-                        providerListItem(dragIsMidScreen: dragIsMidScreen),
-                        providerListItem(dragIsMidScreen: dragIsMidScreen)
-                      ],
-                    ),
-                  ],
-                ),
+                        const SizedBox(height: 20,),
+                        SizedBox(
+                          // width: 250,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Ionicons.man_outline, size: 17,),
+                              Text(
+                                "There are no providers for the selected service at this time",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 17),
+                              )
+                            ],
+                          ),
+                        )
+                      ]
+                  ):
+                  ListView.builder(
+                    physics: dragIsMidScreen? AlwaysScrollableScrollPhysics(): NeverScrollableScrollPhysics(),
+                    itemCount: _users.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, idx){
+                      return providerListItem(dragIsMidScreen: dragIsMidScreen, user: _users[idx]);
+                    },
+
+                  )
+                ],
               ),
             )
         ),
@@ -225,7 +264,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
     );
   }
 
-  Widget providerListItem({required dragIsMidScreen}){
+  Widget providerListItem({required bool dragIsMidScreen, required UserModel user}){
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
@@ -246,22 +285,17 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
             children: [
               // Item 1
               // provider icon
-              Container(
+              RoundImage(
+                image: NetworkImage(user.avatar),
                 width: 30,
                 height: 30,
-                decoration: const BoxDecoration(
-                    color: Colors.pinkAccent,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage('assets/avatars/woman.png')
-                    )
-                ),
+                fit: BoxFit.cover,
               ),
               const SizedBox(width: 10,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Mary Yvonne", style: TextStyle(fontSize: 20),),
+                  Text("${user.firstName} ${user.lastName}", style: const TextStyle(fontSize: 17),),
                   Row(
                     children: const [
                       Icon(Icons.star, color: Colors.green, size: 15,),

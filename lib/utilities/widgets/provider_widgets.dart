@@ -250,7 +250,7 @@ class _PortfolioReviewsTabViewState extends State<PortfolioReviewsTabView> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              roundImage(image: AssetImage('assets/avatars/woman.png'), width: 40, height: 40),
+              RoundImage(image: AssetImage('assets/avatars/woman.png'), width: 40, height: 40),
               SizedBox(width: 10,),
               Expanded(
                   child: Column(

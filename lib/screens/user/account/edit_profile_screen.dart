@@ -30,7 +30,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onTap: (){},
                 child: Stack(
                   children: [
-                    roundImage(
+                    RoundImage(
                         image: const AssetImage("assets/avatars/man.png"),
                         width: 130,
                         height: 130

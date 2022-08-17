@@ -74,28 +74,40 @@ Widget cartIcon({int? itemCount}){
   );
 }
 
-Widget roundImage({
-  required ImageProvider image,
-  double width=50,
-  double height=50,
-  bool hasShadow=false,
-  BoxFit? fit
-}){
-  return Container(
-    width: width,
-    height: height,
-    decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        image: DecorationImage(
-            image: image,
-            fit: fit
-        ),
-        boxShadow: hasShadow? [
-          boxShadow2()
-        ]: null
-    ),
-  );
+class RoundImage extends StatelessWidget {
+  final ImageProvider image;
+  final double width;
+  final double height;
+  final bool hasShadow;
+  final BoxFit? fit;
+
+  const RoundImage({
+    Key? key,
+    required this.image,
+    this.width=50,
+    this.height=50,
+    this.hasShadow=false,
+    this.fit
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+              image: image,
+              fit: fit
+          ),
+          boxShadow: hasShadow? [
+            boxShadow2()
+          ]: null
+      ),
+    );
+  }
 }
 
 Widget getRatingIcons(int ratingValue, {double iconSize=30}){

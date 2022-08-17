@@ -13,4 +13,12 @@ class ServiceCategoryRepo{
         ServiceCategoryModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>))
         .toList();
   }
+  ServiceCategoryRepo getServiceCategoryFromOptions(List<ServiceCategoryModel> categories, String categoryId){
+    var result = categories.where((category) => category.id==categoryId);
+    if(result.isNotEmpty) serviceCategory = result.first;
+    return this;
+  }
+  String? get getName{
+    return serviceCategory != null? serviceCategory!.name : null;
+  }
 }
