@@ -10,6 +10,7 @@ import 'package:afro_grids/screens/user/chat/chats_screen.dart';
 import 'package:afro_grids/screens/user/user_dashboard_screen.dart';
 import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
                     )
                 ),
                 debugShowCheckedModeBanner: false,
+                navigatorKey: NavigationService.navigatorKey,
                 routes: {
                   '/': (context)=>const OnboardScreen(),
                   '/user-signup': (context)=>const UserSignUpScreen(),

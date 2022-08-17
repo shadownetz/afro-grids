@@ -19,4 +19,7 @@ class ServiceRepo{
         ServiceModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>))
         .toList();
   }
+  Future<String> addService()async{
+    return (await FirestoreRef().serviceRef.add(service!.toMap())).id;
+  }
 }

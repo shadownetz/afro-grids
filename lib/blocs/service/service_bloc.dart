@@ -8,6 +8,7 @@ import '../../repositories/service_repo.dart';
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState>{
   ServiceBloc(): super(ServiceInitialState()){
     on<FetchServiceEvent>(_mapFetchServiceEventToEvent);
+    on<AddServiceEvent>(_mapAddServiceEventToEvent);
   }
 
   void _mapFetchServiceEventToEvent(FetchServiceEvent event, Emitter<ServiceState> emit)async{
@@ -20,6 +21,16 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState>{
         services = await ServiceRepo().fetchAllServices();
       }
       emit(ServiceLoadedState(services: services));
+    }catch(e){
+      emit(ServiceErrorState(e.toString()));
+    }
+  }
+
+  void _mapAddServiceEventToEvent(AddServiceEvent event, Emitter<ServiceState> emit) async{
+    emit(ServiceLoadingState());
+    try{
+      await ServiceRepo(service: event.service).addService();
+      emit(ServiceLoadedState());
     }catch(e){
       emit(ServiceErrorState(e.toString()));
     }

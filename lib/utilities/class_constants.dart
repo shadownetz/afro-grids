@@ -2,6 +2,7 @@ class AccessLevel{
   static const user = 'USER';
   static const provider = 'PROVIDER';
   static const admin = 'ADMIN';
+  static const superAdmin = 'SUPER_ADMIN';
 }
 
 class AuthType{

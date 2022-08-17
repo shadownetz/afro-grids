@@ -1,13 +1,11 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
-import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
-import 'package:afro_grids/screens/provider/account/inventory_screen.dart';
 import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
-import 'package:afro_grids/screens/user/account/user_profile_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/asset_resources.dart';
+import 'package:afro_grids/utilities/widgets/navigation/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -376,66 +374,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           },
         ),
       ),
-      endDrawer: Drawer(
-        backgroundColor: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: DrawerHeader(
-                padding: EdgeInsets.all(0),
-                margin: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Colours.primary,
-                    border: Border.all(style: BorderStyle.none, color: Colors.transparent, width: 0)
-                ),
-                child: Stack(
-                  children: [
-                    const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Lintang C",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white, fontSize: 30,
-                        ),),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: halfWhiteOverlay2(),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 2,
-                child: ListView(
-                  padding: EdgeInsets.only(top: 0),
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.person, color: Colours.primary),
-                      title: const Text("Profile", style: TextStyle(fontSize: 20),),
-                      onTap: ()=>Navigator.of(context).push(createRoute(const UserProfileScreen())),
-                    ),
-                    const Divider(),
-                    ListTile(
-                      leading: Icon(Ionicons.bag_handle, color: Colours.primary),
-                      title: Text("Inventory", style: TextStyle(fontSize: 20),),
-                      onTap: ()=>Navigator.of(context).push(createRoute(const InventoryScreen())),
-                    ),
-                    const Divider(),
-                    ListTile(
-                      leading: const Icon(Ionicons.log_out, color: Colours.primary),
-                      title: const Text("Logout", style: TextStyle(fontSize: 20),),
-                      onTap: ()=>authBlocProvider!.add(LogoutEvent()),
-                    )
-                  ],
-                )
-            )
-          ],
-        ),
-      ),
+      endDrawer: const NavigationDrawer(),
     );
   }
   void _displayAlerts()async{

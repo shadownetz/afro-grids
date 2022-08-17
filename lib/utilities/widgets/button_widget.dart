@@ -124,6 +124,31 @@ ButtonStyle cartCountBtnStyle(){
   );
 }
 
+class RoundSMButton extends StatelessWidget {
+  final Widget child;
+  final VoidCallback onPressed;
+
+  const RoundSMButton({
+    Key? key,
+    required this.child,
+    required this.onPressed
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: ()=>onPressed(),
+      style: ElevatedButton.styleFrom(
+        elevation: 2,
+        fixedSize: const Size(50, 50),
+        shape: const CircleBorder(),
+      ),
+      child: const Icon(Icons.add),
+    );
+  }
+}
+
+
 class GoogleSignInButton extends StatelessWidget {
   final void Function()? onClick;
   const GoogleSignInButton({Key? key, this.onClick}) : super(key: key);
