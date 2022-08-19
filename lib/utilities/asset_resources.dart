@@ -17,8 +17,8 @@ class AssetResources{
     return const AssetImage('assets/avatars/man.png');
   }
 
-  Future<Uint8List> gMapMarkerIcon()async{
-    return await getBytesFromAsset("assets/logo.png", 50);
+  Future<Uint8List> getGMapMarkerIcon()async{
+    return await getBytesFromAsset("assets/icons/afroGridsLocPin.png", 60);
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {

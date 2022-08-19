@@ -1,4 +1,5 @@
 import 'package:afro_grids/utilities/class_constants.dart';
+import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
@@ -15,6 +16,7 @@ class UserModel{
   late String authType; // AuthType values
   late String accessLevel; // AccessLevel values
   late String currency; // Currency values
+  late String address;
   late GeoFirePoint location;
   late DateTime createdAt;
   late DateTime updatedAt;
@@ -39,6 +41,7 @@ class UserModel{
     required this.accessLevel,
     required this.currency,
     required this.location,
+    required this.address,
     required this.createdAt,
     required this.updatedAt,
     required this.serviceId,
@@ -63,6 +66,7 @@ class UserModel{
         authType = user.data()!['authType'],
         accessLevel = user.data()!['accessLevel'],
         currency = user.data()!['currency'],
+        address = user.data()!['address']?? "",
         location = GeoFirePoint(user.data()!['location']['geopoint'].latitude, user.data()!['location']['geopoint'].longitude),
         createdAt = user.data()!['createdAt'].toDate(),
         updatedAt = user.data()!['updatedAt'].toDate(),
@@ -76,27 +80,28 @@ class UserModel{
         phoneVerified = user.data()!['phoneVerified'];
 
   UserModel.providerInstance():
-    id = "",
-    firstName = "",
-    lastName = "",
-    middleName = "",
-    avatar = "",
-    email = "",
-    phone = "",
-    authType = AuthType.email,
-    accessLevel = AccessLevel.provider,
-    currency = CurrencyUtil().currencyName,
-    location = GeoFirePoint(6.465422, 3.406448),
-    createdAt = DateTime.now(),
-    updatedAt = DateTime.now(),
-    serviceId = "",
-    serviceType = ServiceType.multiple,
-    ratings = Ratings(0, 0, 0),
-    accessStatus = AccessStatus.pending,
-    reviews = Reviews(0, 0),
-    favorites = [],
-    emailVerified = false,
-    phoneVerified = false;
+        id = "",
+        firstName = "",
+        lastName = "",
+        middleName = "",
+        avatar = "",
+        email = "",
+        phone = "",
+        authType = AuthType.email,
+        accessLevel = AccessLevel.provider,
+        currency = CurrencyUtil().currencyName,
+        address = "",
+        location = GeoFirePoint(6.465422, 3.406448),
+        createdAt = DateTime.now(),
+        updatedAt = DateTime.now(),
+        serviceId = "",
+        serviceType = ServiceType.multiple,
+        ratings = Ratings(0, 0, 0),
+        accessStatus = AccessStatus.pending,
+        reviews = Reviews(0, 0),
+        favorites = [],
+        emailVerified = false,
+        phoneVerified = false;
 
   UserModel.userInstance():
         id = "",
@@ -109,6 +114,7 @@ class UserModel{
         authType = AuthType.email,
         accessLevel = AccessLevel.user,
         currency = CurrencyUtil().currencyName,
+        address = "",
         location = GeoFirePoint(6.465422, 3.406448),
         createdAt = DateTime.now(),
         updatedAt = DateTime.now(),
@@ -132,6 +138,7 @@ class UserModel{
       'authType': authType,
       'accessLevel': accessLevel,
       'currency': currency,
+      'address': address,
       'location': location.data,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
@@ -149,6 +156,9 @@ class UserModel{
   bool get isProvider{
     return accessLevel == AccessLevel.provider;
   }
+  bool get isApproved{
+    return accessStatus == AccessStatus.approved;
+  }
 
   setLocation(double lat, double lng){
     location = GeoFirePoint(lat, lng);
@@ -158,5 +168,14 @@ class UserModel{
   }
   setPhone(String? phoneNum){
     phone = phoneNum ?? "";
+  }
+
+  double distanceFrom(GeoFirePoint position, [String unit='KM']){
+    return GMapService.getDistanceInKM(
+        location.latitude,
+        position.latitude,
+        location.longitude,
+        position.longitude
+    );
   }
 }

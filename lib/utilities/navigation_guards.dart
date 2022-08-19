@@ -1,18 +1,29 @@
+import 'package:afro_grids/screens/provider/provider_info_multiple_service_screen.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user_model.dart';
+import '../screens/provider/provider_info_single_service_screen.dart';
 
 class NavigationGuards{
-  BuildContext context;
   UserModel user;
 
-  NavigationGuards(this.context, {required this.user});
+  NavigationGuards({required this.user});
 
   navigateToDashboard(){
     if(user.isProvider){
-      Navigator.of(context).pushReplacementNamed("/provider-dashboard");
+      NavigationService.replacePageNamed("/provider-dashboard");
     }else{
-      Navigator.of(context).pushReplacementNamed("/user-dashboard");
+      NavigationService.replacePageNamed("/user-dashboard");
+    }
+  }
+  navigateToPortfolioPage(){
+    if(user.serviceType == ServiceType.single){
+      NavigationService.toPage(ProviderInfoSingleServiceScreen(user: user,));
+    }
+    else if(user.serviceType == ServiceType.multiple){
+      NavigationService.toPage(ProviderInfoMultipleServiceScreen(user: user));
     }
   }
 

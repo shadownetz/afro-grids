@@ -24,7 +24,7 @@ class GeocodeResponse{
         )
     );
     placeId = json['place_id'];
-    plusCode = json['plus_code'];
+    // plusCode = json['plus_code'];
     types = List<String>.from(json['types']);
   }
 

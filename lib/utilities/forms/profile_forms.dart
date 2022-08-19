@@ -1,9 +1,5 @@
-import 'package:afro_grids/models/model_types.dart';
 import 'package:afro_grids/models/user_model.dart';
-import 'package:afro_grids/utilities/services/geofire_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../class_constants.dart';
@@ -173,7 +169,7 @@ class _UpdateUserProfileFormState extends State<UpdateUserProfileForm> {
                 onPressed: (){
                   if(formKey.currentState!.validate()){
                     widget.onUpdate(
-                        UserModel(id: "id", firstName: "firstName", lastName: "lastName", middleName: "middleName", email: "email", phone: "phone", authType: "authType", accessLevel: "accessLevel", currency: "currency", location: GeoFireService().geo.point(latitude: 0, longitude: 0), createdAt: DateTime.now(), updatedAt: DateTime.now(), serviceId: "'serviceId'", serviceType: "serviceType", ratings: Ratings(0, 0, 0), accessStatus: "accessStatus", reviews: Reviews(0,0), favorites: [], avatar: "avatar")
+                      UserModel.userInstance()
                     );
                   }
                 },

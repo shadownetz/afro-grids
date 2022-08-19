@@ -29,7 +29,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           final user = await UserRepo().getUser(authUser.uid);
           localStorage.user = user;
           if(user.phoneVerified){
-            emit(AuthenticatedState(user: user));
+            if(!user.isProvider || (user.isProvider && user.isApproved)){
+              emit(AuthenticatedState(user: user));
+            }else{
+              await authRepo.signOut();
+              emit(UnAuthenticatedState(message: "Your account is currently pending for approval. Contact support if you think this is a mistake"));
+            }
           }else{
             emit(PhoneVerificationState());
           }
@@ -91,13 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     try{
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: event.email, password: event.password);
       if(credential.user != null){
-        final user = await UserRepo().getUser(credential.user!.uid);
-        localStorage.user = user;
-        if(user.phoneVerified){
-          emit(AuthenticatedState(user: user));
-        }else{
-          emit(PhoneVerificationState());
-        }
+        add(CheckAuthEvent());
       }else{
         throw Exception("You are unable to login. Please try again or contact support");
       }
@@ -185,7 +184,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
             localStorage.user = await userRepo.addUser();
           }
           if(localStorage.user!.phoneVerified){
-            emit(AuthenticatedState(user: localStorage.user!));
+            add(CheckAuthEvent());
           }else{
             emit(PhoneVerificationState());
           }

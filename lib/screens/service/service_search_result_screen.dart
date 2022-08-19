@@ -4,6 +4,7 @@ import 'package:afro_grids/blocs/service/service_state.dart';
 import 'package:afro_grids/models/service_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/provider/provider_info_single_service_screen.dart';
+import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import '../../main.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/widgets.dart';
@@ -34,7 +36,10 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
     mapController = controller;
   }
   void _initMapValues({required List<UserModel> users})async{
-    var markers = await GMapService.getUsersMarker(users);
+    var markers = await GMapService.getUsersMarker(
+        users,
+        onTapAction: (user)=>NavigationGuards(user: user).navigateToPortfolioPage
+    );
     setState((){
       _users = users;
       _usersMarker = markers;
@@ -247,14 +252,16 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                         )
                       ]
                   ):
-                  ListView.builder(
-                    physics: dragIsMidScreen? AlwaysScrollableScrollPhysics(): NeverScrollableScrollPhysics(),
-                    itemCount: _users.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, idx){
-                      return providerListItem(dragIsMidScreen: dragIsMidScreen, user: _users[idx]);
-                    },
+                  Expanded(
+                      child: ListView.builder(
+                        physics: dragIsMidScreen? AlwaysScrollableScrollPhysics(): NeverScrollableScrollPhysics(),
+                        itemCount: _users.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, idx){
+                          return providerListItem(dragIsMidScreen: dragIsMidScreen, user: _users[idx]);
+                        },
 
+                      )
                   )
                 ],
               ),
@@ -267,7 +274,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
   Widget providerListItem({required bool dragIsMidScreen, required UserModel user}){
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
+      onTap: ()=>NavigationGuards(user: user).navigateToPortfolioPage(),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: dragIsMidScreen? null : BoxDecoration(
@@ -309,9 +316,9 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                   )
                 ],
               ),
-              const Expanded(
+              Expanded(
                   child: Text(
-                    "0.3 km",
+                    "${user.distanceFrom(localStorage.user!.location).toStringAsFixed(2)} km",
                     textAlign: TextAlign.end,
                     style: TextStyle(color: Colors.grey, fontSize: 20),
                   )

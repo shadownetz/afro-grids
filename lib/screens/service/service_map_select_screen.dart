@@ -103,7 +103,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
                           SizedBox(height: 20,),
                           // confirm button
                           ElevatedButton(
-                              onPressed: ()=>Navigator.of(context).push(createRoute(const ProviderInfoMultipleServiceScreen())),
+                              onPressed: ()=>{},
                               style: buttonPrimaryMdStyle(),
                               child: Text("Confirm selection")
                           )
@@ -122,7 +122,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
 
   Widget providerInfoItem(){
     return GestureDetector(
-      onTap: ()=>Navigator.of(context).push(createRoute(const ProviderInfoSingleServiceScreen())),
+      onTap: ()=>{},
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -132,18 +132,13 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
         child: Row(
           children: [
             // provider icon
-            Container(
+            const RoundImage(
+              image: AssetImage('assets/avatars/woman.png'),
               width: 30,
               height: 30,
-              decoration: const BoxDecoration(
-                  color: Colors.pinkAccent,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('assets/avatars/woman.png')
-                  )
-              ),
+              fit: BoxFit.cover,
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

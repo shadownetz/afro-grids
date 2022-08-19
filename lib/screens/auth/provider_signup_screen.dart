@@ -46,7 +46,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                 Navigator.of(context).push(createRoute(const OTPScreen()));
               }
               if(state is AuthenticatedState){
-                NavigationGuards(context, user: state.user!).navigateToDashboard();
+                NavigationGuards(user: state.user!).navigateToDashboard();
                 Alerts(context).showToast("Logged in");
               }
             },

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
 
 class GPlaceAutoComplete extends StatefulWidget {
-  final void Function(String placeId)? onSelected;
+  final void Function(String placeId, String name)? onSelected;
   const GPlaceAutoComplete({Key? key, this.onSelected}) : super(key: key);
 
   @override
@@ -103,7 +103,7 @@ class _GPlaceAutoCompleteState extends State<GPlaceAutoComplete> {
             fieldFocusNode.addListener(() {
               if(!fieldFocusNode.hasFocus && fieldTextEditingController.text.isEmpty){
                 if(widget.onSelected != null){
-                  widget.onSelected!("");
+                  widget.onSelected!("","");
                 }
               }
             });
@@ -121,7 +121,7 @@ class _GPlaceAutoCompleteState extends State<GPlaceAutoComplete> {
           },
           onSelected: (AutocompletePrediction selection) {
             if(widget.onSelected != null){
-              widget.onSelected!(selection.placeId??"");
+              widget.onSelected!(selection.placeId??"", selection.description??"");
             }
           },
         )

@@ -11,6 +11,7 @@ import '../../models/user_model.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/navigation_guards.dart';
+import '../../utilities/services/navigation_service.dart';
 import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
@@ -49,8 +50,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 Navigator.of(context).push(createRoute(const OTPScreen()));
               }
               if(state is AuthenticatedState){
-                NavigationGuards(context, user: state.user!).navigateToDashboard();
+                NavigationGuards(user: state.user!).navigateToDashboard();
                 Alerts(context).showToast("Logged in");
+              }
+              if(state is UnAuthenticatedState){
+                NavigationService.pushNamedAndRemoveAll("/signin", state.message);
               }
             },
             builder: (context, state){

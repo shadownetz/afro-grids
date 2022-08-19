@@ -39,6 +39,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
   final _serviceTypeController = TextEditingController(text: ServiceType.single);
   XFile? _avatarFile;
   String _locationPlaceId = "";
+  String _locationName = "";
   String? _currencyVal;
   ServiceCategoryModel? _serviceCategory;
   ServiceModel? _service;
@@ -124,8 +125,9 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
               },
             ),
             GPlaceAutoComplete(
-              onSelected: (placeId){
+              onSelected: (placeId, placeName){
                 _locationPlaceId=placeId;
+                _locationName = placeName;
               },
             ),
             const SizedBox(height: 10,),
@@ -213,6 +215,12 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                 return null;
               },
             ),
+            const SizedBox(height: 20,),
+            const Text(
+              "After you complete the registration process, your account will be temporarily placed on hold until approved. This usually takes not less than 48 hours",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black54),
+            ),
             const SizedBox(height: 50,),
             ElevatedButton(
                 style: buttonLgStyle(),
@@ -248,19 +256,20 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
   void _signUp(){
     final user = UserModel(
         id: "",
-        firstName: _firstNameController.text,
-        lastName: _lastNameController.text,
-        middleName: _middleNameController.text,
-        email: _emailController.text,
-        phone: _phoneController.text,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        middleName: _middleNameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
         authType: AuthType.email,
         accessLevel: AccessLevel.provider,
         currency: _currencyVal ?? CurrencyUtil().currencyName,
+        address: _locationName,
         location: GeoFireService().geo.point(latitude: 0, longitude: 0),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         serviceId: _service!.id,
-        serviceType: _serviceTypeController.text,
+        serviceType: _serviceTypeController.text.trim(),
         ratings: Ratings(0,0,0),
         accessStatus: AccessStatus.pending,
         reviews: Reviews(0,0),
@@ -290,6 +299,7 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
   var passwordController = TextEditingController();
   var password2Controller = TextEditingController();
   String locationPlaceId = "";
+  String locationName = "";
   bool obscurePassword = true;
   bool obscurePassword2 = true;
 
@@ -363,8 +373,9 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
               },
             ),
             GPlaceAutoComplete(
-              onSelected: (placeId){
+              onSelected: (placeId, placeName){
                 locationPlaceId=placeId;
+                locationName = placeName;
               },
             ),
             TextFormField(
@@ -439,14 +450,15 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
   void _signUp(){
     final user = UserModel(
         id: "",
-        firstName: firstNameController.text,
-        lastName: lastNameController.text,
-        middleName: middleNameController.text,
-        email: emailController.text,
-        phone: phoneController.text,
+        firstName: firstNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+        middleName: middleNameController.text.trim(),
+        email: emailController.text.trim(),
+        phone: phoneController.text.trim(),
         authType: AuthType.email,
         accessLevel: AccessLevel.user,
         currency: CurrencyUtil().currencyName,
+        address: locationName,
         location: GeoFireService().geo.point(latitude: 0, longitude: 0),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -515,7 +527,7 @@ class _PhoneUpdateFormState extends State<PhoneUpdateForm> {
                   // Navigator.of(context).pushReplacementNamed('/user-dashboard');
                   if(formKey.currentState != null){
                     if(formKey.currentState!.validate()){
-                      widget.onComplete(phoneController.text);
+                      widget.onComplete(phoneController.text.trim());
                     }
                   }
                 },

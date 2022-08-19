@@ -4,6 +4,7 @@ import 'package:afro_grids/blocs/auth/auth_bloc.dart';
 import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/utilities/forms/auth_forms.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   Alerts(context).showToast("Logged in");
                 }
                 if(state is UnAuthenticatedState){
-                  Navigator.of(context).pushReplacementNamed("/signin");
+                  NavigationService.pushNamedAndRemoveAll("/signin", state.message);
                 }
                 if(state is PhoneUpdatedState){
                   localStorage.user!.setPhone(state.phone);

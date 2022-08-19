@@ -4,13 +4,18 @@ import 'package:afro_grids/utilities/widgets/widget_models.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/inventory_model.dart';
+import '../../models/user_model.dart';
 import '../../utilities/class_constants.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/provider_widgets.dart';
 
 
 class ProviderInfoMultipleServiceScreen extends StatefulWidget {
-  const ProviderInfoMultipleServiceScreen({Key? key}) : super(key: key);
+  final UserModel user;
+  const ProviderInfoMultipleServiceScreen({
+    Key? key,
+    required this.user
+  }) : super(key: key);
 
   @override
   State<ProviderInfoMultipleServiceScreen> createState() => _ProviderInfoMultipleServiceScreenState();

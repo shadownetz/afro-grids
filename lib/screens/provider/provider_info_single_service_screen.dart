@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/review_model.dart';
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widget_models.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
@@ -9,7 +10,11 @@ import '../../utilities/widgets/provider_widgets.dart';
 
 
 class ProviderInfoSingleServiceScreen extends StatefulWidget {
-  const ProviderInfoSingleServiceScreen({Key? key}) : super(key: key);
+  final UserModel user;
+  const ProviderInfoSingleServiceScreen({
+    Key? key,
+    required this.user
+  }) : super(key: key);
 
   @override
   State<ProviderInfoSingleServiceScreen> createState() => _ProviderInfoSingleServiceScreenState();
