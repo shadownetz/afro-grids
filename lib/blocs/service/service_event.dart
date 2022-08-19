@@ -28,3 +28,8 @@ class FetchServiceProvidersEvent extends ServiceEvent{
   @override
   List<Object?> get props => [];
 }
+
+class FetchNearbyProvidersEvent extends ServiceEvent{
+  @override
+  List<Object?> get props => [];
+}

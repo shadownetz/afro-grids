@@ -77,7 +77,7 @@ class GMapService{
   }
 
   static double getDistanceInKM(double lat1, double lat2, double lng1, double lng2){
-    const radius = 6371; // for miles use 3956
+    const radius = 6367994.65; // for miles use 3956
     var radian = math.pi/180;
     lat1 = lat1 * radian;
     lat2 = lat2 * radian;

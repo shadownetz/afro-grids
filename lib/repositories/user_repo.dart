@@ -2,9 +2,13 @@ import 'dart:io';
 
 import 'package:afro_grids/configs/firestorage_references.dart';
 import 'package:afro_grids/configs/firestore_references.dart';
+import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
+import 'package:afro_grids/utilities/services/geofire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../utilities/services/device_service.dart';
@@ -75,6 +79,28 @@ class UserRepo{
     return querySnapshot.docs.map((doc){
       return UserModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>);
     }).toList();
+  }
+
+  Future<List<UserModel>> fetchNearbyProviders() async{
+    GeoFirePoint userPos = localStorage.user!.location;
+    try{
+      var pos = await DeviceService().determinePosition();
+      userPos = GeoFirePoint(pos.latitude, pos.longitude);
+    }catch(e){
+      debugPrint("Unable to determine user location: ${e.toString()}");
+    }
+    var users =  await GeoFireService().queryWithin(
+        center: userPos,
+        reference: FirestoreRef().usersRef,
+        fieldName: "location",
+        radius: 100000
+    );
+    return users
+        .map((user) =>
+        UserModel.fromFirestore(user as DocumentSnapshot<Map<String, dynamic>>))
+        .where((user) => user.isProvider)
+        .toList();
+
   }
 
 

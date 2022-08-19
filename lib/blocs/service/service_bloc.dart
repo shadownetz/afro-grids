@@ -11,6 +11,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState>{
     on<FetchServiceEvent>(_mapFetchServiceEventToEvent);
     on<AddServiceEvent>(_mapAddServiceEventToEvent);
     on<FetchServiceProvidersEvent>(_mapFetchServiceProvidersToEvent);
+    on<FetchNearbyProvidersEvent>(_mapFetchNearbyProvidersEventToEvent);
   }
 
   void _mapFetchServiceEventToEvent(FetchServiceEvent event, Emitter<ServiceState> emit)async{
@@ -42,6 +43,16 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState>{
     emit(ServiceLoadingState());
     try{
       var users = await UserRepo().fetchUsersByServiceID(event.service.id);
+      emit(FetchedServiceProvidersState(users));
+    }catch(e){
+      emit(ServiceErrorState(e.toString()));
+    }
+  }
+  
+  void _mapFetchNearbyProvidersEventToEvent(FetchNearbyProvidersEvent event, Emitter<ServiceState> emit) async{
+    emit(ServiceLoadingState());
+    try{
+      var users = await UserRepo().fetchNearbyProviders();
       emit(FetchedServiceProvidersState(users));
     }catch(e){
       emit(ServiceErrorState(e.toString()));

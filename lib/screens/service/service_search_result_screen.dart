@@ -38,7 +38,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
   void _initMapValues({required List<UserModel> users})async{
     var markers = await GMapService.getUsersMarker(
         users,
-        onTapAction: (user)=>NavigationGuards(user: user).navigateToPortfolioPage
+        onTapAction: (user)=>NavigationGuards(user: user).navigateToPortfolioPage()
     );
     setState((){
       _users = users;
