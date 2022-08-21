@@ -1,7 +1,7 @@
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utilities/forms/account/inventory_forms.dart';
+import '../../../utilities/forms/models/inventory_forms.dart';
 
 
 class UpdateMultipleServiceInventoryScreen extends StatefulWidget {

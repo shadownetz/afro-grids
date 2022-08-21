@@ -31,7 +31,7 @@ class InventoryModel{
         price = inventory.data()!['price'],
         currency = inventory.data()!['currency'],
         description = inventory.data()!['description'],
-        images = inventory.data()!['images'],
+        images = List<String>.from(inventory.data()!['images']),
         visible = inventory.data()!['visible'];
 
   Map<String, dynamic> toMap(){

@@ -30,6 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           localStorage.user = user;
           if(user.phoneVerified){
             if(!user.isProvider || (user.isProvider && user.isApproved)){
+              UserRepo(user: user).persistUser();
               emit(AuthenticatedState(user: user));
             }else{
               await authRepo.signOut();
@@ -145,6 +146,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
 
   void _mapLogoutEventToEvent(LogoutEvent event, Emitter<AuthState> emit)async{
     try{
+      localStorage.userListener?.cancel();
       await AuthRepo().signOut();
       emit(UnAuthenticatedState());
     }catch(e){

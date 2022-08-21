@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:afro_grids/screens/provider/account/update_multiple_service_inventory_screen.dart';
+import 'package:afro_grids/utilities/currency.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -115,7 +116,7 @@ class _ViewMultipleServiceInventoryScreenState extends State<ViewMultipleService
                     Text(widget.inventory.name, style: TextStyle(fontSize: 30),),
                     Text('# ${widget.inventory.description}', style: TextStyle(fontSize: 20, color: Colors.grey),),
                     SizedBox(height: 10,),
-                    Text('${widget.inventory.currency}${widget.inventory.price}', style: TextStyle(fontSize: 25, color: Colours.secondary),)
+                    Text('${CurrencyUtil().currencySymbol(widget.inventory.currency)}${widget.inventory.price}', style: TextStyle(fontSize: 25, color: Colours.secondary),)
                   ],
                 ),
               ),

@@ -20,8 +20,9 @@ class ServiceLoadingState extends ServiceState{
 }
 
 class ServiceLoadedState extends ServiceState{
+  final ServiceModel? service;
   final List<ServiceModel> services;
-  ServiceLoadedState({this.services=const []});
+  ServiceLoadedState({this.services=const [], this.service});
   @override
   List<Object?> get props => [];
 

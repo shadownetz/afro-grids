@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
+import '../../models/inventory_model.dart';
 
 @immutable
 abstract class InventoryState extends Equatable{}
@@ -16,6 +17,8 @@ class InventoryLoadingState extends InventoryState{
 }
 
 class InventoryLoadedState extends InventoryState{
+  final List<InventoryModel> inventories;
+  InventoryLoadedState({this.inventories = const []});
   @override
   List<Object?> get props => [];
 }

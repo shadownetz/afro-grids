@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/serviceCategory/service_category_event.dart';
 import '../../../blocs/serviceCategory/service_category_state.dart';
 import '../../../models/service_category_model.dart';
+import '../../colours.dart';
 
 class ServiceCategoryDropdown extends StatefulWidget {
+  final String? initialValue;
   final Function(String value) onSelected;
-  const ServiceCategoryDropdown({Key? key, required this.onSelected}) : super(key: key);
+  const ServiceCategoryDropdown({Key? key, required this.onSelected, this.initialValue}) : super(key: key);
 
   @override
   State<ServiceCategoryDropdown> createState() => _ServiceCategoryDropdownState();
@@ -17,6 +19,12 @@ class ServiceCategoryDropdown extends StatefulWidget {
 class _ServiceCategoryDropdownState extends State<ServiceCategoryDropdown> {
   List<ServiceCategoryModel> _serviceCategories = [];
   String? categoryId;
+
+  @override
+  void initState() {
+    categoryId = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +36,7 @@ class _ServiceCategoryDropdownState extends State<ServiceCategoryDropdown> {
             _serviceCategories = state.serviceCategories;
           }
           return DropdownButton<String>(
+              dropdownColor: Colours.tertiary,
               isExpanded: true,
               value: categoryId,
               alignment: Alignment.bottomLeft,

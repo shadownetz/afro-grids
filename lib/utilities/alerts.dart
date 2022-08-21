@@ -139,8 +139,8 @@ class Alerts{
     );
   }
 
-  showConfirmDialog({required String title, required String message, required void Function() onConfirm}){
-    return showDialog<void>(
+  Future<bool?> showConfirmDialog({required String title, required String message}){
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -162,14 +162,13 @@ class Alerts{
             TextButton(
               child: const Text('Proceed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colours.primary),),
               onPressed: () {
-                Navigator.of(context).pop();
-                onConfirm();
+                Navigator.of(context).pop(true);
               },
             ),
             TextButton(
               child: const Text('Cancel', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black54),),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             )
           ],

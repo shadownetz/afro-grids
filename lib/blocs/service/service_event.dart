@@ -33,3 +33,10 @@ class FetchNearbyProvidersEvent extends ServiceEvent{
   @override
   List<Object?> get props => [];
 }
+
+class GetServiceEvent extends ServiceEvent{
+  final String serviceID;
+  GetServiceEvent(this.serviceID);
+  @override
+  List<Object?> get props => [];
+}

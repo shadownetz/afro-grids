@@ -21,4 +21,8 @@ class NavigationService{
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(pageName, (route)=>false);
   }
 
+  static void exitPage([dynamic value]){
+    return navigatorKey.currentState!.pop(value);
+  }
+
 }

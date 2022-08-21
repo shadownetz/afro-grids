@@ -1,13 +1,18 @@
+import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/utilities/alerts.dart';
+import 'package:afro_grids/utilities/currency.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../main.dart';
 import '../../widgets/selectors/item_image_selector.dart';
 
 // Creation Form
 class NewMultiServiceInventoryForm extends StatefulWidget {
-  const NewMultiServiceInventoryForm({Key? key}) : super(key: key);
+  final void Function(InventoryModel inventory, List<XFile>? images) onComplete;
+  const NewMultiServiceInventoryForm({Key? key, required this.onComplete}) : super(key: key);
 
   @override
   State<NewMultiServiceInventoryForm> createState() => _NewMultiServiceInventoryFormState();
@@ -60,13 +65,13 @@ class _NewMultiServiceInventoryFormState extends State<NewMultiServiceInventoryF
               controller: itemPriceController,
               cursorHeight: 20,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   labelText: "Item Price",
                   hintText: "0.00",
-                  prefix: Text("₦")
+                  prefix: Text(CurrencyUtil().currencySymbol(localStorage.user!.currency))
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value == null || value.isEmpty || double.tryParse(value) == null) {
                   return 'Please enter a valid price';
                 }
                 return null;
@@ -87,7 +92,27 @@ class _NewMultiServiceInventoryFormState extends State<NewMultiServiceInventoryF
                 style: buttonPrimaryMdStyle(),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    //
+                    if(_itemImages == null){
+                      Alerts(context).showToast("You need to upload one or more item images");
+                    }
+                    else if(_itemImages!.isEmpty){
+                      Alerts(context).showToast("You need to upload one or more item images");
+                    }
+                    else {
+                      var inventory = InventoryModel(
+                          id: "",
+                          createdBy: localStorage.user!.id,
+                          createdAt: DateTime.now(),
+                          name: itemNameController.text,
+                          price: double.parse(itemPriceController.text),
+                          currency: localStorage.user!.currency,
+                          description: itemDescriptionController.text,
+                          images: [],
+                          visible: true
+                      );
+                      widget.onComplete(inventory, _itemImages);
+                    }
+
                   }
                 },
                 child: Row(

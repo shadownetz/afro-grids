@@ -15,8 +15,11 @@ import '../utilities/services/device_service.dart';
 
 class UserRepo{
   final UserModel? _user;
+  final CollectionReference _userRef;
 
-  UserRepo({UserModel? user}): _user=user;
+  UserRepo({UserModel? user}):
+        _user=user,
+        _userRef = FirestoreRef().usersRef;
 
   Future<UserModel> addUser()async{
     await FirestoreRef().usersRef.doc(_user!.id).set(_user!.toMap());
@@ -39,12 +42,20 @@ class UserRepo{
   }
 
   Future<UserModel> getUser(String uid) async{
-    var docSnapshot = await FirestoreRef().usersRef.doc(uid).get();
+    var docSnapshot = await _userRef.doc(uid).get();
     return UserModel.fromFirestore(docSnapshot as DocumentSnapshot<Map<String, dynamic>>);
   }
 
+  void persistUser(){
+    if(_user != null){
+      localStorage.userListener = _userRef.doc(_user!.id).snapshots().listen((doc) {
+        localStorage.user = UserModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>);
+      });
+    }
+  }
+
   Future<UserModel?> getUserByEmail(String email) async{
-    var querySnapshot = await FirestoreRef().usersRef.where("email", isEqualTo: email).get();
+    var querySnapshot = await _userRef.where("email", isEqualTo: email).get();
     if(querySnapshot.docs.isNotEmpty){
       return UserModel.fromFirestore(querySnapshot.docs[0] as DocumentSnapshot<Map<String, dynamic>>);
     }
@@ -53,13 +64,13 @@ class UserRepo{
 
   Future<void> updateUser() async{
     _user!.updatedAt = DateTime.now();
-    return await FirestoreRef().usersRef.doc(_user!.id).update(_user!.toMap());
+    return await _userRef.doc(_user!.id).update(_user!.toMap());
   }
 
   Future<void> updatePhone(String phone) async{
     _user!.updatedAt = DateTime.now();
     _user!.setPhone(phone);
-    return await FirestoreRef().usersRef.doc(_user!.id).update(_user!.toMap());
+    return await _userRef.doc(_user!.id).update(_user!.toMap());
   }
 
   Future<void> trySetLocation()async{
@@ -72,7 +83,7 @@ class UserRepo{
   }
 
   Future<List<UserModel>> fetchUsersByServiceID(String serviceID) async {
-    var querySnapshot = await FirestoreRef().usersRef
+    var querySnapshot = await _userRef
         .where("serviceId", isEqualTo: serviceID)
         .where("accessStatus", isEqualTo: AccessStatus.approved)
         .get();
@@ -91,9 +102,9 @@ class UserRepo{
     }
     var users =  await GeoFireService().queryWithin(
         center: userPos,
-        reference: FirestoreRef().usersRef,
+        reference: _userRef,
         fieldName: "location",
-        radius: 100000
+        radius: 100000  // TODO: remove this line
     );
     return users
         .map((user) =>
