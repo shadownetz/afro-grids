@@ -18,7 +18,8 @@ class InventoryLoadingState extends InventoryState{
 
 class InventoryLoadedState extends InventoryState{
   final List<InventoryModel> inventories;
-  InventoryLoadedState({this.inventories = const []});
+  final InventoryModel? inventory;
+  InventoryLoadedState({this.inventories = const [], this.inventory});
   @override
   List<Object?> get props => [];
 }
@@ -26,6 +27,11 @@ class InventoryLoadedState extends InventoryState{
 class InventoryErrorState extends InventoryState{
   final String message;
   InventoryErrorState(this.message);
+  @override
+  List<Object?> get props => [];
+}
+
+class InventoryUpdatedState extends InventoryState{
   @override
   List<Object?> get props => [];
 }

@@ -34,6 +34,19 @@ class InventoryModel{
         images = List<String>.from(inventory.data()!['images']),
         visible = inventory.data()!['visible'];
 
+  InventoryModel.copyWith(InventoryModel inventory):
+      this(
+        id: inventory.id,
+        createdBy: inventory.createdBy,
+        createdAt: inventory.createdAt,
+        name: inventory.name,
+        price: inventory.price,
+        currency: inventory.currency,
+        description: inventory.description,
+        images: inventory.images,
+        visible: inventory.visible
+      );
+
   Map<String, dynamic> toMap(){
     return {
       'createdBy': createdBy,

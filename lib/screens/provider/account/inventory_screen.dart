@@ -204,13 +204,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                     InventoryView(
                       items:  _inventories,
-                      onClick: (item){
-                        showModalBottomSheet(
+                      onClick: (item) async {
+                        var result = await showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (context)=>ViewMultipleServiceInventoryScreen(inventory: item)
                         );
+                        if(result == true){
+                          _inventoryBloc!.add(FetchProviderInventories(localStorage.user!));
+                        }
                       },
                     )
                   ],

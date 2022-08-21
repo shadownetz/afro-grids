@@ -42,7 +42,7 @@ class _NewMultiServiceInventoryFormState extends State<NewMultiServiceInventoryF
           children: [
             Center(
               child: ItemImageSelector(
-                onUpdated: (imageList){
+                onUpdated: (imageList, [modOldURLS]){
                   _itemImages = imageList;
                 },
               ),
@@ -134,7 +134,9 @@ class _NewMultiServiceInventoryFormState extends State<NewMultiServiceInventoryF
 
 // Update Form
 class UpdateMultiServiceInventoryForm extends StatefulWidget {
-  const UpdateMultiServiceInventoryForm({Key? key}) : super(key: key);
+  final InventoryModel inventory;
+  final void Function(InventoryModel inventory, List<XFile>? images) onComplete;
+  const UpdateMultiServiceInventoryForm({Key? key,required this.inventory, required this.onComplete}) : super(key: key);
 
   @override
   State<UpdateMultiServiceInventoryForm> createState() => _UpdateMultiServiceInventoryFormState();
@@ -143,10 +145,18 @@ class UpdateMultiServiceInventoryForm extends StatefulWidget {
 class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInventoryForm> {
   CarouselController carouselController = CarouselController();
   final _formKey = GlobalKey<FormState>();
-  var itemNameController = TextEditingController();
-  var itemPriceController = TextEditingController();
-  var itemDescriptionController = TextEditingController();
+  late TextEditingController itemNameController;
+  late TextEditingController itemPriceController;
+  late TextEditingController itemDescriptionController;
   List<XFile>? _itemImages = [];
+
+  @override
+  void initState() {
+    itemNameController = TextEditingController(text: widget.inventory.name);
+    itemPriceController = TextEditingController(text: widget.inventory.price.toString());
+    itemDescriptionController = TextEditingController(text: widget.inventory.description);
+    super.initState();
+  }
 
 
 
@@ -164,8 +174,12 @@ class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInve
           children: [
             Center(
               child: ItemImageSelector(
-                onUpdated: (imageList){
+                initialURLS: widget.inventory.images,
+                onUpdated: (imageList, [modOldURLS]){
                   _itemImages = imageList;
+                  if(modOldURLS != null){
+                    widget.inventory.images = modOldURLS;
+                  }
                 },
               ),
             ),
@@ -187,13 +201,13 @@ class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInve
               controller: itemPriceController,
               cursorHeight: 20,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   labelText: "Item Price",
                   hintText: "0.00",
-                  prefix: Text("₦")
+                  prefix: Text(CurrencyUtil().currencySymbol(localStorage.user!.currency))
               ),
               validator: (value) {
-                if (value == null || value.isEmpty) {
+                if (value == null || value.isEmpty || double.tryParse(value) == null) {
                   return 'Please enter a valid price';
                 }
                 return null;
@@ -214,7 +228,15 @@ class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInve
                 style: buttonPrimaryMdStyle(),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    //
+                    if(_itemImages == null && widget.inventory.images.isEmpty){
+                      Alerts(context).showToast("You need to upload one or more item images");
+                    }
+                    else {
+                      widget.inventory.name = itemNameController.text;
+                      widget.inventory.description = itemDescriptionController.text;
+                      widget.inventory.price = double.parse(itemPriceController.text);
+                      widget.onComplete(widget.inventory, _itemImages);
+                    }
                   }
                 },
                 child: Row(
@@ -222,7 +244,7 @@ class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInve
                   children: const [
                     Icon(Icons.save, size: 20,),
                     SizedBox(width: 10,),
-                    Text("Save changes", style: TextStyle(fontSize: 20,),)
+                    Text("Update item", style: TextStyle(fontSize: 20,),)
                   ],
                 )
             )

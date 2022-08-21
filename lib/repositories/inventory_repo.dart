@@ -15,6 +15,14 @@ class InventoryRepo{
         _inventory = inventory,
         _inventoryRef = FirestoreRef().inventoryRef;
 
+  Future<InventoryModel?> getInventory(String inventoryId)async{
+    var snapshot = await _inventoryRef.doc(inventoryId).get();
+    if(snapshot.exists){
+      return InventoryModel.fromFirestore(snapshot as DocumentSnapshot<Map<String, dynamic>>);
+    }
+    return null;
+  }
+
   Future<InventoryModel> addInventory()async{
     var ref = await _inventoryRef.add(_inventory?.toMap());
     _inventory!.id = ref.id;
@@ -22,6 +30,11 @@ class InventoryRepo{
   }
 
   Future<void> updateInventory()async{
+    return _inventoryRef.doc(_inventory!.id).update(_inventory!.toMap());
+  }
+
+  Future<void> softDeleteInventory()async{
+    _inventory!.visible = false;
     return _inventoryRef.doc(_inventory!.id).update(_inventory!.toMap());
   }
 
@@ -42,8 +55,24 @@ class InventoryRepo{
     var uploadURLS = await Future.wait(uploadTaskSnapshots.map((taskSnapshot){
       return taskSnapshot.ref.getDownloadURL();
     }));
-    _inventory!.images = uploadURLS;
+    if(_inventory != null){
+      if(_inventory!.images.isNotEmpty){
+        _inventory!.images.addAll(uploadURLS);
+      }else{
+        _inventory!.images = uploadURLS;
+      }
+    }
     return uploadURLS;
+  }
+
+  Future<void> deleteImages(List<String> images)async{
+    var promises = images.map((image){
+      return FirebaseStorageReferences().storageInstance.refFromURL(image).delete();
+    });
+    await Future.wait(promises);
+    if(_inventory != null){
+      _inventory!.images = _inventory!.images.where((image) => !images.contains(image)).toList();
+    }
   }
 
   Future<List<InventoryModel>> fetchProviderItems(String providerId)async{

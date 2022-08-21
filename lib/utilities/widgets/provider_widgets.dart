@@ -293,7 +293,7 @@ class _InventoryViewState extends State<InventoryView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: Wrap(
         spacing: 20,
         runSpacing: 20,
