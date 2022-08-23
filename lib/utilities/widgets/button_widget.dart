@@ -1,3 +1,4 @@
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
@@ -5,7 +6,7 @@ import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
-Widget leaveAReviewButton(BuildContext context){
+Widget leaveAReviewButton(BuildContext context, {required UserModel provider}){
   return ElevatedButton(
       style: buttonPrimaryLgStyle(),
       onPressed: (){
@@ -13,7 +14,7 @@ Widget leaveAReviewButton(BuildContext context){
             context: context,
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
-            builder: (context)=>const LeaveAReviewScreen()
+            builder: (context)=>LeaveAReviewScreen(user: provider,)
         );
       },
       child: Row(

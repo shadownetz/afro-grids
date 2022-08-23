@@ -45,6 +45,16 @@ class UserRepo{
     var docSnapshot = await _userRef.doc(uid).get();
     return UserModel.fromFirestore(docSnapshot as DocumentSnapshot<Map<String, dynamic>>);
   }
+  Future<UserModel?> getUserIfExist(String uid) async{
+    UserModel? user;
+    try{
+      var docSnapshot = await _userRef.doc(uid).get();
+      user = UserModel.fromFirestore(docSnapshot as DocumentSnapshot<Map<String, dynamic>>);
+    }catch(e){
+      debugPrint(e.toString());
+    }
+    return user;
+  }
 
   void persistUser(){
     if(_user != null){

@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/models/local/local_review_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:flutter/material.dart';
@@ -147,8 +148,8 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               Chip(
-                  avatar: Icon(Icons.stars, color: Colors.white, size: 15,),
-                  label: Text("3.5", style: TextStyle(fontSize: 15),),
+                avatar: Icon(Icons.stars, color: Colors.white, size: 15,),
+                label: Text("3.5", style: TextStyle(fontSize: 15),),
                 backgroundColor: Colors.lightGreen,
               ),
               Chip(
@@ -226,49 +227,53 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
 
 
 class PortfolioReviewsTabView extends StatefulWidget {
-  const PortfolioReviewsTabView({Key? key}) : super(key: key);
+  final List<LocalReviewModel> reviews;
+
+  const PortfolioReviewsTabView({Key? key, required this.reviews}) : super(key: key);
 
   @override
   State<PortfolioReviewsTabView> createState() => _PortfolioReviewsTabViewState();
 }
 
 class _PortfolioReviewsTabViewState extends State<PortfolioReviewsTabView> {
-  List<ReviewModel> reviews = [
-    ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 3, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-    ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 1, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-    ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 5, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
-    ReviewModel(id: "", createdBy: "", createdFor: "", createdAt: DateTime.now(), rating: 2, message: "The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort.")
-
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: reviews.map((review){
+      children: widget.reviews.map((localReview){
         return Container(
           margin: EdgeInsets.only(bottom: 20, top: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RoundImage(image: AssetImage('assets/avatars/woman.png'), width: 40, height: 40),
-              SizedBox(width: 10,),
+              RoundImage(
+                image: (localReview.creatorAvatar!=null?NetworkImage(localReview.creatorAvatar!): const AssetImage('assets/avatars/woman.png')) as ImageProvider,
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+              const SizedBox(width: 10,),
               Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Text("Royal Rox", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                          Text(
+                            localReview.creatorName??localReview.review.createdBy,
+                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                          ),
                           Expanded(
                               child: Container(
                                 alignment: Alignment.centerRight,
-                                child: getRatingIcons(review.rating.toInt(), iconSize: 15),
+                                child: getRatingIcons(localReview.review.rating.toInt(), iconSize: 15),
                               )
                           )
                         ],
                       ),
-                      SizedBox(height: 10,),
-                      Text("The most comfortable shirts i have worn in the past couple of years. These have really surpassed my expectations, they look amazing and have comfort."),
+                      const SizedBox(height: 10,),
+                      Text(localReview.review.message)
 
                     ],
                   )
@@ -294,70 +299,70 @@ class _InventoryViewState extends State<InventoryView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerLeft,
-      child: Wrap(
-        spacing: 20,
-        runSpacing: 20,
-        // alignment: WrapAlignment.center,
-        children: widget.items.map((item){
-          return GestureDetector(
-            onTap: (){
-              if(widget.onClick != null){
-                widget.onClick!(item);
-              }
-            },
-            child: Container(
-              width: 180,
-              height: 170,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: (item.images.isNotEmpty?
-                            NetworkImage(item.images.first):
-                            AssetImage("assets/icons/cart.png")) as ImageProvider,
-                            fit: BoxFit.cover
-                        )
+        alignment: Alignment.centerLeft,
+        child: Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          // alignment: WrapAlignment.center,
+          children: widget.items.map((item){
+            return GestureDetector(
+              onTap: (){
+                if(widget.onClick != null){
+                  widget.onClick!(item);
+                }
+              },
+              child: Container(
+                width: 180,
+                height: 170,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: (item.images.isNotEmpty?
+                              NetworkImage(item.images.first):
+                              AssetImage("assets/icons/cart.png")) as ImageProvider,
+                              fit: BoxFit.cover
+                          )
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: halfWhiteOverlay2(height: 120),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(item.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, overflow: TextOverflow.ellipsis),),
-                        const SizedBox(height: 10,),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                          child: Row(
-                            children: [
-                              Text(item.description, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, overflow: TextOverflow.ellipsis),),
-                              Expanded(
-                                  child: Text("${item.currency}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: halfWhiteOverlay2(height: 120),
                     ),
-                  )
-                ],
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(item.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, overflow: TextOverflow.ellipsis),),
+                          const SizedBox(height: 10,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                            child: Row(
+                              children: [
+                                Text(item.description, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, overflow: TextOverflow.ellipsis),),
+                                Expanded(
+                                    child: Text("${item.currency}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        }).toList(),
-      )
+            );
+          }).toList(),
+        )
     );
   }
 }

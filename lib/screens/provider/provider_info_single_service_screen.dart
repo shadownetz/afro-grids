@@ -1,6 +1,5 @@
 import 'package:afro_grids/blocs/inventory/inventory_bloc.dart';
 import 'package:afro_grids/models/inventory_model.dart';
-import 'package:afro_grids/models/review_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widget_models.dart';
@@ -89,7 +88,7 @@ class _ProviderInfoSingleServiceScreenState extends State<ProviderInfoSingleServ
                                       Text("Reviews", style: TextStyle(fontWeight: FontWeight.bold))
                                     ],
                                   ),
-                                  child: const PortfolioReviewsTabView()
+                                  child: const PortfolioReviewsTabView(reviews: [],)
                               )
                             ],
                             onClick: (value){
@@ -103,7 +102,7 @@ class _ProviderInfoSingleServiceScreenState extends State<ProviderInfoSingleServ
                     showReviewButton?
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: leaveAReviewButton(context),
+                      child: leaveAReviewButton(context,provider: UserModel.providerInstance()),
                     ):
                     Container(height: 0,)
                   ],
