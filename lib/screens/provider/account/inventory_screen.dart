@@ -84,11 +84,34 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         },
                       ),
                       const SizedBox(height: 20,),
-                      AnimatedCrossFade(
-                          firstChild: multipleServiceItemsUI(),
-                          secondChild: singleServiceItemUI(),
-                          crossFadeState: viewMode==ServiceType.multiple?CrossFadeState.showFirst: CrossFadeState.showSecond,
-                          duration: const Duration(milliseconds: 500)
+                      CustomLoadingOverlay(
+                          widget: BlocProvider<InventoryBloc>(
+                            create: (context)=>InventoryBloc()..add(FetchProviderInventories(localStorage.user!)),
+                            child: BlocConsumer<InventoryBloc, InventoryState>(
+                              listener: (context, state){
+                                if(state is InventoryLoadingState){
+                                  context.loaderOverlay.show();
+                                }else{
+                                  context.loaderOverlay.hide();
+                                }
+                                if(state is InventoryErrorState){
+                                  Alerts(context).showErrorDialog(title: "Unable to add inventory", message: state.message);
+                                }
+                                if(state is InventoryLoadedState){
+                                  setState(()=>_inventories=state.inventories);
+                                }
+                              },
+                              builder: (context, state){
+                                _inventoryBloc = BlocProvider.of<InventoryBloc>(context);
+                                return AnimatedCrossFade(
+                                    firstChild: multipleServiceItemsUI(),
+                                    secondChild: singleServiceItemUI(),
+                                    crossFadeState: viewMode==ServiceType.multiple?CrossFadeState.showFirst: CrossFadeState.showSecond,
+                                    duration: const Duration(milliseconds: 500)
+                                );
+                              },
+                            ),
+                          )
                       ),
                     ],
                   ),
@@ -127,7 +150,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
   Widget floatingAction2(){
     return ElevatedButton(
-      onPressed: ()=>Navigator.of(context).push(createRoute(const UpdateSingleServiceInventoryScreen())),
+      onPressed: ()async{
+        InventoryModel? inventory;
+        if(_inventories.isNotEmpty){
+          inventory = _inventories.first;
+        }
+        var result = await NavigationService.toPage(UpdateSingleServiceInventoryScreen(inventory: inventory,));
+        if(result == true){
+          _inventoryBloc!.add(FetchProviderInventories(localStorage.user!));
+        }
+      },
       style: ElevatedButton.styleFrom(
           elevation: 2,
           minimumSize: const Size(50, 50),
@@ -139,106 +171,100 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
   Widget multipleServiceItemsUI(){
-    return CustomLoadingOverlay(
-        widget: BlocProvider(
-          create: (context)=>InventoryBloc()..add(FetchProviderInventories(localStorage.user!)),
-          child: BlocConsumer<InventoryBloc, InventoryState>(
-            listener: (context, state){
-              if(state is InventoryLoadingState){
-                context.loaderOverlay.show();
-              }else{
-                context.loaderOverlay.hide();
-              }
-              if(state is InventoryErrorState){
-                Alerts(context).showErrorDialog(title: "Unable to add inventory", message: state.message);
-              }
-              if(state is InventoryLoadedState){
-                setState(()=>_inventories=state.inventories);
-              }
-            },
-            builder: (context, state){
-              _inventoryBloc = BlocProvider.of<InventoryBloc>(context);
-              if(_inventories.isNotEmpty){
-                return Column(
+    return BlocBuilder<InventoryBloc, InventoryState>(
+        builder: (context, state){
+          if(_inventories.isNotEmpty){
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("showing ${_inventories.length} of ${_inventories.length} items"),
-                        PopupMenuButton(
-                            position: PopupMenuPosition.under,
-                            icon: const Icon(Icons.filter_list),
-                            onSelected: (String item){
-                              // print(item);
-                            },
-                            itemBuilder: (context){
-                              return [
-                                const PopupMenuItem<String>(
-                                    enabled: false,
-                                    child: Text("Date")
-                                ),
-                                const PopupMenuItem<String>(
-                                    value: "date_asc",
-                                    child: Text("ascending")
-                                ),
-                                const PopupMenuItem<String>(
-                                    value: "date_desc",
-                                    child: Text("descending")
-                                ),
-                                const PopupMenuItem<String>(
-                                    enabled: false,
-                                    child: Text("Price")
-                                ),
-                                const PopupMenuItem<String>(
-                                    value: "price_asc",
-                                    child: Text("ascending")
-                                ),
-                                const PopupMenuItem<String>(
-                                    value: "price_desc",
-                                    child: Text("descending")
-                                )
-                              ];
-                            }
-                        )
-                      ],
-                    ),
-                    InventoryView(
-                      items:  _inventories,
-                      onClick: (item) async {
-                        var result = await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context)=>ViewMultipleServiceInventoryScreen(inventory: item)
-                        );
-                        if(result == true){
-                          _inventoryBloc!.add(FetchProviderInventories(localStorage.user!));
+                    Text("showing ${_inventories.length} of ${_inventories.length} items"),
+                    PopupMenuButton(
+                        position: PopupMenuPosition.under,
+                        icon: const Icon(Icons.filter_list),
+                        onSelected: (String item){
+                          // print(item);
+                        },
+                        itemBuilder: (context){
+                          return [
+                            const PopupMenuItem<String>(
+                                enabled: false,
+                                child: Text("Date")
+                            ),
+                            const PopupMenuItem<String>(
+                                value: "date_asc",
+                                child: Text("ascending")
+                            ),
+                            const PopupMenuItem<String>(
+                                value: "date_desc",
+                                child: Text("descending")
+                            ),
+                            const PopupMenuItem<String>(
+                                enabled: false,
+                                child: Text("Price")
+                            ),
+                            const PopupMenuItem<String>(
+                                value: "price_asc",
+                                child: Text("ascending")
+                            ),
+                            const PopupMenuItem<String>(
+                                value: "price_desc",
+                                child: Text("descending")
+                            )
+                          ];
                         }
-                      },
                     )
                   ],
-                );
-              }
-              return Container(
-                alignment: Alignment.center,
-                child: const Text(
-                  "You do not have any items in your inventory at the moment",
-                  style: TextStyle(fontSize: 17, color: Colors.black26),
                 ),
-              );
-            },
-          ),
-        )
+                InventoryView(
+                  items:  _inventories,
+                  onClick: (item) async {
+                    var result = await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context)=>ViewMultipleServiceInventoryScreen(inventory: item)
+                    );
+                    if(result == true){
+                      _inventoryBloc!.add(FetchProviderInventories(localStorage.user!));
+                    }
+                  },
+                )
+              ],
+            );
+          }
+          return Container(
+            alignment: Alignment.center,
+            child: const Text(
+              "You do not have any items in your inventory at the moment",
+              style: TextStyle(fontSize: 17, color: Colors.black26),
+            ),
+          );
+        }
     );
   }
   Widget singleServiceItemUI(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text("Description", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-        SizedBox(height: 20,),
-        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla duis massa nisl lectus urna integer blandit est sit. Ipsum ut mus scelerisque malesuada. Dapibus consequat aliquam mattis orci amet orci fames sit hendrerit. Neque aliquam, porta nunc consequat, tincidunt pulvinar. Mollis elit odio sit eleifend sit. Lectus neque dignissim ornare ipsum. Elit proin urna, eget commodo justo. Dictum eget fermentum magna rhoncus urna. Amet sed gravida vitae non curabitur varius. In non scelerisque arcu a, elementum. Facilisis ut eget vel a luctus pellentesque purus. Maecenas ut ornare urna condimentum. Justo tellus vel tellus, elit dolor mi. Varius gravida pretium sed elit lectus quis eget a, lacus.")
-      ],
+    return BlocBuilder<InventoryBloc, InventoryState>(
+        builder: (context, state){
+          if(_inventories.isNotEmpty){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Description", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 20,),
+                Text(_inventories.first.description),
+              ],
+            );
+          }
+          return Container(
+            alignment: Alignment.center,
+            child: const Text(
+              "You have no description of your service at the moment",
+              style: TextStyle(fontSize: 17, color: Colors.black26),
+            ),
+          );
+        }
     );
   }
 

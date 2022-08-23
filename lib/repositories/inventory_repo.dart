@@ -30,7 +30,12 @@ class InventoryRepo{
   }
 
   Future<void> updateInventory()async{
-    return _inventoryRef.doc(_inventory!.id).update(_inventory!.toMap());
+    assert(_inventory!=null, "An inventory object must be provided before making update action");
+    if(_inventory!.id.isEmpty){
+      await addInventory();
+    }else{
+      return _inventoryRef.doc(_inventory!.id).update(_inventory!.toMap());
+    }
   }
 
   Future<void> softDeleteInventory()async{

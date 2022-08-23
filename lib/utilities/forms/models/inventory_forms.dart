@@ -256,7 +256,11 @@ class _UpdateMultiServiceInventoryFormState extends State<UpdateMultiServiceInve
 }
 
 class UpdateSingleServiceInventoryForm extends StatefulWidget {
-  const UpdateSingleServiceInventoryForm({Key? key}) : super(key: key);
+  final InventoryModel? inventory;
+  final void Function(InventoryModel inventory) onComplete;
+
+
+  const UpdateSingleServiceInventoryForm({Key? key, this.inventory, required this.onComplete}) : super(key: key);
 
   @override
   State<UpdateSingleServiceInventoryForm> createState() => _UpdateSingleServiceInventoryFormState();
@@ -265,6 +269,14 @@ class UpdateSingleServiceInventoryForm extends StatefulWidget {
 class _UpdateSingleServiceInventoryFormState extends State<UpdateSingleServiceInventoryForm> {
   final _formKey = GlobalKey<FormState>();
   var itemDescriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.inventory != null){
+      itemDescriptionController.text = widget.inventory!.description;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -281,8 +293,8 @@ class _UpdateSingleServiceInventoryFormState extends State<UpdateSingleServiceIn
             TextFormField(
               controller: itemDescriptionController,
               cursorHeight: 20,
-              maxLines: 20,
-              maxLength: 2000,
+              maxLines: 10,
+              maxLength: 1000,
               decoration: const InputDecoration(
                 labelText: "Item Description",
                 hintText: "e.g available in sizes XL,M&L",
@@ -293,7 +305,24 @@ class _UpdateSingleServiceInventoryFormState extends State<UpdateSingleServiceIn
                 style: buttonPrimaryMdStyle(),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    //
+                    InventoryModel inventory;
+                    if(widget.inventory != null){
+                      inventory = InventoryModel.copyWith(widget.inventory!);
+                      inventory.description = itemDescriptionController.text;
+                    }else{
+                      inventory = InventoryModel(
+                          id: "",
+                          createdBy: localStorage.user!.id,
+                          createdAt: DateTime.now(),
+                          name: "",
+                          price: 0,
+                          currency: localStorage.user!.currency,
+                          description: itemDescriptionController.text,
+                          images: [],
+                          visible: true
+                      );
+                    }
+                    widget.onComplete(inventory);
                   }
                 },
                 child: Row(
