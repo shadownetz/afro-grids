@@ -1,4 +1,5 @@
 import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -23,7 +24,7 @@ AppBar portfolioAppBar(BuildContext context){
   );
 }
 
-Widget portfolioActionBar(BuildContext context){
+Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
   final deviceWidth = MediaQuery.of(context).size.width;
   return Container(
     width: deviceWidth-20,
@@ -45,11 +46,11 @@ Widget portfolioActionBar(BuildContext context){
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/avatars/man.png'),
-                        alignment: Alignment.bottomCenter,
-                        fit: BoxFit.contain,
+                        image: (provider.avatar.isEmpty ? const AssetImage('assets/avatars/man.png'):NetworkImage(provider.avatar)) as ImageProvider,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
                       )
                   ),
                 ),
@@ -68,7 +69,7 @@ Widget portfolioActionBar(BuildContext context){
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text("George Rufus", style: TextStyle(fontSize: 30, overflow: TextOverflow.ellipsis),),
+                  Text(provider.name, style: const TextStyle(fontSize: 27, overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500),),
                   Row(
                     children: [
                       // star rating and favorites
@@ -124,7 +125,7 @@ Widget portfolioActionBar(BuildContext context){
   );
 }
 
-Widget portfolioActionBar2(BuildContext context){
+Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
   final deviceWidth = MediaQuery.of(context).size.width;
   return Container(
     width: deviceWidth-20,
@@ -171,11 +172,11 @@ Widget portfolioActionBar2(BuildContext context){
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/avatars/man.png'),
-                            alignment: Alignment.topCenter,
-                            fit: BoxFit.contain,
+                            image: (provider.avatar.isEmpty ? const AssetImage('assets/avatars/man.png'):NetworkImage(provider.avatar)) as ImageProvider,
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
                           )
                       ),
                     ),
@@ -184,11 +185,11 @@ Widget portfolioActionBar2(BuildContext context){
                     alignment: Alignment.bottomCenter,
                     child: halfWhiteOverlay(),
                   ),
-                  const Align(
+                  Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: 5),
-                        child: Text("George Rufus", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),),
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(provider.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),),
                       )
                   )
                 ],

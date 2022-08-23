@@ -153,6 +153,10 @@ class UserModel{
     };
   }
 
+  String get name{
+    return "$firstName $lastName";
+  }
+
   bool get isProvider{
     return accessLevel == AccessLevel.provider;
   }
