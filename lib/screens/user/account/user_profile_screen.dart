@@ -1,11 +1,14 @@
+import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/account/edit_profile_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utilities/widgets/widgets.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  final UserModel user;
+  const UserProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,48 +21,49 @@ class UserProfileScreen extends StatelessWidget {
       ),
       body: Container(
         height: deviceHeight,
-        padding: EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: ListView(
           children: [
             Center(
               child: Column(
                 children: [
                   RoundImage(
-                      image: AssetImage("assets/avatars/man.png"),
-                      width: 130,
-                      height: 130
+                    image: (user.avatar.isEmpty ? const AssetImage("assets/avatars/man.png"): NetworkImage(user.avatar)) as ImageProvider,
+                    width: 130,
+                    height: 130,
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 10,),
-                  Text("Tony Anderson", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
-                  SizedBox(height: 10,),
-                  Text("Lagos, Nigeria", style: TextStyle(fontSize: 15, color: Colors.grey),),
+                  const SizedBox(height: 10,),
+                  Text(user.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                  const SizedBox(height: 10,),
+                  Text(user.address, style: const TextStyle(fontSize: 15, color: Colors.grey),),
                 ],
               ),
             ),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             // phone
             ListTile(
-              title: Text("+238967677682", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-              subtitle: Text("Phone", style: TextStyle(fontSize: 15, color: Colors.grey),),
+              title: Text(user.phone, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+              subtitle: const Text("Phone (verified)", style: TextStyle(fontSize: 15, color: Colors.grey),),
             ),
             // email
             ListTile(
-              title: Text("tony@gmail.com", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-              subtitle: Text("Email", style: TextStyle(fontSize: 15, color: Colors.grey),),
+              title: Text(user.email, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+              subtitle: const Text("Email", style: TextStyle(fontSize: 15, color: Colors.grey),),
             ),
           ],
         ),
       ),
       floatingActionButton: ElevatedButton(
-        onPressed: ()=>Navigator.of(context).push(createRoute(const EditProfileScreen())),
+        onPressed: ()=>NavigationService.toPage(EditProfileScreen(user: user,)),
         style: ElevatedButton.styleFrom(
-          elevation: 5,
-          minimumSize: Size(50, 50),
-          primary: Colours.primary,
-          onPrimary: Colors.white,
-          shape:CircleBorder()
+            elevation: 5,
+            minimumSize: const Size(50, 50),
+            primary: Colours.primary,
+            onPrimary: Colors.white,
+            shape:const CircleBorder()
         ),
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
       ),
     );
   }

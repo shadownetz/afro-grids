@@ -1,11 +1,20 @@
+import 'package:afro_grids/blocs/user/user_bloc.dart';
+import 'package:afro_grids/blocs/user/user_event.dart';
+import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
+import '../../../blocs/user/user_state.dart';
 import '../../../utilities/forms/profile_forms.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  final UserModel user;
+  const EditProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -20,48 +29,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: const Text("Update Profile"),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: (){},
-                child: Stack(
+      body: CustomLoadingOverlay(
+        widget: BlocProvider<UserBloc>(
+          create: (context)=>UserBloc(),
+          child: BlocConsumer<UserBloc, UserState>(
+            listener: (context, state){
+              if(state is UserLoadingState){
+                context.loaderOverlay.show();
+              }else{
+                context.loaderOverlay.hide();
+              }
+              if(state is UserErrorState){
+                Alerts(context).showErrorDialog(title: "Update Error", message: state.message);
+              }
+              if(state is UserLoadedState){
+                NavigationService.exitPage(true);
+              }
+            },
+            builder: (context, state){
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   children: [
-                    RoundImage(
-                        image: const AssetImage("assets/avatars/man.png"),
-                        width: 130,
-                        height: 130
-                    ),
-                    Container(
-                      height: 130,
-                      width: 130,
-                      decoration: const BoxDecoration(
-                          color: Color.fromRGBO(0, 0, 0, 0.5),
-                          shape: BoxShape.circle
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.image, color: Colors.white,),
-                          SizedBox(width: 5,),
-                          Text("update", style: TextStyle(color: Colors.white),)
-                        ],
-                      ),
+                    UpdateUserProfileForm(
+                      user: widget.user,
+                      onUpdate: (user, placeId, newPassword, newAvatar){
+                        BlocProvider
+                            .of<UserBloc>(context)
+                            .add(UpdateUserEvent(
+                            user,
+                            placeId: placeId,
+                            password: newPassword,
+                            avatar: newAvatar
+                        ));
+                      },
                     )
                   ],
                 ),
-              ),
-            ),
-            SizedBox(height: 20,),
-            UpdateUserProfileForm(
-              onUpdate: (user){
-                Navigator.of(context).pop();
-              },
-            )
-          ],
+              );
+            },
+          ),
         ),
       ),
     );

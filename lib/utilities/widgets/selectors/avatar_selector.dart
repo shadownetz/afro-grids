@@ -10,9 +10,10 @@ import '../../../blocs/device/device_state.dart';
 import '../widgets.dart';
 
 class AvatarSelector extends StatefulWidget {
+  final String? value;
   final void Function(XFile? imageFile)? onUpdated;
 
-  const AvatarSelector({Key? key, this.onUpdated}) : super(key: key);
+  const AvatarSelector({Key? key, this.onUpdated, this.value}) : super(key: key);
 
   @override
   State<AvatarSelector> createState() => _AvatarSelectorState();
@@ -50,9 +51,10 @@ class _AvatarSelectorState extends State<AvatarSelector> {
                 child: Stack(
                   children: [
                     RoundImage(
-                        image: const AssetImage("assets/avatars/man.png"),
+                        image: (widget.value != null? NetworkImage(widget.value!): const AssetImage("assets/avatars/man.png")) as ImageProvider,
                         width: 130,
-                        height: 130
+                        height: 130,
+                        fit: BoxFit.cover,
                     ),
                     Container(
                       height: 130,

@@ -16,6 +16,18 @@ class AuthRepo{
     return FirebaseAuth.instance.currentUser;
   }
 
+  Future<void> updatePassword(String newPassword)async{
+    try{
+      await FirebaseAuth.instance.currentUser!.updatePassword(newPassword);
+    }on FirebaseAuthException catch (e){
+      if (e.code == 'weak-password') {
+        return Future.error("The password provided is too weak");
+      } else if (e.code == 'requires-recent-login') {
+        return Future.error("For security reasons you need to have recently logged in to update your password. Kindly re-login and try again.");
+      }
+    }
+  }
+
   Future<String> getAccessToken()async{
     if(isSignedIn()){
       return await getAuthUser()!.getIdToken(true);

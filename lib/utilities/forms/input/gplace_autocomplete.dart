@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
 
 class GPlaceAutoComplete extends StatefulWidget {
+  final String? value;
   final void Function(String placeId, String name)? onSelected;
-  const GPlaceAutoComplete({Key? key, this.onSelected}) : super(key: key);
+  const GPlaceAutoComplete({Key? key, this.onSelected, this.value}) : super(key: key);
 
   @override
   State<GPlaceAutoComplete> createState() => _GPlaceAutoCompleteState();
@@ -107,6 +108,9 @@ class _GPlaceAutoCompleteState extends State<GPlaceAutoComplete> {
                 }
               }
             });
+            if(widget.value != null && fieldTextEditingController.text.isEmpty){
+              fieldTextEditingController.text = widget.value!;
+            }
             return TextField(
               controller: fieldTextEditingController,
               focusNode: fieldFocusNode,

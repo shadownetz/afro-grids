@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../models/user_model.dart';
+
 @immutable
 abstract class UserState extends Equatable{}
 
@@ -15,6 +17,9 @@ class UserLoadingState extends UserState{
 }
 
 class UserLoadedState extends UserState{
+  final UserModel? user;
+
+  UserLoadedState({this.user});
   @override
   List<Object?> get props => [];
 }

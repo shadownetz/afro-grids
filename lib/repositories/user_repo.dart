@@ -4,6 +4,7 @@ import 'package:afro_grids/configs/firestorage_references.dart';
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/repositories/auth_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/geofire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,6 +78,11 @@ class UserRepo{
     return await _userRef.doc(_user!.id).update(_user!.toMap());
   }
 
+  Future<void> updatePassword(String newPassword) async{
+    _user!.updatedAt = DateTime.now();
+    return await AuthRepo().updatePassword(newPassword);
+  }
+
   Future<void> updatePhone(String phone) async{
     _user!.updatedAt = DateTime.now();
     _user!.setPhone(phone);
@@ -90,6 +96,10 @@ class UserRepo{
     }catch(e){
       //
     }
+  }
+
+  setLocation(double lat, double lng){
+    _user!.location = GeoFirePoint(lat, lng);
   }
 
   Future<List<UserModel>> fetchUsersByServiceID(String serviceID) async {

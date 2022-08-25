@@ -29,6 +29,7 @@ class UserModel{
   late String avatar;
   late bool phoneVerified;
   late bool emailVerified;
+  late String deliveryAddress;
 
   UserModel({
     required this.id,
@@ -53,6 +54,7 @@ class UserModel{
     required this.avatar,
     this.phoneVerified=false,
     this.emailVerified=false,
+    this.deliveryAddress=""
   });
 
   UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> user):
@@ -77,7 +79,8 @@ class UserModel{
         reviews = Reviews(user.data()!['reviews']['total'], user.data()!['reviews']['average']),
         favorites = List<String>.from(user.data()!['favorites']),
         emailVerified = user.data()!['emailVerified'],
-        phoneVerified = user.data()!['phoneVerified'];
+        phoneVerified = user.data()!['phoneVerified'],
+        deliveryAddress = user.data()!['deliveryAddress']??"";
 
   UserModel.providerInstance():
         id = "",
@@ -101,7 +104,8 @@ class UserModel{
         reviews = Reviews(0, 0),
         favorites = [],
         emailVerified = false,
-        phoneVerified = false;
+        phoneVerified = false,
+        deliveryAddress="";
 
   UserModel.userInstance():
         id = "",
@@ -125,7 +129,8 @@ class UserModel{
         reviews = Reviews(0, 0),
         favorites = [],
         emailVerified = false,
-        phoneVerified = false;
+        phoneVerified = false,
+        deliveryAddress="";
 
   Map<String, dynamic> toMap(){
     return {
@@ -150,6 +155,7 @@ class UserModel{
       'favorites': favorites,
       'emailVerified': emailVerified,
       'phoneVerified': phoneVerified,
+      'deliveryAddress': deliveryAddress
     };
   }
 

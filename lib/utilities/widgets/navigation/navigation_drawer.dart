@@ -76,7 +76,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                         ListTile(
                           leading: const Icon(Icons.person, color: Colours.primary),
                           title: const Text("Profile", style: TextStyle(fontSize: 20),),
-                          onTap: ()=>Navigator.of(context).push(createRoute(const UserProfileScreen())),
+                          onTap: ()=>Navigator.of(context).push(createRoute(UserProfileScreen(user: localStorage.user!,))),
                         ),
                         const Divider(),
                         ListTile(
