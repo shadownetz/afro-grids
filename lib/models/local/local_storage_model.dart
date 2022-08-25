@@ -22,6 +22,10 @@ class LocalStorageModel{
     return _notifications.isEmpty? null: _notifications;
   }
 
+  void emptyCart(){
+    cart.cartItems = [];
+  }
+
   void addItemToCart(LocalCartItem cartItem){
     var idx = cart.cartItems.indexWhere((localCartItem) => cartItem.inventory.id == localCartItem.inventory.id);
     if(idx >= 0){

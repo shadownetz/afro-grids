@@ -3,7 +3,7 @@ import 'package:afro_grids/blocs/user/user_event.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
-import 'package:afro_grids/utilities/services/navigation_service.dart';
+import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +43,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Alerts(context).showErrorDialog(title: "Update Error", message: state.message);
               }
               if(state is UserLoadedState){
-                NavigationService.exitPage(true);
+                Alerts(context).showToast("Profile updated");
+                NavigationGuards(user: widget.user).navigateToDashboard();
               }
             },
             builder: (context, state){

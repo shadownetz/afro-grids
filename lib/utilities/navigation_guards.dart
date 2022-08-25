@@ -13,9 +13,9 @@ class NavigationGuards{
 
   navigateToDashboard(){
     if(user.isProvider){
-      NavigationService.replacePageNamed("/provider-dashboard");
+      NavigationService.pushNamedAndRemoveAll("/provider-dashboard");
     }else{
-      NavigationService.replacePageNamed("/user-dashboard");
+      NavigationService.pushNamedAndRemoveAll("/user-dashboard");
     }
   }
   navigateToPortfolioPage(){

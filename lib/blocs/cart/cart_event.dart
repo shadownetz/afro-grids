@@ -35,8 +35,9 @@ class GetCartEvent extends CartEvent{
 
 class AddCheckoutEvent extends CartEvent{
   final LocalCartModel localCart;
+  final UserModel user;
 
-  AddCheckoutEvent({required this.localCart});
+  AddCheckoutEvent({required this.localCart, required this.user});
 
   @override
   List<Object?> get props => [];

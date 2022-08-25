@@ -1,8 +1,11 @@
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ionicons/ionicons.dart';
+
+import '../main.dart';
 
 class Alerts{
   final BuildContext context;
@@ -271,7 +274,7 @@ class Alerts{
             const SizedBox(height: 20,),
             ElevatedButton(
                 onPressed: (){
-                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route)=>false);
+                  NavigationGuards(user: localStorage.user!).navigateToDashboard();
                 },
                 style: buttonPrimaryMdStyle(
                   elevation: 3

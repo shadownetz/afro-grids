@@ -29,7 +29,9 @@ class OrderModel{
         id = order.id,
         orderNo = order.data()!['orderNo'],
         createdBy = order.data()!['createdBy'],
-        items = order.data()!['items'],
+        items = List.from(order.data()!['items']).map((item){
+          return OrderItem(item.inventoryId, item.count);
+        }).toList(),
         deliveryAddress = order.data()!['deliveryAddress'],
         totalPrice = order.data()!['totalPrice'],
         paymentResponse = order.data()!['paymentResponse'],
@@ -43,7 +45,7 @@ class OrderModel{
       'items': items.map((item) => {
         'inventoryId': item.inventoryId,
         'count': item.count
-      }),
+      }).toList(),
       'deliveryAddress': deliveryAddress,
       'totalPrice': totalPrice,
       'paymentResponse': paymentResponse,

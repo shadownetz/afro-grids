@@ -25,5 +25,11 @@ class Credentials{
   static String get aPIKey{
     return dotenv.env['API_KEY']!;
   }
+  static String raveKey({bool isTest = false}){
+    if(isTest){
+      return dotenv.env['TEST_RAVE_PUBLIC_KEY']!;
+    }
+    return dotenv.env['PROD_RAVE_PUBLIC_KEY']!;
+  }
 
 }

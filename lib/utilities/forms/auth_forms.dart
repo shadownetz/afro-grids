@@ -104,7 +104,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                   hintText: "enter your email address"
               ),
               validator: (value) {
-                if (value == null || value.isEmpty || value.length <= 3 || !validateEmail(value)) {
+                if (value == null || value.isEmpty || value.length <= 3 || !FuncUtils.validateEmail(value)) {
                   return 'Please enter a valid email';
                 }
                 return null;
@@ -352,7 +352,7 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
                   hintText: "enter your email address"
               ),
               validator: (value) {
-                if (value == null || value.isEmpty || value.length <= 3 || !validateEmail(value)) {
+                if (value == null || value.isEmpty || value.length <= 3 || !FuncUtils.validateEmail(value)) {
                   return 'Please enter a valid email';
                 }
                 return null;

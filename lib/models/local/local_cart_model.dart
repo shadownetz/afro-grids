@@ -20,25 +20,27 @@ class LocalCartItem{
 class LocalCartModel{
   String id;
   List<LocalCartItem> cartItems;
-  String currency = '';
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
-  LocalCartModel({required this.id, required this.cartItems}){
+  LocalCartModel({required this.id, required this.cartItems});
+
+  String get currency{
     if(cartItems.isNotEmpty){
-      currency = cartItems.first.inventory.currency;
+      return cartItems.first.inventory.currency;
     }
+    return "";
   }
 
-  get totalItems{
+  int get totalItems{
     return cartItems.map((cartItem) => cartItem.count).reduce((val1, val2) => val1+val2);
   }
 
-  get totalPrice{
+  num get totalPrice{
     return cartItems.map((cartItem) => cartItem.inventory.price*cartItem.count).reduce((val1, val2) => val1+val2);
   }
 
-  get totalPriceStr{
+  String get totalPriceStr{
     return CurrencyUtil().format(totalPrice);
   }
 

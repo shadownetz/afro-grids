@@ -2,6 +2,7 @@ import 'package:afro_grids/blocs/cart/cart_event.dart';
 import 'package:afro_grids/blocs/cart/cart_state.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/repositories/cart_repo.dart';
+import 'package:afro_grids/repositories/order_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState>{
@@ -14,8 +15,23 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     on<ReduceItemCountEvent>(_mapReduceItemCountEventToEvent);
   }
 
-  void _mapCheckOutStateToEvent(CartEvent event, Emitter<CartState> emit){
-    emit(CartCheckedOutState());
+  void _mapCheckOutStateToEvent(AddCheckoutEvent event, Emitter<CartState> emit)async{
+    emit(CartLoadingState());
+    try{
+      CartRepo cartRepo = CartRepo();
+      var cart = await cartRepo.getCart(event.user.id);
+      if(cart != null){
+        var response = await cartRepo.checkout(cart, event.user);
+        await OrderRepo().saveOrder(cart: cart, user: event.user, paymentResponse: response);
+        await cartRepo.emptyCart(cart);
+        localStorage.emptyCart();
+        emit(CartCheckedOutState());
+      }else{
+        emit(CartErrorState("Could not find cart items"));
+      }
+    }catch(e){
+      emit(CartErrorState(e.toString()));
+    }
   }
 
   void _mapGetCartEventToEvent(GetCartEvent event, Emitter<CartState> emit)async{

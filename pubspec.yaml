@@ -60,6 +60,7 @@ dependencies:
   flutter_spinkit: ^5.1.0
   google_sign_in: ^5.4.1
   flutter_treeview: ^1.0.7+1
+  flutterwave_standard: ^1.0.4
 
 dev_dependencies:
   flutter_test:
