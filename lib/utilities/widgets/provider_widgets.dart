@@ -2,11 +2,13 @@ import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/local/local_review_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
+import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../models/review_model.dart';
 import '../colours.dart';
+import '../currency.dart';
 import 'widget_models.dart';
 import 'widgets.dart';
 
@@ -15,12 +17,8 @@ AppBar portfolioAppBar(BuildContext context){
     // backgroundColor: Colours.tertiary,
     // foregroundColor: Colours.primary,
     title: const Text("Provider Portfolio"),
-    actions: [
-      IconButton(
-          padding: const EdgeInsets.all(0),
-          onPressed: ()=>Navigator.of(context).push(createRoute(const CartScreen())),
-          icon: cartIcon(itemCount: 30)
-      )
+    actions: const [
+      CartButton()
     ],
   );
 }
@@ -58,7 +56,7 @@ Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: halfWhiteOverlay(),
+                child: HalfWhiteOverlay(),
               )
             ],
           ),
@@ -184,7 +182,7 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: halfWhiteOverlay(),
+                    child: HalfWhiteOverlay(),
                   ),
                   Align(
                       alignment: Alignment.bottomCenter,
@@ -267,7 +265,7 @@ class _PortfolioReviewsTabViewState extends State<PortfolioReviewsTabView> {
                           Expanded(
                               child: Container(
                                 alignment: Alignment.centerRight,
-                                child: getRatingIcons(localReview.review.rating.toInt(), iconSize: 15),
+                                child: RatingIcons(localReview.review.rating.toInt(), iconSize: 15),
                               )
                           )
                         ],
@@ -334,7 +332,7 @@ class _InventoryViewState extends State<InventoryView> {
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: halfWhiteOverlay2(height: 120),
+                      child: HalfWhiteOverlay2(height: 120),
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -349,7 +347,7 @@ class _InventoryViewState extends State<InventoryView> {
                               children: [
                                 Text(item.description, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, overflow: TextOverflow.ellipsis),),
                                 Expanded(
-                                    child: Text("${item.currency}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
+                                    child: Text("${CurrencyUtil().currencySymbol(item.currency)}${item.price}", style: TextStyle(fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis), textAlign: TextAlign.end,)
                                 )
                               ],
                             ),

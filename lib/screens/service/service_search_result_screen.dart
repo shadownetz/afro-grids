@@ -215,7 +215,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                       firstChild: Column(
                         children: [
                           // drag indicator
-                          modalDragIndicator(),
+                          ModalDragIndicator(),
                           const SizedBox(height: 20,),
                           const SizedBox(
                             width: 250,

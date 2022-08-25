@@ -7,7 +7,10 @@ import '../inventory_model.dart';
 class LocalCartItem{
   InventoryModel inventory;
   int count;
-  LocalCartItem(this.inventory, this.count);
+  LocalCartItem({
+    required this.inventory,
+    required this.count
+  });
 
   get priceStr{
     return CurrencyUtil().format(inventory.price);
@@ -15,10 +18,13 @@ class LocalCartItem{
 }
 
 class LocalCartModel{
+  String id;
   List<LocalCartItem> cartItems;
   String currency = '';
+  DateTime createdAt = DateTime.now();
+  DateTime updatedAt = DateTime.now();
 
-  LocalCartModel(this.cartItems){
+  LocalCartModel({required this.id, required this.cartItems}){
     if(cartItems.isNotEmpty){
       currency = cartItems.first.inventory.currency;
     }

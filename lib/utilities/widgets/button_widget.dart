@@ -1,9 +1,15 @@
+import 'package:afro_grids/blocs/cart/cart_bloc.dart';
+import 'package:afro_grids/blocs/cart/cart_state.dart';
+import 'package:afro_grids/main.dart';
+import 'package:afro_grids/models/local/local_cart_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 
 Widget leaveAReviewButton(BuildContext context, {required UserModel provider}){
@@ -30,7 +36,7 @@ Widget leaveAReviewButton(BuildContext context, {required UserModel provider}){
 Widget checkoutButton(BuildContext context){
   return ElevatedButton(
       style: buttonPrimaryLgStyle(),
-      onPressed: ()=>Navigator.of(context).push(createRoute(const CartScreen())),
+      onPressed: ()=>NavigationService.toPage(const CartScreen()),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
@@ -223,3 +229,38 @@ class FacebookSignInButton extends StatelessWidget {
     );
   }
 }
+
+class CartButton extends StatefulWidget {
+  const CartButton({Key? key}) : super(key: key);
+
+  @override
+  State<CartButton> createState() => _CartButtonState();
+}
+
+class _CartButtonState extends State<CartButton> {
+  late LocalCartModel cart;
+
+  @override
+  void initState() {
+    cart = localStorage.cart;
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, state){
+        if(state is CartLoadedState){
+          setState(()=>cart=localStorage.cart);
+        }
+      },
+      builder: (context, state){
+        return IconButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: ()=>Navigator.of(context).push(createRoute(const CartScreen())),
+            icon: CartIcon(itemCount: cart.totalItems)
+        );
+      },
+    );
+  }
+}
+

@@ -1,10 +1,17 @@
 import 'dart:ui';
 
+import 'package:afro_grids/blocs/cart/cart_bloc.dart';
+import 'package:afro_grids/blocs/cart/cart_event.dart';
 import 'package:afro_grids/models/inventory_model.dart';
+import 'package:afro_grids/models/local/local_cart_model.dart';
+import 'package:afro_grids/utilities/alerts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/cart/cart_state.dart';
 import '../../utilities/colours.dart';
+import '../../utilities/currency.dart';
 import '../../utilities/widgets/button_widget.dart';
 import '../../utilities/widgets/widgets.dart';
 
@@ -53,7 +60,7 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
                           // indicator
                           Align(
                             alignment: Alignment.topCenter,
-                            child: modalDragIndicator(),
+                            child: ModalDragIndicator(),
                           ),
                           // carousel items
                           Container(
@@ -113,24 +120,14 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
                     Text(widget.inventory.name, style: TextStyle(fontSize: 30),),
                     Text('# ${widget.inventory.description}', style: TextStyle(fontSize: 20, color: Colors.grey),),
                     SizedBox(height: 10,),
-                    Text('${widget.inventory.currency}${widget.inventory.price}', style: TextStyle(fontSize: 25, color: Colours.secondary),)
+                    Text('${CurrencyUtil().currencySymbol(widget.inventory.currency)}${widget.inventory.price}', style: TextStyle(fontSize: 25, color: Colours.secondary),)
                   ],
                 ),
               ),
               Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                    onPressed: ()=>Navigator.of(context).pop(),
-                    style: buttonLgStyle(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add_shopping_cart_outlined),
-                        Text("Add to cart")
-                      ],
-                    )
-                ),
+                child: buildAddToCartButton(),
               )
             ],
           ),
@@ -157,6 +154,41 @@ class _ViewItemScreenState extends State<ViewItemScreen> {
       alignment: Alignment.center,
       child: Text("No items available to display", textAlign: TextAlign.center,),
     )];
+  }
+
+  Widget buildAddToCartButton(){
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, state){
+        if(state is CartLoadingState){
+          Alerts(context).showToast("Adding item to cart");
+        }
+        if(state is CartLoadedState){
+          Alerts(context).showToast("Item added to cart");
+        }
+        if(state is CartErrorState){
+          Alerts(context).showErrorDialog(title: "Cart Error", message: "Unable to add item to cart: ${state.message}");
+        }
+      },
+      builder: (context, state){
+        return ElevatedButton(
+            onPressed: (){
+              BlocProvider.of<CartBloc>(context).add(AddToCartEvent(
+                  LocalCartItem(
+                      inventory: widget.inventory, count: 1
+                  )
+              ));
+            },
+            style: buttonLgStyle(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.add_shopping_cart_outlined),
+                Text("Add to cart")
+              ],
+            )
+        );
+      },
+    );
   }
 
 }

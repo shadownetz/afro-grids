@@ -3,18 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-Widget appBarLogo({
-  theme='light'
-}){
-  return Image(
-      width: 130,
-      height: 130,
-      image: AssetImage(
-          theme=='light'?"assets/splash_light.png":"assets/splash.png"
-      )
-  );
-}
-
 Route createRoute(Widget page) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => page,
@@ -40,38 +28,61 @@ BoxShadow boxShadow2(){
   return const BoxShadow(color: Colors.black26, blurRadius: 9, offset: Offset(0.0, 5));
 }
 
-Widget cartIcon({int? itemCount}){
-  return Stack(
-    children: [
-      const Align(
-          alignment: Alignment.center,
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Icon(
-              Ionicons.cart,
-              size: 30,
-            ),
-          )
-      ),
-      itemCount != null ?
-      Align(
-        alignment: Alignment.topLeft,
-        child: Container(
-          width: 20,
-          height: 20,
-          margin: EdgeInsets.only(top: 5),
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(2),
-          decoration: const BoxDecoration(
-              color: Colours.secondary,
-              shape: BoxShape.circle
-          ),
-          child: Text("$itemCount", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12),),
+class AppBarLogo extends StatelessWidget {
+  final String theme;
+  const AppBarLogo({Key? key, this.theme='light'}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image(
+        width: 130,
+        height: 130,
+        image: AssetImage(
+            theme=='light'?"assets/splash_light.png":"assets/splash.png"
+        )
+    );
+  }
+}
+
+class CartIcon extends StatelessWidget{
+  final int? itemCount;
+  
+  const CartIcon({Key? key, this.itemCount}): super(key: key);
+  
+  @override
+  Widget build(BuildContext context){
+    return Stack(
+      children: [
+        const Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Icon(
+                Ionicons.cart,
+                size: 30,
+              ),
+            )
         ),
-      ):
-      Container(),
-    ],
-  );
+        itemCount != null ?
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            width: 20,
+            height: 20,
+            margin: EdgeInsets.only(top: 5),
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(2),
+            decoration: const BoxDecoration(
+                color: Colours.secondary,
+                shape: BoxShape.circle
+            ),
+            child: Text("$itemCount", overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12),),
+          ),
+        ):
+        Container(),
+      ],
+    );
+  }
 }
 
 class RoundImage extends StatelessWidget {
@@ -110,74 +121,99 @@ class RoundImage extends StatelessWidget {
   }
 }
 
-Widget getRatingIcons(int ratingValue, {double iconSize=30}){
-  List<Widget> ratingIcons = [];
-  for(int i=0; i<ratingValue; i++){
-    ratingIcons.add(Icon(
-      Icons.star, size: iconSize,color: Colours.secondary,
-    ));
+class RatingIcons extends StatelessWidget {
+  final List<Widget> ratingIcons = [];
+  final int ratingValue;
+  final double iconSize;
+  
+  RatingIcons(this.ratingValue, {Key? key, this.iconSize=30}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    for(int i=0; i<ratingValue; i++){
+      ratingIcons.add(Icon(
+        Icons.star, size: iconSize,color: Colours.secondary,
+      ));
+    }
+    for(int i=ratingIcons.length; i<5; i++){
+      ratingIcons.add(Icon(
+        Icons.star_border, size: iconSize,color: Colours.secondary,
+      ));
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: ratingIcons,
+    );
   }
-  for(int i=ratingIcons.length; i<5; i++){
-    ratingIcons.add(Icon(
-      Icons.star_border, size: iconSize,color: Colours.secondary,
-    ));
+}
+
+class HalfWhiteOverlay extends StatelessWidget {
+  final double height;
+  const HalfWhiteOverlay({Key? key, this.height=50}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: height,
+      decoration: BoxDecoration(
+          color: Colors.grey,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white.withOpacity(0),
+              Colors.white.withOpacity(0.5),
+              Colors.white.withOpacity(0.9),
+              Colors.white,
+            ],
+          )
+      ),
+    );
   }
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: ratingIcons,
-  );
 }
 
-Widget halfWhiteOverlay({double height=50}){
-  return Container(
-    width: double.infinity,
-    height: height,
-    decoration: BoxDecoration(
-        color: Colors.grey,
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white.withOpacity(0),
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(0.9),
-            Colors.white,
-          ],
-        )
-    ),
-  );
+class HalfWhiteOverlay2 extends StatelessWidget {
+  final double height;
+  const HalfWhiteOverlay2({Key? key, this.height=50}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: height,
+      decoration: BoxDecoration(
+          color: Colors.grey,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white.withOpacity(0),
+              Colors.white.withOpacity(0.5),
+              Colors.white.withOpacity(1),
+              Colors.white,
+            ],
+          )
+      ),
+    );
+  }
 }
 
-Widget halfWhiteOverlay2({double height=50}){
-  return Container(
-    width: double.infinity,
-    height: height,
-    decoration: BoxDecoration(
-        color: Colors.grey,
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white.withOpacity(0),
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(1),
-            Colors.white,
-          ],
-        )
-    ),
-  );
-}
+class ModalDragIndicator extends StatelessWidget {
+  const ModalDragIndicator({Key? key}) : super(key: key);
 
-Widget modalDragIndicator(){
-  return Container(
-    width: 60,
-    height: 10,
-    margin: const EdgeInsets.only(top: 10),
-    decoration: BoxDecoration(
-        color: Color.fromRGBO(220, 220, 220, 1),
-        borderRadius: BorderRadius.circular(20)
-    ),
-  );
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      height: 10,
+      margin: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(220, 220, 220, 1),
+          borderRadius: BorderRadius.circular(20)
+      ),
+    );
+  }
 }
 
 class AuthTab extends StatelessWidget {

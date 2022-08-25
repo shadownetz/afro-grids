@@ -84,7 +84,7 @@ class _ViewMultipleServiceInventoryScreenState extends State<ViewMultipleService
                                   // indicator
                                   Align(
                                     alignment: Alignment.topCenter,
-                                    child: modalDragIndicator(),
+                                    child: ModalDragIndicator(),
                                   ),
                                   // carousel items
                                   Container(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:afro_grids/blocs/cart/cart_bloc.dart';
 import 'package:afro_grids/models/local/local_storage_model.dart';
 import 'package:afro_grids/screens/auth/otp_screen.dart';
 import 'package:afro_grids/screens/auth/provider_signup_screen.dart';
@@ -65,8 +66,13 @@ class MyApp extends StatelessWidget {
         future: delayLoading,
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
-            return BlocProvider(
-              create: (context)=>AuthBloc()..add(CheckAuthEvent()),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                    create: (context)=>AuthBloc()..add(CheckAuthEvent())
+                ),
+                BlocProvider(create: (context)=>CartBloc())
+              ],
               child: MaterialApp(
                 title: 'AfroGrids',
                 theme: Theme.of(context).copyWith(

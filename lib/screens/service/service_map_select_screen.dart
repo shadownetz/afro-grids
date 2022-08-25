@@ -136,7 +136,7 @@ class _ServiceMapSelectScreenState extends State<ServiceMapSelectScreen> {
                           height: deviceHeight/4,
                           child: Column(
                             children: [
-                              modalDragIndicator(),
+                              ModalDragIndicator(),
                               const SizedBox(height: 20,),
                               const Text("Confirm selection", style: TextStyle(fontSize: 17, color: Colors.grey),),
                               const SizedBox(height: 25,),

@@ -28,7 +28,7 @@ class _UserSignUpScreenState extends State<UserSignUpScreen> {
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
-          title: appBarLogo(),
+          title: AppBarLogo(),
         ),
         body: CustomLoadingOverlay(
           widget: BlocConsumer<AuthBloc, AuthState>(

@@ -55,7 +55,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                           // indicator
                           Align(
                             alignment: Alignment.topCenter,
-                            child: modalDragIndicator(),
+                            child: ModalDragIndicator(),
                           ),
                           // carousel items
                           Container(

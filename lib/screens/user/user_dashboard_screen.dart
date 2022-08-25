@@ -1,4 +1,6 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
+import 'package:afro_grids/blocs/cart/cart_bloc.dart';
+import 'package:afro_grids/blocs/cart/cart_event.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
 import 'package:afro_grids/screens/user/orders/orders_screen.dart';
@@ -46,7 +48,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
         backgroundColor: Colours.tertiary,
-        title: appBarLogo(theme: 'dark'),
+        title: AppBarLogo(theme: 'dark'),
         actions: [
           IconButton(
               onPressed: ()=>scaffoldKey.currentState!.isEndDrawerOpen?
@@ -64,7 +66,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
           BlocProvider(create: (BuildContext context)=>DashboardBloc()
             // ..add(FetchDashboardInfo())
           ),
-          BlocProvider(create: (BuildContext context)=>AuthBloc())
+          BlocProvider<AuthBloc>(create: (BuildContext context)=>AuthBloc()),
+          BlocProvider<CartBloc>(
+              lazy: false,
+              create: (context)=>CartBloc()..add(GetCartEvent(user: localStorage.user!))
+          )
         ],
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state){
@@ -108,7 +114,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                   borderRadius: BorderRadius.circular(20),
                                   image: DecorationImage(
                                       image: AssetResources().userAvatar(localStorage.user),
-                                    fit: BoxFit.cover
+                                      fit: BoxFit.cover
                                   )
                               ),
                               child: Stack(

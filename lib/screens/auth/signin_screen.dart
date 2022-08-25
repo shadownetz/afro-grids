@@ -33,7 +33,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
-          title: appBarLogo(),
+          title: AppBarLogo(),
         ),
         body: CustomLoadingOverlay(
           widget: BlocConsumer<AuthBloc, AuthState>(

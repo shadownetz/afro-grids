@@ -29,7 +29,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
-          title: appBarLogo(),
+          title: AppBarLogo(),
         ),
         body: CustomLoadingOverlay(
           widget: BlocConsumer<AuthBloc, AuthState>(

@@ -1,5 +1,6 @@
 import 'package:afro_grids/blocs/auth/auth_state.dart';
 import 'package:afro_grids/main.dart';
+import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/widgets/navigation/super_admin_navigation.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
@@ -39,18 +40,18 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               ),
               child: Stack(
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Lintang C",
+                      localStorage.user!.name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white, fontSize: 30,
                       ),),
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.bottomCenter,
-                    child: halfWhiteOverlay2(),
+                    child: HalfWhiteOverlay2(),
                   )
                 ],
               ),
@@ -82,6 +83,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                           leading: const Icon(Ionicons.bag_handle, color: Colours.primary),
                           title: const Text("Inventory", style: TextStyle(fontSize: 20),),
                           onTap: ()=>Navigator.of(context).push(createRoute(const InventoryScreen())),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Ionicons.cart, color: Colours.primary),
+                          title: const Text("Cart", style: TextStyle(fontSize: 20),),
+                          onTap: ()=>Navigator.of(context).push(createRoute(const CartScreen())),
                         ),
                         const Divider(),
                         ListTile(
