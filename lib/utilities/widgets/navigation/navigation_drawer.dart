@@ -102,15 +102,15 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               },
             ),
           ),
-          Expanded(
+          localStorage.user!.accessLevel == AccessLevel.superAdmin?
+          const Expanded(
               flex: 2,
-              child:  localStorage.user!.accessLevel == AccessLevel.superAdmin?
-              const Padding(
+              child:  Padding(
                 padding: EdgeInsets.all(10),
                 child: SuperAdminNav(),
-              ):
-              Container()
-          )
+              )
+          ):
+          const SizedBox()
         ],
       ),
     );

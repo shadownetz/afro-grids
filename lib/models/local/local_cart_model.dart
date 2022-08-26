@@ -33,11 +33,17 @@ class LocalCartModel{
   }
 
   int get totalItems{
-    return cartItems.map((cartItem) => cartItem.count).reduce((val1, val2) => val1+val2);
+    if(cartItems.isNotEmpty){
+      return cartItems.map((cartItem) => cartItem.count).reduce((val1, val2) => val1+val2);
+    }
+    return 0;
   }
 
   num get totalPrice{
-    return cartItems.map((cartItem) => cartItem.inventory.price*cartItem.count).reduce((val1, val2) => val1+val2);
+    if(cartItems.isNotEmpty){
+      return cartItems.map((cartItem) => cartItem.inventory.price*cartItem.count).reduce((val1, val2) => val1+val2);
+    }
+    return 0;
   }
 
   String get totalPriceStr{

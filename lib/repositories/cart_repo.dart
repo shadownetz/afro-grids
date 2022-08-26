@@ -76,7 +76,7 @@ class CartRepo{
         currency: localCart.currency,
         price: localCart.totalPrice
     );
-    response = await PaymentRepo().pay(
+    response = await PaymentService().pay(
         context: NavigationService.navigatorKey.currentContext!,
         email: user.email,
         firstName: user.firstName,

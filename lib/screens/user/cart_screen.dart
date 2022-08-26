@@ -59,7 +59,8 @@ class _CartScreenState extends State<CartScreen> {
               body: Container(
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
-                  child: Column(
+                  child: localCart.cartItems.isNotEmpty?
+                  Column(
                     children: [
                       getCartItems(),
                       // delivery info section
@@ -152,6 +153,17 @@ class _CartScreenState extends State<CartScreen> {
                           child: Text("Pay ${CurrencyUtil().currencySymbol(localCart.currency)}${localCart.totalPriceStr}", overflow: TextOverflow.ellipsis,)
                       )
                     ],
+                  ):
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.remove_shopping_cart, size: 20,),
+                        SizedBox(width: 10,),
+                        Text("Your cart is currently empty", style: TextStyle(fontSize: 20),)
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -236,20 +248,8 @@ class _CartScreenState extends State<CartScreen> {
         ),
       );
     }).toList();
-    if(items.isNotEmpty) {
-      return Column(
-        children: items,
-      );
-    }
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.remove_shopping_cart, size: 20,),
-          SizedBox(width: 10,),
-          Text("Your cart is currently empty", style: TextStyle(fontSize: 20),)
-        ],
-      ),
+    return Column(
+      children: items,
     );
   }
 }

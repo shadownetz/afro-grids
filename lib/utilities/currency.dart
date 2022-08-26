@@ -22,4 +22,13 @@ class CurrencyUtil{
     return NumberFormat("#,000").format(value);
   }
 
+  List<String> get acceptedCurrencies{
+    return ['USD'];
+    // return [
+    //   'GBP', 'CAD', 'XAF', 'CLP', 'COP', 'EGP', 'EUR', 'GHS',
+    //   'GNF', 'KES', 'MWK', 'MAD', 'NGN', 'RWF', 'SLL', 'STD',
+    //   'ZAR', 'TZS', 'UGX', 'USD', 'XOF', 'ZMW'
+    // ];
+  }
+
 }

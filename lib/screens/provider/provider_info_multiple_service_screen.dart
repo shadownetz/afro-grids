@@ -4,7 +4,6 @@ import 'package:afro_grids/blocs/inventory/inventory_state.dart';
 import 'package:afro_grids/blocs/review/review_bloc.dart';
 import 'package:afro_grids/blocs/review/review_event.dart';
 import 'package:afro_grids/blocs/review/review_state.dart';
-import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/local/local_review_model.dart';
 import 'package:afro_grids/screens/provider/view_item_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../models/inventory_model.dart';
-import '../../models/review_model.dart';
 import '../../models/user_model.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/provider_widgets.dart';

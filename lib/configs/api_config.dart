@@ -17,7 +17,7 @@ class APIConfig{
     return testMode? _TEST_API_ENDPOINT: _PROD_API_ENDPOINT;
   }
   String get paymentURL{
-    return "$APIURL/payment";
+    return "$APIURL/transaction";
   }
 
 }

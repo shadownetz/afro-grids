@@ -10,11 +10,12 @@ import 'package:flutterwave_standard/models/responses/charge_response.dart';
 import "package:http/http.dart" as http;
 
 import '../../models/payment_response_model.dart';
+import '../../repositories/auth_repo.dart';
 import '../styles.dart';
 
-class PaymentRepo{
+class PaymentService{
 
-  PaymentRepo();
+  PaymentService();
 
   RaveCustomer.Customer getCustomer(firstName, phone, String email) {
     return RaveCustomer.Customer(
@@ -27,11 +28,11 @@ class PaymentRepo{
   Future<PaymentResponseModel?> verifyPayment(String transactionId)async{
     http.Response transactionResponse = await http.post(
       Uri.parse("${APIConfig().paymentURL}/verify"),
-      headers: APIConfig().header(),
-      body: jsonEncode({
+      headers: APIConfig().header(accessToken: await AuthRepo().getAccessToken()),
+      body: {
         'transactionId': transactionId,
         'isTest': APIConfig.testMode
-      }),
+      },
     );
     if(transactionResponse.statusCode == 200){
       return PaymentResponseModel.fromJson(jsonDecode(transactionResponse.body));
@@ -60,10 +61,13 @@ class PaymentRepo{
       txRef: "${DateTime.now()}_$userId",
       amount: amount,
       customer: getCustomer(firstName, phone, email),
-      paymentOptions: "ussd, card, barter, payattitude",
-      customization: Customization(title: description ?? paymentLabel),
+      paymentOptions: "ussd, card, account, banktransfer, mpesa, mobilemoneyghana, mobilemoneyfranco, mobilemoneyuganda, mobilemoneyrwanda, mobilemoneyzambia, qr, credit, barter, payattitude",
+      customization: Customization(
+          title: description ?? paymentLabel,
+          logo: 'https://firebasestorage.googleapis.com/v0/b/afrogrids.appspot.com/o/ext%2Frsz_1afrogrid.png?alt=media&token=a1a70d50-9a98-4a2a-a670-a262a27b0c7e'
+      ),
       isTestMode: APIConfig.testMode,
-      redirectUrl: '',
+      redirectUrl: 'https://afrogrids.com',
       meta: {
         'username': firstName,
         'phone': phone,

@@ -1,10 +1,10 @@
 import 'package:afro_grids/utilities/colours.dart';
-import 'package:country_currency_pickers/country_picker_dialog.dart';
 import 'package:country_currency_pickers/currency_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:country_currency_pickers/country.dart';
-import 'package:country_currency_pickers/currency_picker_dropdown.dart';
 import 'package:country_currency_pickers/utils/utils.dart';
+
+import '../../currency.dart';
 
 class CustomCountryDropdown extends StatefulWidget {
   final void Function(String value) onSelected;
@@ -67,7 +67,10 @@ class _CustomCountryDropdownState extends State<CustomCountryDropdown> {
              setState(()=>currencyController.text = "${country.currencyCode} (${country.currencyName})");
               widget.onSelected(country.currencyCode??"");
             },
-            itemBuilder: _buildCurrencyDialogItem)),
+            itemBuilder: _buildCurrencyDialogItem,
+          itemFilter: (country)=>CurrencyUtil().acceptedCurrencies.contains(country.currencyCode?.toUpperCase()),
+        ),
+    ),
   );
 
 }
