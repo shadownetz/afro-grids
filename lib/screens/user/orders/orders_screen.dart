@@ -21,7 +21,7 @@ class _OrderScreenState extends State<OrderScreen> {
   // this model is for view order
   LocalOrderModel localOrderModel = LocalOrderModel(
       inventory: InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300","https://picsum.photos/id/119/200/300", "https://picsum.photos/id/133/200/300"], visible: true),
-      orderModel: OrderModel(id: '', orderNo: '2397834789', createdBy: '', items: [], deliveryAddress: '', totalPrice: 0, paymentResponse: {}, status: '', createdAt: DateTime.now())
+      orderModel: OrderModel(id: '', orderNo: '2397834789', createdBy: '', items: [], currency: '', deliveryAddress: '', totalPrice: 0, paymentResponse: {}, status: '', createdAt: DateTime.now())
   );
 
   @override

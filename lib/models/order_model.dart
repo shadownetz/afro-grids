@@ -7,6 +7,7 @@ class OrderModel{
   late String orderNo;
   late String createdBy;
   late List<OrderItem> items;
+  late String currency;
   late String deliveryAddress;
   late num totalPrice;
   late dynamic paymentResponse;
@@ -18,6 +19,7 @@ class OrderModel{
     required this.orderNo,
     required this.createdBy,
     required this.items,
+    required this.currency,
     required this.deliveryAddress,
     required this.totalPrice,
     required this.paymentResponse,
@@ -32,6 +34,7 @@ class OrderModel{
         items = List.from(order.data()!['items']).map((item){
           return OrderItem(item.inventoryId, item.count);
         }).toList(),
+        currency = order.data()!['currency']?? "",
         deliveryAddress = order.data()!['deliveryAddress'],
         totalPrice = order.data()!['totalPrice'],
         paymentResponse = order.data()!['paymentResponse'],
@@ -46,6 +49,7 @@ class OrderModel{
         'inventoryId': item.inventoryId,
         'count': item.count
       }).toList(),
+      'currency': currency,
       'deliveryAddress': deliveryAddress,
       'totalPrice': totalPrice,
       'paymentResponse': paymentResponse,

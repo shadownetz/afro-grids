@@ -1,8 +1,10 @@
 import 'package:afro_grids/blocs/cart/cart_bloc.dart';
 import 'package:afro_grids/blocs/cart/cart_event.dart';
 import 'package:afro_grids/main.dart';
+import 'package:afro_grids/screens/user/order_complete_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +15,7 @@ import '../../blocs/cart/cart_state.dart';
 import '../../models/local/local_cart_model.dart';
 import '../../utilities/currency.dart';
 import '../../utilities/widgets/button_widget.dart';
+import 'cart_blank_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -41,16 +44,16 @@ class _CartScreenState extends State<CartScreen> {
               context.loaderOverlay.hide();
             }
             if(state is CartErrorState){
-              Alerts(context).showToast("Unable to update cart content");
+              Alerts(context).showErrorDialog(title: "Error", message: state.message);
             }
             if(state is CartLoadedState){
               setState(()=>localCart=localStorage.cart);
             }
+            if(state is CartCheckedOutState){
+              NavigationService.toPage(const OrderCompleteScreen());
+            }
           },
           builder: (context, state){
-            if(state is CartCheckedOutState){
-              return Alerts(context).orderCompleted();
-            }
             return Scaffold(
               backgroundColor: Colours.tertiary,
               appBar: AppBar(
@@ -144,7 +147,13 @@ class _CartScreenState extends State<CartScreen> {
                       ElevatedButton(
                           onPressed: (){
                             if(localStorage.user!.deliveryAddress.isNotEmpty){
-                              BlocProvider.of<CartBloc>(context).add(AddCheckoutEvent(localCart: localCart, user: localStorage.user!));
+                              NavigationService.toPage(
+                                  CartBlankScreen(
+                                    run: ()=>BlocProvider
+                                        .of<CartBloc>(context)
+                                        .add(AddCheckoutEvent(localCart: localCart, user: localStorage.user!)),
+                                  )
+                              );
                             }else{
                               Alerts(context).showErrorDialog(title: "Important", message: "Set your delivery address to continue");
                             }

@@ -22,9 +22,10 @@ class OrderRepo{
         orderNo: FuncUtils.getRandomString(length: 10),
         createdBy: user.id,
         items: items.toList(),
+        currency: cart.currency,
         deliveryAddress: user.deliveryAddress,
         totalPrice: cart.totalPrice,
-        paymentResponse: paymentResponse,
+        paymentResponse: paymentResponse?.toJson(),
         status: OrderStatus.approved,
         createdAt: DateTime.now()
     );

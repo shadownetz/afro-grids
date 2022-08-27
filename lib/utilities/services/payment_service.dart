@@ -31,7 +31,7 @@ class PaymentService{
       headers: APIConfig().header(accessToken: await AuthRepo().getAccessToken()),
       body: {
         'transactionId': transactionId,
-        'isTest': APIConfig.testMode
+        'isTest': APIConfig.testMode.toString()
       },
     );
     if(transactionResponse.statusCode == 200){
@@ -82,9 +82,9 @@ class PaymentService{
       if(paymentVerificationResponse != null){
         return paymentVerificationResponse;
       }
-      throw Exception("Unable to verify payment");
+      return Future.error("Unable to verify payment");
     } else {
-      throw Exception("Unable to complete payment");
+      return Future.error("Unable to complete payment");
     }
   }
 

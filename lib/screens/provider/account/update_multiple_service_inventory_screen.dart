@@ -56,9 +56,11 @@ class _UpdateMultipleServiceInventoryScreenState extends State<UpdateMultipleSer
                         UpdateMultiServiceInventoryForm(
                           inventory: state.inventory!,
                           onComplete: (inventory, images){
-                            final List<String> modImages;
+                            List<String>? modImages;
                             if(images != null){
-                              modImages = state.inventory!.images;
+                              if(images.isNotEmpty){
+                                modImages = state.inventory!.images;
+                              }
                             }else{
                               modImages = state.inventory!.images.where((image) => !inventory.images.contains(image)).toList();
                             }

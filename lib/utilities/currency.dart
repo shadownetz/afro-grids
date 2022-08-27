@@ -19,7 +19,7 @@ class CurrencyUtil{
   }
 
   String format(num value){
-    return NumberFormat("#,000").format(value);
+    return NumberFormat("#,##0.00", "en_US").format(value);
   }
 
   List<String> get acceptedCurrencies{

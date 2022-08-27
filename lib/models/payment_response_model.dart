@@ -22,7 +22,7 @@ class PaymentResponseModel {
     this.amountSettled,
     this.customer,});
 
-  PaymentResponseModel.fromJson(dynamic json) {
+  PaymentResponseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     txRef = json['tx_ref'];
     flwRef = json['flw_ref'];
@@ -57,9 +57,9 @@ class PaymentResponseModel {
   String? deviceFingerprint;
   num? amount;
   String? currency;
-  int? chargedAmount;
-  int? appFee;
-  int? merchantFee;
+  num? chargedAmount;
+  num? appFee;
+  num? merchantFee;
   String? processorResponse;
   String? authModel;
   String? ip;
@@ -70,17 +70,17 @@ class PaymentResponseModel {
   int? accountId;
   Card? card;
   Meta? meta;
-  int? amountSettled;
+  num? amountSettled;
   Customer? customer;
   PaymentResponseModel copyWith({  int? id,
     String? txRef,
     String? flwRef,
     String? deviceFingerprint,
-    int? amount,
+    num? amount,
     String? currency,
-    int? chargedAmount,
-    int? appFee,
-    int? merchantFee,
+    num? chargedAmount,
+    num? appFee,
+    num? merchantFee,
     String? processorResponse,
     String? authModel,
     String? ip,
@@ -91,7 +91,7 @@ class PaymentResponseModel {
     int? accountId,
     Card? card,
     Meta? meta,
-    int? amountSettled,
+    num? amountSettled,
     Customer? customer,
   }) => PaymentResponseModel(  id: id ?? this.id,
     txRef: txRef ?? this.txRef,
