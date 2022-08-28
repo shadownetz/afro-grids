@@ -115,7 +115,6 @@ class MyApp extends StatelessWidget {
                   '/phone-verification': (context)=>const OTPScreen(),
                   '/user-dashboard': (context)=>const UserDashboardScreen(),
                   '/provider-dashboard': (context)=>const UserDashboardScreen(),
-                  '/chat': (context)=> const ChatScreen()
                 },
               ),
             );

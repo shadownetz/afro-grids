@@ -33,6 +33,7 @@ class OrderStatus{
 class MessageType{
   static const text = 'TEXT';
   static const image = 'IMAGE';
+  static const serviceRef = "SREF";
 }
 
 class Currency{

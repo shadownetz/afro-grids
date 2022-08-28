@@ -251,7 +251,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                     height: 90,
                                     width: 170,
                                     child: GestureDetector(
-                                      onTap: ()=>Navigator.of(context).push(createRoute(const ChatScreen())),
+                                      onTap: ()=>NavigationService.toPage(const ChatScreen()),
                                       child: Card(
                                         surfaceTintColor: Colors.white,
                                         color: Colors.white,
