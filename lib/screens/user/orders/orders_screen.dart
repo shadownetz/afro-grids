@@ -1,10 +1,17 @@
+import 'package:afro_grids/blocs/order/order_bloc.dart';
+import 'package:afro_grids/blocs/order/order_event.dart';
+import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/local/local_order_model.dart';
-import 'package:afro_grids/models/order_model.dart';
+import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/currency.dart';
+import 'package:afro_grids/utilities/type_extensions.dart';
+import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
-import '../../../models/inventory_model.dart';
-import '../../../utilities/class_constants.dart';
+import '../../../blocs/order/order_state.dart';
 import '../orders/view_order_screen.dart';
 
 
@@ -17,12 +24,28 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  // TODO: generate model for orders because the template contains hardcoded values
-  // this model is for view order
-  LocalOrderModel localOrderModel = LocalOrderModel(
-      inventory: InventoryModel(id: "", createdBy: "", createdAt: DateTime.now(), name: "Strawberries", price: 5000, currency: Currency.ngn, description: "Sizes XL&M", images: ["https://picsum.photos/id/1080/200/300","https://picsum.photos/id/119/200/300", "https://picsum.photos/id/133/200/300"], visible: true),
-      orderModel: OrderModel(id: '', orderNo: '2397834789', createdBy: '', items: [], currency: '', deliveryAddress: '', totalPrice: 0, paymentResponse: {}, status: '', createdAt: DateTime.now())
-  );
+  final List<LocalOrderModel> _orders = [];
+  final ScrollController _scrollController = ScrollController();
+  OrderBloc? orderBloc;
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+        if(_orders.isNotEmpty){
+          if(_orders.first.totalOrderCount! != _orders.length){
+            orderBloc!.add(FetchNextUserOrders(user: localStorage.user!, cursor: _orders.last));
+          }
+        }
+      }
+      // if (_scrollController.offset <= _scrollController.position.minScrollExtent &&
+      //     !_scrollController.position.outOfRange) {
+      //
+      // }
+
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,59 +79,112 @@ class _OrderScreenState extends State<OrderScreen> {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: ListView.separated(
-            itemCount: 3,
-            separatorBuilder: (context, idx)=>const Divider(),
-            itemBuilder: (context, idx){
-              return ListTile(
-                isThreeLine: true,
-                leading: Transform.translate(
-                  offset: Offset(0, -5),
-                  child: Card(
-                    margin: EdgeInsets.all(0),
-                    color: Colors.white,
-                    surfaceTintColor: Colors.white,
-                    elevation: 3,
-                    child: Container(
-                      width: 70,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/icons/cart.png"),
-                            fit: BoxFit.contain,
-                          )
-                      ),
-                    ),
-                  ),
+      body: CustomLoadingOverlay(
+        widget: BlocProvider<OrderBloc>(
+          create: (context)=>OrderBloc()..add(FetchUserOrders(user: localStorage.user!)),
+          child: BlocConsumer<OrderBloc, OrderState>(
+            listener: (context, state){
+              if(state is OrderLoadingState){
+                context.loaderOverlay.show();
+              }else{
+                context.loaderOverlay.hide();
+              }
+              if(state is OrderLoadedState){
+                setState(()=>_orders.addAll(state.userOrders!));
+              }
+              if(state is OrderErrorState){
+                Alerts(context).showErrorDialog(title: "Error", message: state.message);
+              }
+            },
+            builder: (context, state){
+              orderBloc = BlocProvider.of<OrderBloc>(context);
+              if(_orders.isEmpty){
+                return Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: const Text("You have not made any orders yet", style: TextStyle(fontSize: 20, color: Colors.grey),),
+                );
+              }
+              return Container(
+                padding: const EdgeInsets.all(10),
+                child: ListView(
+                  controller: _scrollController,
+                  children: buildList(),
                 ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Sweather (black)", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),),
-                    Text("order 472890827", style: TextStyle(fontSize: 15, color: Colors.grey, overflow: TextOverflow.ellipsis),),
-                  ],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("N3000", style: TextStyle(fontSize: 20, color: Colours.secondary, overflow: TextOverflow.ellipsis),),
-                    Text("created on 3 February 2022 at 15:01", style: TextStyle(color: Colours.primary, overflow: TextOverflow.ellipsis),),
-                  ],
-                ),
-                trailing: const Text("X3", style: TextStyle(fontSize: 20, color: Colors.grey),),
-                onTap: (){
-                  showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context)=>ViewOrderScreen(localOrder: localOrderModel)
-                  );
-                },
               );
-            }
+            },
+          ),
         ),
       ),
     );
+  }
+
+  List<Widget> buildList(){
+    List<Widget> items = [];
+    for (var order in _orders) {
+      for (var inventory in order.inventories) {
+        items.add(ListTile(
+          isThreeLine: true,
+          leading: Transform.translate(
+            offset: Offset(0, -5),
+            child: Card(
+              margin: EdgeInsets.all(0),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              elevation: 3,
+              child: Container(
+                width: 70,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: (inventory != null ?
+                      NetworkImage(inventory.images.first):
+                      const AssetImage("assets/icons/cart.png")) as ImageProvider,
+                      fit: BoxFit.contain,
+                    )
+                ),
+              ),
+            ),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                inventory!=null? inventory.name: "####",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),
+              ),
+              Text(
+                "order ${order.orderModel.orderNo}",
+                style: const TextStyle(fontSize: 15, color: Colors.grey, overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${CurrencyUtil().currencySymbol(order.orderModel.currency)}${inventory!=null?inventory.price:0}",
+                style: const TextStyle(fontSize: 20, color: Colours.secondary, overflow: TextOverflow.ellipsis),
+              ),
+              Text(
+                "created on ${inventory!=null?order.orderModel.createdAt.format1():""}",
+                style: const TextStyle(color: Colours.primary, overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+          trailing: Text("X${inventory!=null?order.inventorySize(inventory): '0'}", style: const TextStyle(fontSize: 20, color: Colors.grey),),
+          onTap: (){
+            if(inventory != null){
+              showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context)=>ViewOrderScreen(inventory: inventory, order: order,)
+              );
+            }
+          },
+        ));
+      }
+    }
+    return items;
   }
 }

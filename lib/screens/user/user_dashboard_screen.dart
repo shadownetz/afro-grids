@@ -7,6 +7,7 @@ import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/asset_resources.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/navigation/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -280,7 +281,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         ),
                         // history section
                         GestureDetector(
-                          onTap: ()=>Navigator.of(context).push(createRoute(const OrderScreen())),
+                          onTap: ()=>NavigationService.toPage(const OrderScreen()),
                           child: Card(
                             color: Colors.white,
                             surfaceTintColor: Colors.white,

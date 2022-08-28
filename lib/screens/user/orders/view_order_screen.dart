@@ -1,17 +1,24 @@
 import 'dart:ui';
 
+import 'package:afro_grids/blocs/user/user_bloc.dart';
+import 'package:afro_grids/blocs/user/user_event.dart';
+import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/local/local_order_model.dart';
+import 'package:afro_grids/utilities/navigation_guards.dart';
+import 'package:afro_grids/utilities/type_extensions.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/user/user_state.dart';
 import '../../../utilities/colours.dart';
 import '../../../utilities/widgets/button_widget.dart';
 import '../../../utilities/widgets/widgets.dart';
 
 class ViewOrderScreen extends StatefulWidget {
-  final LocalOrderModel localOrder;
-
-  const ViewOrderScreen({Key? key, required this.localOrder}) : super(key: key);
+  final InventoryModel inventory;
+  final LocalOrderModel order;
+  const ViewOrderScreen({Key? key, required this.inventory, required this.order}) : super(key: key);
 
   @override
   State<ViewOrderScreen> createState() => _ViewOrderScreenState();
@@ -85,9 +92,9 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                       width: 100,
                       margin: EdgeInsets.symmetric(vertical: 20),
                       child: Row(
-                        children: widget.localOrder.inventory.images.map((image){
-                          final isActive = (widget.localOrder.inventory.images.indexOf(image)==currentScreenIndex);
-                          if(widget.localOrder.inventory.images.length != 1){
+                        children: widget.inventory.images.map((image){
+                          final isActive = (widget.inventory.images.indexOf(image)==currentScreenIndex);
+                          if(widget.inventory.images.length != 1){
                             return AnimatedContainer(
                               duration: const Duration(milliseconds: 400),
                               curve: Curves.fastOutSlowIn,
@@ -113,11 +120,11 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                 child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.localOrder.inventory.name, style: TextStyle(fontSize: 20,),),
+                    Text(widget.inventory.name, style: const TextStyle(fontSize: 20,),),
                     // order
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${widget.localOrder.orderModel.orderNo}', style: TextStyle(fontSize: 15),),
+                      child: Text(widget.order.orderModel.orderNo, style: const TextStyle(fontSize: 15),),
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,
@@ -127,7 +134,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     // price
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${widget.localOrder.inventory.currency}${widget.localOrder.inventory.price}', style: TextStyle(fontSize: 15),),
+                      child: Text('${widget.inventory.currency.currencySymbol()}${widget.inventory.price}', style: const TextStyle(fontSize: 15),),
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,
@@ -137,7 +144,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     // quantity
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${widget.localOrder.count}', style: TextStyle(fontSize: 15),),
+                      child: Text('${widget.order.inventorySize(widget.inventory)}', style: const TextStyle(fontSize: 15),),
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,
@@ -147,7 +154,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     // created
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('${widget.localOrder.orderModel.createdAt}', style: TextStyle(fontSize: 15),),
+                      child: Text(widget.order.orderModel.createdAt.format1(), style: const TextStyle(fontSize: 15),),
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,
@@ -158,17 +165,36 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
               ),
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                    onPressed: ()=>Navigator.of(context).pop(),
-                    style: buttonPrimaryLgStyle(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.person),
-                        Text("View provider")
-                      ],
-                    )
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: BlocProvider<UserBloc>(
+                  create: (context)=>UserBloc(),
+                  child: BlocConsumer<UserBloc, UserState>(
+                    listener: (context, state){
+                      if(state is UserLoadedState){
+                        if(state.user != null){
+                          NavigationGuards(user: state.user!).navigateToPortfolioPage();
+                        }
+                      }
+                    },
+                    builder: (context, state){
+                      return ElevatedButton(
+                          onPressed: (){
+                            if(state is UserInitialState || state is UserLoadedState){
+                              BlocProvider.of<UserBloc>(context).add(GetUserEvent(widget.inventory.createdBy));
+                            }
+                          },
+                          style: buttonPrimaryLgStyle(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.person),
+                              state is UserLoadingState?
+                              const Text("Fetching details..."): const Text("View provider")
+                            ],
+                          )
+                      );
+                    },
+                  ),
                 ),
               )
             ],
@@ -179,8 +205,8 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
   }
 
   List<Widget> itemsView(){
-    if(widget.localOrder.inventory.images.isNotEmpty){
-      return widget.localOrder.inventory.images.map((image){
+    if(widget.inventory.images.isNotEmpty){
+      return widget.inventory.images.map((image){
         return Container(
           height: 50,
           decoration: BoxDecoration(
@@ -194,7 +220,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
     }
     return [Container(
       alignment: Alignment.center,
-      child: Text("No items available to display", textAlign: TextAlign.center,),
+      child: const Text("No items available to display", textAlign: TextAlign.center,),
     )];
   }
 }

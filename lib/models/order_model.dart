@@ -32,7 +32,7 @@ class OrderModel{
         orderNo = order.data()!['orderNo'],
         createdBy = order.data()!['createdBy'],
         items = List.from(order.data()!['items']).map((item){
-          return OrderItem(item.inventoryId, item.count);
+          return OrderItem(item['inventoryId'], item['count']);
         }).toList(),
         currency = order.data()!['currency']?? "",
         deliveryAddress = order.data()!['deliveryAddress'],

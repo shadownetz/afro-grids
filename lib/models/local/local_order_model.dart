@@ -1,16 +1,21 @@
 import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/order_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LocalOrderModel{
-  late InventoryModel inventory;
+  late List<InventoryModel?> inventories;
   late OrderModel orderModel;
+  DocumentSnapshot? snapshot;
+  int? totalOrderCount;
 
   LocalOrderModel({
-    required this.inventory,
+    required this.inventories,
     required this.orderModel,
+    this.snapshot,
+    this.totalOrderCount
   });
 
-  int get count{
+  int inventorySize(InventoryModel inventory){
     if(orderModel.items.isNotEmpty){
       var result = orderModel.items.where((item) => item.inventoryId==inventory.id);
       if(result.isNotEmpty){
@@ -19,4 +24,5 @@ class LocalOrderModel{
     }
     return 0;
   }
+
 }
