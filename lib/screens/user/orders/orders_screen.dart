@@ -166,7 +166,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 style: const TextStyle(fontSize: 20, color: Colours.secondary, overflow: TextOverflow.ellipsis),
               ),
               Text(
-                "created on ${inventory!=null?order.orderModel.createdAt.format1():""}",
+                "created on ${inventory!=null?order.orderModel.createdAt.toDateTimeStr():""}",
                 style: const TextStyle(color: Colours.primary, overflow: TextOverflow.ellipsis),
               ),
             ],

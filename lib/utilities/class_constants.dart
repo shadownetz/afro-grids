@@ -30,7 +30,7 @@ class OrderStatus{
   static const declined = 'DECLINED';
 }
 
-class MessageType{
+class ChatType{
   static const text = 'TEXT';
   static const image = 'IMAGE';
   static const serviceRef = "SREF";

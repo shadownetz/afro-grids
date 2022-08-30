@@ -81,7 +81,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             title: Text(chat.user.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
             subtitle: Text(chat.meta.lastMsg, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w500, overflow: TextOverflow.ellipsis),),
-            trailing: Text(chat.meta.lastMsgTimestamp.format1(), style: const TextStyle(color: Colors.grey),),
+            trailing: Text(chat.meta.lastMsgTimestamp.toDateTimeStr(), style: const TextStyle(color: Colors.grey),),
             onTap: ()=>Navigator.of(context).push(createRoute(ViewChatScreen(user: chat.user))),
           );
         },

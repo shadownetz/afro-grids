@@ -2,6 +2,8 @@ import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/local/local_review_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
+import 'package:afro_grids/screens/user/chat/view_chat_screen.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -54,7 +56,7 @@ Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
                   ),
                 ),
               ),
-              Align(
+              const Align(
                 alignment: Alignment.bottomCenter,
                 child: HalfWhiteOverlay(),
               )
@@ -97,14 +99,17 @@ Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Chip(
-                                avatar: Icon(Ionicons.chatbubbles_outline, color: Colors.white,size: 15,),
-                                label: Text("Chat", style: TextStyle(fontSize: 15, color: Colors.white),),
-                                backgroundColor: Colours.secondary,
-                                elevation: 2,
+                            children: [
+                              GestureDetector(
+                                child: const Chip(
+                                  avatar: Icon(Ionicons.chatbubbles_outline, color: Colors.white,size: 15,),
+                                  label: Text("Chat", style: TextStyle(fontSize: 15, color: Colors.white),),
+                                  backgroundColor: Colours.secondary,
+                                  elevation: 2,
+                                ),
+                                onTap: ()=>NavigationService.toPage(ViewChatScreen(user: provider)),
                               ),
-                              Chip(
+                              const Chip(
                                 avatar: Icon(Icons.error, color: Colors.white,size: 15,),
                                 label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
                                 backgroundColor: Colors.redAccent,
@@ -202,14 +207,17 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
           child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Chip(
-                avatar: Icon(Ionicons.chatbubbles_outline, color: Colors.white,size: 15,),
-                label: Text("Chat", style: TextStyle(fontSize: 15, color: Colors.white),),
-                backgroundColor: Colours.secondary,
-                elevation: 2,
+            children: [
+              GestureDetector(
+                child: const Chip(
+                  avatar: Icon(Ionicons.chatbubbles_outline, color: Colors.white,size: 15,),
+                  label: Text("Chat", style: TextStyle(fontSize: 15, color: Colors.white),),
+                  backgroundColor: Colours.secondary,
+                  elevation: 2,
+                ),
+                onTap: ()=>NavigationService.toPage(ViewChatScreen(user: provider)),
               ),
-              Chip(
+              const Chip(
                 avatar: Icon(Icons.error, color: Colors.white,size: 15,),
                 label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
                 backgroundColor: Colors.redAccent,

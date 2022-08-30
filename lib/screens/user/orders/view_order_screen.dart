@@ -154,7 +154,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     // created
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(widget.order.orderModel.createdAt.format1(), style: const TextStyle(fontSize: 15),),
+                      child: Text(widget.order.orderModel.createdAt.toDateTimeStr(), style: const TextStyle(fontSize: 15),),
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,

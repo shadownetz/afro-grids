@@ -67,8 +67,32 @@ class ChatRepo{
     return "$id2$id1";
   }
 
-  Future<void> sendMessage({required ChatModel message, required String toId})async{
-    await _chatRef.doc(generateChatId(message.createdBy, toId)).collection("messages").add(message.toMap());
+  Future<void> sendMessage()async{
+    await _chatRef.doc(generateChatId(chat!.createdBy, chat!.createdFor)).collection("messages").add(chat!.toMap());
+    String? chatId = await getChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
+    if( chatId == null){
+      await saveChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
+    }
+  }
+
+  Future<String?> getChatId({required String senderId, required String receiverId})async{
+    var doc = await FirestoreRef().usersMetaRef.doc(senderId).collection("chat").doc(receiverId).get();
+    if(doc.exists){
+      return doc.data()!['chatId'];
+    }
+    return null;
+  }
+
+  Future<void> saveChatId({required String senderId, required String receiverId})async{
+    String chatId = generateChatId(senderId, receiverId);
+    await FirestoreRef().usersMetaRef.doc(senderId).collection("chat").doc(receiverId).set({
+      'chatId': chatId,
+      'createdAt': FieldValue.serverTimestamp()
+    });
+    await FirestoreRef().usersMetaRef.doc(receiverId).collection("chat").doc(senderId).set({
+      'chatId': chatId,
+      'createdAt': FieldValue.serverTimestamp()
+    });
   }
 
 }

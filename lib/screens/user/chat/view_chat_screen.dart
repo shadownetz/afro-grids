@@ -2,7 +2,9 @@ import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/repositories/chat_repo.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/type_extensions.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +24,16 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
   double? deviceWidth;
   List<ChatModel> chats = [];
   final ScrollController _scrollController = ScrollController();
+  late Stream<QuerySnapshot> _messageStream;
 
   @override
   void initState() {
+    _messageStream = ChatRepo().getChatsStream(localStorage.user!.id, widget.user.id);
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge) {
-        bool isBottom = _scrollController.position.pixels == 0;
-        if (!isBottom) {
+        bool atTop = _scrollController.position.pixels == 0;
+        if (atTop) {
+          print('is at top');
           // fetch next chats if all items are not loaded
         }
       }
@@ -73,24 +78,25 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
       ),
       body: Stack(
         children: [
-          Container(
+          AnimatedContainer(
             width: deviceWidth,
             height: (deviceHeight!-20),
             margin: const EdgeInsets.only(top: 20),
+            duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
                 boxShadow: [boxShadow1()]
             ),
             child: StreamBuilder(
-                stream: ChatRepo().getChatsStream(localStorage.user!.id, widget.user.id),
+                stream: _messageStream,
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                   if (snapshot.hasError) {
                     return const Text('we were unable to load your chat history');
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SpinKitRotatingCircle(
-                      size: 50,
+                      size: 20,
                       itemBuilder: (BuildContext context, int index) {
                         return const DecoratedBox(
                           decoration: BoxDecoration(
@@ -105,10 +111,8 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                       .docs.map((doc) =>
                       ChatModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>))
                       .toList();
-                  chats2 = chats2.where((chat) => !chats.contains(chat)).toList();
-                  for(var chat in chats2){
-                    chats.insert(0, chat);
-                  }
+                  chats2 = chats2.where((chat) => chats.indexWhere((chat2)=>chat2.id==chat.id) < 0).toList();
+                  chats.addAll(chats2);
                   return Stack(
                     children: [
                       // message timestamp indicator
@@ -165,10 +169,11 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 7,),
           Card(
             elevation: 2,
             color: Colours.primary,
-            margin: EdgeInsets.only(left: 0),
+            margin: const EdgeInsets.only(left: 0),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(7)
             ),
@@ -177,12 +182,12 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
               padding: const EdgeInsets.all(10),
               child: Text(
                 chat.content,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
               ),
             ),
           ),
-          SizedBox(height: 7,),
-          Text("11.12", style: TextStyle(color: Colors.grey),)
+          const SizedBox(height: 7,),
+          Text(chat.createdAt.toTimeStr(), style: TextStyle(color: Colors.grey),)
         ],
       ),
     );
@@ -194,11 +199,12 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          const SizedBox(height: 7,),
           Card(
             elevation: 2,
             color: Colours.tertiary,
             surfaceTintColor: Colours.tertiary,
-            margin: EdgeInsets.only(left: 0),
+            margin: const EdgeInsets.only(left: 0),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(7)
             ),
@@ -211,8 +217,8 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
               ),
             ),
           ),
-          SizedBox(height: 7,),
-          Text("11.12", style: TextStyle(color: Colors.grey),)
+          const SizedBox(height: 7,),
+          Text(chat.createdAt.toTimeStr(), style: const TextStyle(color: Colors.grey),)
         ],
       ),
     );
@@ -240,11 +246,24 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                         borderRadius: BorderRadius.circular(20)
                     )
                 ),
-                onSubmitted: (value){},
               ),
             ),
             ElevatedButton(
-                onPressed: (){},
+                onPressed: ()async{
+                  if(chatController.text.isNotEmpty){
+                    ChatModel newChat = ChatModel(
+                        id: "", 
+                        createdBy: localStorage.user!.id, 
+                        type: ChatType.text, 
+                        content: chatController.text,
+                        createdAt: DateTime.now(),
+                        createdFor: widget.user.id
+                    );
+                    ChatRepo(chat: newChat).sendMessage();
+                    chatController.clear();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                     alignment: Alignment.center,
                     primary: Colours.primary,

@@ -5,7 +5,7 @@ extension DateTimeFormatter on DateTime{
   static List<String> months = [ "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December" ];
 
-  String format1(){
+  String toDateTimeStr(){
     var day = this.day;
     var month = months[this.month-1];
     var year = this.year;
@@ -13,6 +13,10 @@ extension DateTimeFormatter on DateTime{
     var minute = this.minute;
     var marker = DateFormat('a').format(this);
     return "$day $month $year at $hour:$minute $marker";
+  }
+
+  String toTimeStr(){
+    return DateFormat.jm().format(this);
   }
 }
 
