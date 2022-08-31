@@ -18,7 +18,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState>{
         cursor: event.cursor,
         limit: 25
       );
-
+      emit(ChatLoadedState(chats: chats));
     }catch(e){
       emit(ChatErrorState(e.toString()));
     }

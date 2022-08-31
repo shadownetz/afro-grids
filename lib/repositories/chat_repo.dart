@@ -4,6 +4,7 @@ import 'package:afro_grids/models/local/local_chat_list_model.dart';
 import 'package:afro_grids/repositories/user_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../main.dart';
 import '../models/chat_model.dart';
 
 class ChatRepo{
@@ -18,15 +19,15 @@ class ChatRepo{
     required String fromId,
     required String toId,
     DocumentSnapshot? cursor,
-    int? limit
+    int? limit=25
   })
   async {
 
     Query query = _chatRef.doc(generateChatId(fromId, toId)).collection("messages");
+    query = query.orderBy('createdAt', descending: true);
     if(cursor != null){
       query = query.startAfterDocument(cursor);
     }
-    query = query.orderBy('createdAt');
     if(limit != null){
       query = query.limit(limit);
     }
@@ -56,7 +57,7 @@ class ChatRepo{
 
   Stream<QuerySnapshot> getChatsStream(String fromId, String toId, [int limit=25]){
     return _chatRef.doc(generateChatId(fromId, toId))
-        .collection("messages").orderBy('createdAt')
+        .collection("messages").orderBy('createdAt', descending: true)
         .limit(limit).snapshots();
   }
 
@@ -68,11 +69,15 @@ class ChatRepo{
   }
 
   Future<void> sendMessage()async{
-    await _chatRef.doc(generateChatId(chat!.createdBy, chat!.createdFor)).collection("messages").add(chat!.toMap());
-    String? chatId = await getChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
-    if( chatId == null){
-      await saveChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
+    String chatId = generateChatId(chat!.createdBy, chat!.createdFor);
+    await _chatRef.doc(chatId).collection("messages").add(chat!.toMap());
+    if(!localStorage.activeChatIds.contains(chatId)){
+      String? nchatId = await getChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
+      if( nchatId == null){
+        await saveChatId(senderId: chat!.createdBy, receiverId: chat!.createdFor);
+      }
     }
+    localStorage.activeChatIds.add(chatId);
   }
 
   Future<String?> getChatId({required String senderId, required String receiverId})async{

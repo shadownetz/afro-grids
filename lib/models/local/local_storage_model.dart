@@ -8,11 +8,13 @@ class LocalStorageModel{
   UserModel? user;
   StreamSubscription? userListener;
   final List<String> _notifications;
+  final Set<String> activeChatIds;
   LocalCartModel cart;
 
   LocalStorageModel({this.user}):
         cart = LocalCartModel(cartItems: [], id: ''),
-        _notifications = [];
+        _notifications = [],
+        activeChatIds = {};
 
   String get getNextNotification{
     return _notifications.removeAt(0);
