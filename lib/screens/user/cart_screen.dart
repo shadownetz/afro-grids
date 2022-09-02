@@ -57,6 +57,7 @@ class _CartScreenState extends State<CartScreen> {
             return Scaffold(
               backgroundColor: Colours.tertiary,
               appBar: AppBar(
+                leading: const BackButton(color: Colors.white,),
                 title: const Text("Cart"),
               ),
               body: Container(

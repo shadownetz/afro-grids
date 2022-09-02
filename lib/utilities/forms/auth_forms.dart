@@ -270,9 +270,8 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
         updatedAt: DateTime.now(),
         serviceId: _service!.id,
         serviceType: _serviceTypeController.text.trim(),
-        ratings: Ratings(0,0,0),
+        reviews: Reviews(0,0,0),
         accessStatus: AccessStatus.pending,
-        reviews: Reviews(0,0),
         favorites: [],
         avatar: ""
     );
@@ -464,9 +463,8 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
         updatedAt: DateTime.now(),
         serviceId: "",
         serviceType: "",
-        ratings: Ratings(0,0,0),
+        reviews: Reviews(0,0,0),
         accessStatus: AccessStatus.approved,
-        reviews: Reviews(0,0),
         favorites: [],
         avatar: ""
     );

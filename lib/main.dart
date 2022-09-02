@@ -79,7 +79,9 @@ class MyApp extends StatelessWidget {
                     useMaterial3: true,
                     colorScheme: Theme.of(context).colorScheme.copyWith(
                       primary: Colours.primary,
+                      onPrimary: Colors.white,
                       secondary: Colours.secondary,
+                      onSecondary: Colours.primary,
                       background: Colours.tertiary,
                     ),
                     appBarTheme: const AppBarTheme(

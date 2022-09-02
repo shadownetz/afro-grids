@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState>{
   ChatBloc(): super(ChatInitialState()){
     on<FetchNextChatsEvent>(_onFetchNextChatsEvent);
+    on<GetChatListEvent>(_onGetChatListEvent);
   }
 
   void _onFetchNextChatsEvent(FetchNextChatsEvent event, Emitter<ChatState> emit)async{
@@ -19,6 +20,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState>{
         limit: 25
       );
       emit(ChatLoadedState(chats: chats));
+    }catch(e){
+      emit(ChatErrorState(e.toString()));
+    }
+  }
+
+  void _onGetChatListEvent(GetChatListEvent event, Emitter<ChatState> emit)async{
+    emit(ChatLoadingState());
+    try{
+      var chats = await ChatRepo().getChatList(event.user.id);
+      emit(ChatLoadedState(chatsList: chats));
     }catch(e){
       emit(ChatErrorState(e.toString()));
     }

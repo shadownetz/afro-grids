@@ -10,6 +10,7 @@ class UserBloc extends Bloc<UserEvent, UserState>{
   UserBloc() : super(UserInitialState()){
     on<UpdateUserEvent>(_mapUpdateUserEventToState);
     on<GetUserEvent>(_mapGetUserEventToState);
+    on<GetUserFavoritesEvent>(_onGetUserFavoritesEvent);
   }
 
   void _mapUpdateUserEventToState(UpdateUserEvent event,  Emitter<UserState> emit) async {
@@ -40,6 +41,17 @@ class UserBloc extends Bloc<UserEvent, UserState>{
     try{
       var user = await UserRepo().getUser(event.userId);
       emit(UserLoadedState(user: user));
+    }catch(e){
+      emit(UserErrorState(e.toString()));
+    }
+  }
+
+  void _onGetUserFavoritesEvent(GetUserFavoritesEvent event, Emitter<UserState> emit) async{
+    emit(UserLoadingState());
+    try{
+      var users = await UserRepo(user: event.user).getFavorites();
+      users = users.where((user) => user != null).toList();
+      emit(UserLoadedState(users: users));
     }catch(e){
       emit(UserErrorState(e.toString()));
     }

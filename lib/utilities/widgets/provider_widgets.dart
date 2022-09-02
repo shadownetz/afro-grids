@@ -16,8 +16,9 @@ import 'widgets.dart';
 
 AppBar portfolioAppBar(BuildContext context){
   return AppBar(
-    // backgroundColor: Colours.tertiary,
-    // foregroundColor: Colours.primary,
+    leading: const BackButton(
+      color: Colors.white
+    ),
     title: const Text("Provider Portfolio"),
     actions: const [
       CartButton()

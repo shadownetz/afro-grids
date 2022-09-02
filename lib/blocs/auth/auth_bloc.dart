@@ -27,17 +27,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
         final authUser = authRepo.getAuthUser();
         if(authUser != null){
           final user = await UserRepo().getUser(authUser.uid);
-          localStorage.user = user;
-          if(user.phoneVerified){
-            if(!user.isProvider || (user.isProvider && user.isApproved)){
-              UserRepo(user: user).persistUser();
-              emit(AuthenticatedState(user: user));
+          if(user != null){
+            localStorage.user = user;
+            if(user.phoneVerified){
+              if(!user.isProvider || (user.isProvider && user.isApproved)){
+                UserRepo(user: user).persistUser();
+                emit(AuthenticatedState(user: user));
+              }else{
+                await authRepo.signOut();
+                emit(UnAuthenticatedState(message: "Your account is currently pending for approval. Contact support if you think this is a mistake"));
+              }
             }else{
-              await authRepo.signOut();
-              emit(UnAuthenticatedState(message: "Your account is currently pending for approval. Contact support if you think this is a mistake"));
+              emit(PhoneVerificationState());
             }
           }else{
-            emit(PhoneVerificationState());
+            emit(UnAuthenticatedState());
           }
         }else{
           emit(UnAuthenticatedState());

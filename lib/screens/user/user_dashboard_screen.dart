@@ -3,6 +3,7 @@ import 'package:afro_grids/blocs/cart/cart_bloc.dart';
 import 'package:afro_grids/blocs/cart/cart_event.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_bloc.dart';
 import 'package:afro_grids/blocs/dashboard/dashboard_event.dart';
+import 'package:afro_grids/screens/user/favorites_screen.dart';
 import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
@@ -171,6 +172,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                   height: 90,
                                   width: 170,
                                   child: GestureDetector(
+                                    onTap: ()=>NavigationService.toPage(FavoritesScreen(user: localStorage.user!)),
                                     child: Card(
                                       surfaceTintColor: Colors.white,
                                       color: Colors.white,
@@ -193,7 +195,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                             ),
                                             Row(
                                               children: [
-                                                const Text("120", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                                Text("${localStorage.user!.favorites.length}", style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                                 Expanded(
                                                     child: Align(
                                                       alignment: Alignment.centerRight,
@@ -213,7 +215,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                                           Container(
                                                             width: 20,
                                                             height: 20,
-                                                            margin: EdgeInsets.only(left: 12),
+                                                            margin: const EdgeInsets.only(left: 12),
                                                             decoration: const BoxDecoration(
                                                                 color: Colors.white,
                                                                 shape: BoxShape.circle,

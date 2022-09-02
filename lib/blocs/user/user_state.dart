@@ -18,8 +18,9 @@ class UserLoadingState extends UserState{
 
 class UserLoadedState extends UserState{
   final UserModel? user;
+  final List<UserModel?>? users;
 
-  UserLoadedState({this.user});
+  UserLoadedState({this.user, this.users});
   @override
   List<Object?> get props => [];
 }

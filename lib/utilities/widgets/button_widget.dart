@@ -1,16 +1,21 @@
 import 'package:afro_grids/blocs/cart/cart_bloc.dart';
 import 'package:afro_grids/blocs/cart/cart_state.dart';
+import 'package:afro_grids/blocs/user/user_bloc.dart';
+import 'package:afro_grids/blocs/user/user_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/local/local_cart_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
+import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
+
+import '../../blocs/user/user_state.dart';
 
 Widget leaveAReviewButton(BuildContext context, {required UserModel provider}){
   return ElevatedButton(
@@ -260,6 +265,62 @@ class _CartButtonState extends State<CartButton> {
             icon: CartIcon(itemCount: cart.totalItems)
         );
       },
+    );
+  }
+}
+
+class FavoriteButton extends StatefulWidget {
+  final UserModel user;
+  const FavoriteButton({Key? key, required this.user}) : super(key: key);
+
+  @override
+  State<FavoriteButton> createState() => _FavoriteButtonState();
+}
+
+class _FavoriteButtonState extends State<FavoriteButton> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    _isFavorite = widget.user.isFavorite(localStorage.user!.id);
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context)=>UserBloc(),
+        child: BlocConsumer<UserBloc, UserState>(
+          listener: (context, state){
+            if(state is UserLoadedState){
+              setState(()=>_isFavorite=!_isFavorite);
+              if(_isFavorite){
+                Alerts(context).showToast("Added to favorites");
+              }else{
+                Alerts(context).showToast("Removed from favorites");
+              }
+            }
+            if(state is UserErrorState){
+              Alerts(context).showToast(state.message);
+            }
+          },
+          builder: (context, state){
+            return IconButton(
+                onPressed: (){
+                  var user = UserModel.copyWith(localStorage.user!);
+                  if(_isFavorite){
+                    user.favorites.remove(widget.user.id);
+                  }else{
+                    user.favorites.add(widget.user.id);
+                  }
+                  BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(user));
+                },
+                icon: Icon(
+                  _isFavorite ? Icons.star: Icons.star_border,
+                  color: Colors.white,
+                )
+            );
+          },
+        ),
     );
   }
 }

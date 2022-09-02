@@ -45,10 +45,11 @@ class ChatRepo{
     var receiversFutures = receiverIds.map((id) => UserRepo().getUser(id));
     var chatMetas = await Future.wait(chatMetaFutures);
     var receivers = await Future.wait(receiversFutures);
+    receivers = receivers.where((receiver) => receiver != null).toList();
     List<LocalChatListModel> results = [];
     for(var i=0; i<chatMetas.length; i++){
       results.add(LocalChatListModel(
-          user: receivers[i],
+          user: receivers[i]!,
           meta: ChatInfoModel.fromFirestore(chatMetas[i])
       ));
     }

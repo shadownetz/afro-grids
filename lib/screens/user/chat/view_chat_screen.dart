@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:afro_grids/blocs/chat/chat_bloc.dart';
-import 'package:afro_grids/blocs/chat/chat_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/models/user_model.dart';
@@ -9,13 +8,12 @@ import 'package:afro_grids/repositories/chat_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/type_extensions.dart';
+import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import '../../../blocs/chat/chat_state.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ViewChatScreen extends StatefulWidget {
   final UserModel user;
@@ -36,11 +34,13 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
   DocumentSnapshot? currentCursor;
   bool loading = false;
   bool chatInitialized = false;
+  DateTime timeAgoStamp = DateTime.now();
 
   @override
   void initState() {
     _messageStream = ChatRepo().getChatsStream(localStorage.user!.id, widget.user.id);
     _scrollController.addListener(() {
+      setState(() {}); // update timeago timestamp
       if (_scrollController.position.atEdge) {
         bool atTop = _scrollController.position.pixels == 0;
         if (atTop) {
@@ -105,6 +105,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
       backgroundColor: Colours.tertiary,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white),
         title: Row(
           children: [
             RoundImage(
@@ -126,10 +127,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
           ],
         ),
         actions: [
-          IconButton(
-              onPressed: ()=>{},
-              icon: const Icon(Icons.star_border)
-          )
+          FavoriteButton(user: widget.user)
         ],
       ),
       body: AnimatedContainer(
@@ -191,8 +189,9 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                       child: Container(
                         width: 80,
                         height: 25,
+                        constraints: const BoxConstraints(maxWidth: 150, maxHeight: 30),
                         alignment: Alignment.center,
-                        child: const Text("Today"),
+                        child: Text(timeago.format(timeAgoStamp)),
                       ),
                     ),
                   ),
@@ -207,6 +206,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                           itemCount: chats.length,
                           itemBuilder: (context, idx){
                             var chat = chats[idx];
+                            timeAgoStamp = chat.createdAt;
                             if(chat.createdBy == widget.user.id){
                               return buildReceiverChatBox(chat);
                             }else{

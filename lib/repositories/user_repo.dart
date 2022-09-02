@@ -42,9 +42,12 @@ class UserRepo{
     return uploadURL;
   }
 
-  Future<UserModel> getUser(String uid) async{
+  Future<UserModel?> getUser(String uid) async{
     var docSnapshot = await _userRef.doc(uid).get();
-    return UserModel.fromFirestore(docSnapshot as DocumentSnapshot<Map<String, dynamic>>);
+    if(docSnapshot.exists){
+      return UserModel.fromFirestore(docSnapshot as DocumentSnapshot<Map<String, dynamic>>);
+    }
+    return null;
   }
   Future<UserModel?> getUserIfExist(String uid) async{
     UserModel? user;
@@ -132,6 +135,11 @@ class UserRepo{
         .where((user) => user.isProvider)
         .toList();
 
+  }
+
+  Future<List<UserModel?>> getFavorites()async{
+    var futures = _user!.favorites.map((id) => getUser(id));
+    return await Future.wait(futures);
   }
 
 }

@@ -27,3 +27,10 @@ class UpdateUserEvent extends UserEvent{
   @override
   List<Object?> get props => [];
 }
+
+class GetUserFavoritesEvent extends UserEvent{
+  final UserModel user;
+  GetUserFavoritesEvent(this.user);
+  @override
+  List<Object?> get props => [];
+}

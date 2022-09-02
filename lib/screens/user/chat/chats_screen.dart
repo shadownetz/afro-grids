@@ -28,6 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white,),
         title: const Text("Chats"),
       ),
       body: CustomLoadingOverlay(

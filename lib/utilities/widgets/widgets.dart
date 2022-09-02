@@ -60,6 +60,7 @@ class CartIcon extends StatelessWidget{
               child: Icon(
                 Ionicons.cart,
                 size: 30,
+                color: Colors.white,
               ),
             )
         ),
@@ -125,8 +126,9 @@ class RatingIcons extends StatelessWidget {
   final List<Widget> ratingIcons = [];
   final int ratingValue;
   final double iconSize;
+  final MainAxisAlignment? alignment;
   
-  RatingIcons(this.ratingValue, {Key? key, this.iconSize=30}) : super(key: key);
+  RatingIcons(this.ratingValue, {Key? key, this.iconSize=30, this.alignment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +143,7 @@ class RatingIcons extends StatelessWidget {
       ));
     }
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: alignment ?? MainAxisAlignment.end,
       children: ratingIcons,
     );
   }

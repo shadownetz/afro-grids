@@ -22,9 +22,8 @@ class UserModel{
   late DateTime updatedAt;
   late String serviceId;
   late String serviceType; // ServiceType values
-  late Ratings ratings;
-  late String accessStatus; // AccessStatus values
   late Reviews reviews;
+  late String accessStatus; // AccessStatus values
   late List<String> favorites;
   late String avatar;
   late bool phoneVerified;
@@ -47,9 +46,8 @@ class UserModel{
     required this.updatedAt,
     required this.serviceId,
     required this.serviceType,
-    required this.ratings,
-    required this.accessStatus,
     required this.reviews,
+    required this.accessStatus,
     required this.favorites,
     required this.avatar,
     this.phoneVerified=false,
@@ -74,9 +72,8 @@ class UserModel{
         updatedAt = user.data()!['updatedAt'].toDate(),
         serviceId = user.data()!['serviceId'],
         serviceType = user.data()!['serviceType'],
-        ratings = Ratings(user.data()!['ratings']['average'], user.data()!['ratings']['count'], user.data()!['ratings']['average']),
         accessStatus = user.data()!['accessStatus'],
-        reviews = Reviews(user.data()!['reviews']['total'], user.data()!['reviews']['average']),
+        reviews = Reviews(user.data()!['reviews']['total'], user.data()!['reviews']['count'], user.data()!['reviews']['average']),
         favorites = List<String>.from(user.data()!['favorites']),
         emailVerified = user.data()!['emailVerified'],
         phoneVerified = user.data()!['phoneVerified'],
@@ -99,9 +96,8 @@ class UserModel{
         updatedAt = DateTime.now(),
         serviceId = "",
         serviceType = ServiceType.multiple,
-        ratings = Ratings(0, 0, 0),
+        reviews = Reviews(0, 0, 0),
         accessStatus = AccessStatus.pending,
-        reviews = Reviews(0, 0),
         favorites = [],
         emailVerified = false,
         phoneVerified = false,
@@ -124,9 +120,8 @@ class UserModel{
         updatedAt = DateTime.now(),
         serviceId = "",
         serviceType = ServiceType.single,
-        ratings = Ratings(0, 0, 0),
+        reviews = Reviews(0, 0, 0),
         accessStatus = AccessStatus.approved,
-        reviews = Reviews(0, 0),
         favorites = [],
         emailVerified = false,
         phoneVerified = false,
@@ -149,7 +144,7 @@ class UserModel{
       'updatedAt': Timestamp.fromDate(updatedAt),
       'serviceId': serviceId,
       'serviceType': serviceType,
-      'ratings': ratings.toMap(),
+      'ratings': reviews.toMap(),
       'accessStatus': accessStatus,
       'reviews': reviews.toMap(),
       'favorites': favorites,
@@ -158,6 +153,30 @@ class UserModel{
       'deliveryAddress': deliveryAddress
     };
   }
+
+  UserModel.copyWith(UserModel user):
+        id = user.id,
+        firstName = user.firstName,
+        lastName = user.lastName,
+        middleName = user.middleName,
+        email = user.email,
+        phone = user.phone,
+        authType = user.authType,
+        accessLevel = user.accessLevel,
+        currency = user.currency,
+        location = user.location,
+        address = user.address,
+        createdAt = user.createdAt,
+        updatedAt = user.updatedAt,
+        serviceId = user.serviceId,
+        serviceType = user.serviceType,
+        reviews = user.reviews,
+        accessStatus = user.accessStatus,
+        favorites = user.favorites,
+        avatar = user.avatar,
+        phoneVerified = user.phoneVerified,
+        emailVerified = user.emailVerified,
+        deliveryAddress = user.deliveryAddress;
 
   String get name{
     return "$firstName $lastName";
@@ -187,5 +206,9 @@ class UserModel{
         location.longitude,
         position.longitude
     );
+  }
+
+  bool isFavorite(String userId){
+    return favorites.contains(userId);
   }
 }
