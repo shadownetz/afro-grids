@@ -24,7 +24,7 @@ class UserModel{
   late String serviceType; // ServiceType values
   late Reviews reviews;
   late String accessStatus; // AccessStatus values
-  late List<String> favorites;
+  late Set<String> favorites;
   late String avatar;
   late bool phoneVerified;
   late bool emailVerified;
@@ -74,7 +74,7 @@ class UserModel{
         serviceType = user.data()!['serviceType'],
         accessStatus = user.data()!['accessStatus'],
         reviews = Reviews(user.data()!['reviews']['total'], user.data()!['reviews']['count'], user.data()!['reviews']['average']),
-        favorites = List<String>.from(user.data()!['favorites']),
+        favorites = Set<String>.from(user.data()!['favorites']),
         emailVerified = user.data()!['emailVerified'],
         phoneVerified = user.data()!['phoneVerified'],
         deliveryAddress = user.data()!['deliveryAddress']??"";
@@ -98,7 +98,7 @@ class UserModel{
         serviceType = ServiceType.multiple,
         reviews = Reviews(0, 0, 0),
         accessStatus = AccessStatus.pending,
-        favorites = [],
+        favorites = {},
         emailVerified = false,
         phoneVerified = false,
         deliveryAddress="";
@@ -122,7 +122,7 @@ class UserModel{
         serviceType = ServiceType.single,
         reviews = Reviews(0, 0, 0),
         accessStatus = AccessStatus.approved,
-        favorites = [],
+        favorites = {},
         emailVerified = false,
         phoneVerified = false,
         deliveryAddress="";
@@ -147,7 +147,7 @@ class UserModel{
       'ratings': reviews.toMap(),
       'accessStatus': accessStatus,
       'reviews': reviews.toMap(),
-      'favorites': favorites,
+      'favorites': favorites.toList(),
       'emailVerified': emailVerified,
       'phoneVerified': phoneVerified,
       'deliveryAddress': deliveryAddress

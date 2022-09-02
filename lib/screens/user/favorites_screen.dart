@@ -20,6 +20,8 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
+  UserBloc? _userBloc;
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -49,6 +51,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 }
               },
               builder: (context, state){
+                _userBloc = BlocProvider.of<UserBloc>(context);
                 if(state is UserLoadedState){
                   if(state.users != null){
                     if(state.users!.isNotEmpty){
@@ -62,7 +65,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               ),
                               title: Text(user.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
                               subtitle: RatingIcons(user.reviews.average.toInt(), iconSize: 20, alignment: MainAxisAlignment.start,),
-                              onTap: ()=>NavigationGuards(user: user).navigateToPortfolioPage(),
+                              onTap: ()async{
+                                await NavigationGuards(user: user).navigateToPortfolioPage();
+                                _userBloc!.add(GetUserFavoritesEvent(widget.user));
+                              },
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) {

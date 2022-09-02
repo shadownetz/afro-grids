@@ -172,7 +172,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                   height: 90,
                                   width: 170,
                                   child: GestureDetector(
-                                    onTap: ()=>NavigationService.toPage(FavoritesScreen(user: localStorage.user!)),
+                                    onTap: ()async{
+                                      await NavigationService.toPage(FavoritesScreen(user: localStorage.user!));
+                                      setState(() {});
+                                    },
                                     child: Card(
                                       surfaceTintColor: Colors.white,
                                       color: Colors.white,
@@ -253,7 +256,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                     height: 90,
                                     width: 170,
                                     child: GestureDetector(
-                                      onTap: ()=>NavigationService.toPage(const ChatScreen()),
+                                      onTap: ()async{
+                                        await NavigationService.toPage(const ChatScreen());
+                                        setState(() {});
+                                      },
                                       child: Card(
                                         surfaceTintColor: Colors.white,
                                         color: Colors.white,
@@ -283,7 +289,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         ),
                         // history section
                         GestureDetector(
-                          onTap: ()=>NavigationService.toPage(const OrderScreen()),
+                          onTap: ()async{
+                            await NavigationService.toPage(const OrderScreen());
+                            setState(() {});
+                          },
                           child: Card(
                             color: Colors.white,
                             surfaceTintColor: Colors.white,
@@ -316,7 +325,10 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         // find a provider section
                         GestureDetector(
                             behavior: HitTestBehavior.translucent,
-                            onTap: ()=>Navigator.of(context).push(createRoute(const ServiceSearchScreen())),
+                            onTap: ()async{
+                              await Navigator.of(context).push(createRoute(const ServiceSearchScreen()));
+                              setState(() {});
+                            },
                             child: Card(
                               color: Colors.white,
                               surfaceTintColor: Colors.white,
@@ -386,6 +398,11 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
         ),
       ),
       endDrawer: const NavigationDrawer(),
+      onEndDrawerChanged: (value){
+        if(!value){
+          setState(() {});
+        }
+      },
     );
   }
   void _displayAlerts()async{

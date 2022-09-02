@@ -18,12 +18,12 @@ class NavigationGuards{
       NavigationService.pushNamedAndRemoveAll("/user-dashboard");
     }
   }
-  navigateToPortfolioPage(){
+  Future<dynamic> navigateToPortfolioPage()async{
     if(user.serviceType == ServiceType.single){
-      NavigationService.toPage(ProviderInfoSingleServiceScreen(user: user,));
+      return await NavigationService.toPage(ProviderInfoSingleServiceScreen(user: user,));
     }
     else if(user.serviceType == ServiceType.multiple){
-      NavigationService.toPage(ProviderInfoMultipleServiceScreen(user: user));
+      return await NavigationService.toPage(ProviderInfoMultipleServiceScreen(user: user));
     }
   }
 

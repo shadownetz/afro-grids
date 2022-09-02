@@ -30,4 +30,7 @@ class FirestoreRef{
   CollectionReference get usersMetaRef{
     return _db.collection("usersMeta");
   }
+  CollectionReference get reportRef{
+    return _db.collection("reports");
+  }
 }

@@ -272,7 +272,7 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
         serviceType: _serviceTypeController.text.trim(),
         reviews: Reviews(0,0,0),
         accessStatus: AccessStatus.pending,
-        favorites: [],
+        favorites: {},
         avatar: ""
     );
     widget.onComplete(user, _locationPlaceId, _passwordController.text, _avatarFile);
@@ -465,7 +465,7 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
         serviceType: "",
         reviews: Reviews(0,0,0),
         accessStatus: AccessStatus.approved,
-        favorites: [],
+        favorites: {},
         avatar: ""
     );
     widget.onComplete(user, locationPlaceId, passwordController.text);

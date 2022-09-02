@@ -3,6 +3,7 @@ import 'package:afro_grids/models/local/local_review_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/chat/view_chat_screen.dart';
+import 'package:afro_grids/screens/user/report_screen.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -79,18 +80,13 @@ Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Chip(
-                                avatar: Icon(Icons.stars, color: Colors.white, size: 15,),
-                                label: Text("3.5", style: TextStyle(fontSize: 15),),
+                                avatar: const Icon(Icons.stars, color: Colors.white, size: 15,),
+                                label: Text("${provider.reviews.average}", style: TextStyle(fontSize: 15),),
                                 backgroundColor: Colors.lightGreen,
                               ),
-                              Chip(
-                                avatar: Icon(Icons.bookmarks,size: 15, color: Colours.primary,),
-                                label: Text("Favorite", style: TextStyle(fontSize: 15, color: Colours.primary),),
-                                backgroundColor: Colours.tertiary,
-                                elevation: 2,
-                              ),
+                              FavoriteButton2(user: provider,),
                             ],
                           )
                       ),
@@ -110,11 +106,21 @@ Widget portfolioActionBar(BuildContext context, {required UserModel provider}){
                                 ),
                                 onTap: ()=>NavigationService.toPage(ViewChatScreen(user: provider)),
                               ),
-                              const Chip(
-                                avatar: Icon(Icons.error, color: Colors.white,size: 15,),
-                                label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
-                                backgroundColor: Colors.redAccent,
-                                elevation: 2,
+                              GestureDetector(
+                                child: const Chip(
+                                  avatar: Icon(Icons.error, color: Colors.white,size: 15,),
+                                  label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
+                                  backgroundColor: Colors.redAccent,
+                                  elevation: 2,
+                                ),
+                                onTap: (){
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context)=>ReportScreen(user: provider,)
+                                  );
+                                },
                               ),
                             ],
                           )
@@ -150,18 +156,13 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Chip(
-                avatar: Icon(Icons.stars, color: Colors.white, size: 15,),
-                label: Text("3.5", style: TextStyle(fontSize: 15),),
+                avatar: const Icon(Icons.stars, color: Colors.white, size: 15,),
+                label: Text('${provider.reviews.average}', style: TextStyle(fontSize: 15),),
                 backgroundColor: Colors.lightGreen,
               ),
-              Chip(
-                avatar: Icon(Icons.bookmarks,size: 15, color: Colors.white,),
-                label: Text("Favorited", style: TextStyle(fontSize: 15, color: Colors.white),),
-                backgroundColor: Colours.primary,
-                elevation: 2,
-              ),
+              FavoriteButton2(user: provider,),
             ],
           ),
         ),
@@ -218,11 +219,21 @@ Widget portfolioActionBar2(BuildContext context, {required UserModel provider}){
                 ),
                 onTap: ()=>NavigationService.toPage(ViewChatScreen(user: provider)),
               ),
-              const Chip(
-                avatar: Icon(Icons.error, color: Colors.white,size: 15,),
-                label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
-                backgroundColor: Colors.redAccent,
-                elevation: 2,
+              GestureDetector(
+                child: const Chip(
+                  avatar: Icon(Icons.error, color: Colors.white,size: 15,),
+                  label: Text("Report", style: TextStyle(fontSize: 15, color: Colors.white),),
+                  backgroundColor: Colors.redAccent,
+                  elevation: 2,
+                ),
+                onTap: (){
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context)=>ReportScreen(user: provider,)
+                  );
+                },
               ),
             ],
           ),

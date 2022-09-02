@@ -282,7 +282,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   void initState() {
-    _isFavorite = widget.user.isFavorite(localStorage.user!.id);
+    _isFavorite = localStorage.user!.isFavorite(widget.user.id);
     super.initState();
   }
   @override
@@ -322,6 +322,69 @@ class _FavoriteButtonState extends State<FavoriteButton> {
           },
         ),
     );
+  }
+}
+
+class FavoriteButton2 extends StatefulWidget {
+  final UserModel user;
+  const FavoriteButton2({Key? key, required this.user}) : super(key: key);
+
+  @override
+  State<FavoriteButton2> createState() => _FavoriteButton2State();
+}
+
+class _FavoriteButton2State extends State<FavoriteButton2> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    _isFavorite = localStorage.user!.isFavorite(widget.user.id);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context)=>UserBloc(),
+      child: BlocConsumer<UserBloc, UserState>(
+        listener: (context, state){
+          if(state is UserLoadedState){
+            setState(()=>_isFavorite=!_isFavorite);
+            if(_isFavorite){
+              Alerts(context).showToast("Added to favorites");
+            }else{
+              Alerts(context).showToast("Removed from favorites");
+            }
+          }
+          if(state is UserErrorState){
+            Alerts(context).showToast(state.message);
+          }
+        },
+        builder: (context, state){
+          return GestureDetector(
+            child: Chip(
+              avatar: Icon(Icons.bookmarks,size: 15, color: _isFavorite? Colors.white: Colours.primary,),
+              label: Text(
+                _isFavorite? "Favorited":"Favorite",
+                style: TextStyle(fontSize: 15, color: _isFavorite? Colors.white:Colours.primary),
+              ),
+              backgroundColor: _isFavorite? Colours.primary: Colours.tertiary,
+              elevation: 2,
+            ),
+            onTap: (){
+              var user = UserModel.copyWith(localStorage.user!);
+              if(_isFavorite){
+                user.favorites.remove(widget.user.id);
+              }else{
+                user.favorites.add(widget.user.id);
+              }
+              BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(user));
+            },
+          );
+        },
+      ),
+    );
+
   }
 }
 
