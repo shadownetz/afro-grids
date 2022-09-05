@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:afro_grids/blocs/chat/chat_bloc.dart';
+import 'package:afro_grids/blocs/device/device_bloc.dart';
+import 'package:afro_grids/blocs/device/device_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/repositories/chat_repo.dart';
+import 'package:afro_grids/screens/user/chat/preview_file_attachment_screen.dart';
+import 'package:afro_grids/screens/user/chat/view_chat_content_screen.dart';
+import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/type_extensions.dart';
@@ -12,8 +17,13 @@ import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../../blocs/device/device_state.dart';
+import '../../../utilities/services/navigation_service.dart';
 
 class ViewChatScreen extends StatefulWidget {
   final UserModel user;
@@ -34,7 +44,15 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
   DocumentSnapshot? currentCursor;
   bool loading = false;
   bool chatInitialized = false;
+  bool showAttachFileIcon = true;
   DateTime timeAgoStamp = DateTime.now();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    chatController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -48,6 +66,11 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         }
       }
     });
+    chatController.addListener(() {
+      setState(() {
+        showAttachFileIcon = chatController.text.isEmpty;
+      });
+    });
 
     super.initState();
   }
@@ -56,8 +79,8 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
     if(currentCursor != null){
       setState(()=>loading=true);
       var querySnapshot = await ChatRepo().fetchChats(
-          fromId: localStorage.user!.id,
-          toId: widget.user.id,
+        fromId: localStorage.user!.id,
+        toId: widget.user.id,
         cursor: currentCursor!,
       );
       setState(()=>loading=false);
@@ -187,7 +210,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                           borderRadius: BorderRadius.circular(20)
                       ),
                       child: Container(
-                        width: 80,
+                        width: 100,
                         height: 25,
                         constraints: const BoxConstraints(maxWidth: 150, maxHeight: 30),
                         alignment: Alignment.center,
@@ -244,10 +267,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
             child: Container(
               width: deviceWidth!/2.2,
               padding: const EdgeInsets.all(10),
-              child: Text(
-                chat.content,
-                style: const TextStyle(color: Colors.white, fontSize: 15),
-              ),
+              child: buildChatContent(chat: chat, isReceiver: true),
             ),
           ),
           const SizedBox(height: 7,),
@@ -275,10 +295,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
             child: Container(
               width: deviceWidth!/2.2,
               padding: const EdgeInsets.all(10),
-              child: Text(
-                chat.content,
-                style: TextStyle(fontSize: 15),
-              ),
+              child: buildChatContent(chat: chat, isReceiver: false),
             ),
           ),
           const SizedBox(height: 7,),
@@ -288,6 +305,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
     );
   }
   Widget buildMsgTypeArea(){
+    final alerts =  Alerts(context);
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -296,42 +314,81 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SizedBox(
-              width: deviceWidth!-100,
-              child: TextField(
-                controller: chatController,
-                cursorHeight: 20,
-                textInputAction: TextInputAction.send,
-                decoration: InputDecoration(
-                    hintText: "Message",
-                    filled: true,
-                    fillColor: const Color.fromRGBO(240, 240, 240, 1),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20)
-                    )
-                ),
+            showAttachFileIcon?
+            BlocProvider(
+                create: (context)=>DeviceBloc(),
+              child: BlocConsumer<DeviceBloc, DeviceState>(
+                listener: (context, state)async{
+                  if(state is NewImagesSelected){
+                    List<XFile>? files = await NavigationService.toPage(PreviewFileAttachmentScreen(files: state.images!,));
+                    if(files != null){
+                      try{
+                        ChatModel newChat = ChatModel(
+                            id: "",
+                            createdBy: localStorage.user!.id,
+                            type: ChatType.image,
+                            content: "",
+                            createdAt: DateTime.now(),
+                            createdFor: widget.user.id
+                        );
+                        alerts.showToast("uploading files...please wait", duration: const Duration(seconds: 3));
+                        await ChatRepo(chat: newChat).sendMessageFiles(files);
+                        notifySentMsgListener();
+                        alerts.showToast("uploaded files", duration: const Duration(seconds: 3));
+                      }catch(e){
+                        alerts.showToast(e.toString(), duration: const Duration(seconds: 5));
+                      }
+                    }
+                  }
+                },
+                builder: (context, state){
+                  return IconButton(
+                      onPressed: ()async{
+                        BlocProvider.of<DeviceBloc>(context).add(ChooseImagesEvent());
+                      },
+                      color: Colours.secondary,
+                      icon: const Icon(Icons.attach_file)
+                  );
+                },
               ),
+            ):
+            const SizedBox(),
+            Expanded(
+                flex: 2,
+                child: TextField(
+                  controller: chatController,
+                  cursorHeight: 20,
+                  textInputAction: TextInputAction.send,
+                  decoration: InputDecoration(
+                      hintText: "Message",
+                      filled: true,
+                      fillColor: const Color.fromRGBO(240, 240, 240, 1),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(20)
+                      )
+                  ),
+                )
             ),
             ElevatedButton(
                 onPressed: ()async{
                   if(chatController.text.isNotEmpty){
                     ChatModel newChat = ChatModel(
-                        id: "", 
-                        createdBy: localStorage.user!.id, 
-                        type: ChatType.text, 
+                        id: "",
+                        createdBy: localStorage.user!.id,
+                        type: ChatType.text,
                         content: chatController.text,
                         createdAt: DateTime.now(),
                         createdFor: widget.user.id
                     );
                     ChatRepo(chat: newChat).sendMessage();
-                    chatController.clear();
+                    notifySentMsgListener();
                   }
                 },
                 style: ElevatedButton.styleFrom(
                     alignment: Alignment.center,
-                    primary: Colours.primary,
-                    onPrimary: Colors.white,
+                    backgroundColor: Colours.primary,
+                    foregroundColor: Colors.white,
                     minimumSize: const Size(50, 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)
@@ -343,5 +400,46 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         ),
       ),
     );
+  }
+
+  Widget buildChatContent({required ChatModel chat, required bool isReceiver}){
+
+    if(chat.type == ChatType.text){
+      if(isReceiver){
+        return Text(
+          chat.content,
+          style: const TextStyle(color: Colors.white, fontSize: 15),
+        );
+      }else{
+        return Text(
+          chat.content,
+          style: const TextStyle(fontSize: 15),
+        );
+      }
+    }
+    if(chat.type == ChatType.image){
+      return GestureDetector(
+        onTap: (){
+          NavigationService.toPage(ViewChatContentScreen(chat: chat,));
+        },
+        child: Container(
+          height: 200,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                  image: NetworkImage(chat.content),
+                  fit: BoxFit.cover
+              )
+          ),
+        ),
+      );
+    }
+    return const SizedBox();
+  }
+
+  void notifySentMsgListener(){
+    chatController.clear();
+    _scrollController.animateTo(1000*(chats.length/25), duration: const Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+    setState(()=>showAttachFileIcon = true);
   }
 }

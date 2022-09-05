@@ -14,4 +14,8 @@ class FirebaseStorageReferences{
   Reference get inventoryImageRef{
     return _storageRef.child("inventories/itemImages");
   }
+
+  Reference get chatRef{
+    return _storageRef.child("chats/files");
+  }
 }

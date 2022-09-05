@@ -374,6 +374,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                           child: GoogleMap(
                             onMapCreated: _onMapCreated,
                             myLocationEnabled: true,
+                            liteModeEnabled: true,
                             initialCameraPosition: CameraPosition(
                               target: _mapCenter,
                               zoom: 5.0,

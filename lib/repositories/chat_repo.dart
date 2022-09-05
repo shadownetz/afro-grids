@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/models/chat_info_model.dart';
 import 'package:afro_grids/models/local/local_chat_list_model.dart';
 import 'package:afro_grids/repositories/user_repo.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../configs/firestorage_references.dart';
 import '../main.dart';
 import '../models/chat_model.dart';
 
@@ -79,6 +84,23 @@ class ChatRepo{
       }
     }
     localStorage.activeChatIds.add(chatId);
+  }
+
+  Future<void> sendMessageFiles(List<XFile> files) async{
+    var uploadTasksFutures = files.map((file){
+      return FirebaseStorageReferences()
+          .chatRef
+          .child("${chat!.id}/${DateTime.now().millisecondsSinceEpoch}.${file.name.split(".").removeLast()}")
+          .putFile(File(file.path));
+    });
+    var uploadTasks = await Future.wait(uploadTasksFutures);
+    var uploadURLFutures = uploadTasks.map((task) => task.ref.getDownloadURL());
+    var uploadURLs = await Future.wait(uploadURLFutures);
+    var resultFutures = uploadURLs.map((url){
+      chat!.content = url;
+      return sendMessage();
+    });
+    await Future.wait(resultFutures);
   }
 
   Future<String?> getChatId({required String senderId, required String receiverId})async{

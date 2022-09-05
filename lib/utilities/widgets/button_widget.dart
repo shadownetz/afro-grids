@@ -155,7 +155,7 @@ class RoundSMButton extends StatelessWidget {
         fixedSize: const Size(50, 50),
         shape: const CircleBorder(),
       ),
-      child: const Icon(Icons.add),
+      child: child,
     );
   }
 }

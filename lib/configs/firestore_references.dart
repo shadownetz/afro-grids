@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreRef{
   final _db = FirebaseFirestore.instance;
 
+  FirestoreRef(){
+    _db.settings = const Settings(cacheSizeBytes: 1048576);
+  }
+
   CollectionReference get usersRef{
     return _db.collection("users");
   }
