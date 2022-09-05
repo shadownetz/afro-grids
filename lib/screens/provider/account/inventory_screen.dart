@@ -46,6 +46,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Scaffold(
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white,),
         title: const Text("Inventory"),
       ),
       body: CustomLoadingOverlay(

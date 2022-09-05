@@ -4,11 +4,14 @@ import 'package:afro_grids/blocs/user/user_bloc.dart';
 import 'package:afro_grids/blocs/user/user_event.dart';
 import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/local/local_order_model.dart';
+import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/navigation_guards.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/type_extensions.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../../blocs/user/user_state.dart';
 import '../../../utilities/colours.dart';
@@ -160,6 +163,41 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                       alignment: Alignment.centerLeft,
                       child: Text('Created',textAlign: TextAlign.left, style: TextStyle(fontSize: 12, color: Colors.grey),),
                     ),
+                    BlocProvider<UserBloc>(
+                      create: (context)=>UserBloc(),
+                      child: BlocConsumer<UserBloc, UserState>(
+                        listener: (context, state){
+                          if(state is UserLoadedState){
+                            if(state.user != null){
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context)=>LeaveAReviewScreen(user: state.user!,)
+                              );
+                            }
+                          }
+                        },
+                        builder: (context, state){
+                          return GestureDetector(
+                            onTap: (){
+                              if(state is UserInitialState || state is UserLoadedState){
+                                BlocProvider.of<UserBloc>(context).add(GetUserEvent(widget.inventory.createdBy));
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Ionicons.chatbox_ellipses_outline, color: Colours.secondary, size: 18,),
+                                state is UserLoadingState ?
+                                const Text(" Please wait...", style: TextStyle(color: Colours.secondary),):
+                                const Text(" Leave a review", style: TextStyle(color: Colours.secondary),)
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -133,30 +133,7 @@ class _ProviderInfoMultipleServiceScreenState extends State<ProviderInfoMultiple
                             ),
                           ),
                           showReviewButton?
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: ElevatedButton(
-                                style: buttonPrimaryLgStyle(),
-                                onPressed: ()async{
-                                  var result = await showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context)=>LeaveAReviewScreen(user: widget.user,)
-                                  );
-                                  if(result == true){
-                                    _reviewProvider!.add(FetchReviewsEvent(widget.user, withMetaInfo: true));
-                                  }
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.star_border, size: 20,),
-                                    Text("Leave a review")
-                                  ],
-                                )
-                            ),
-                          ):
+                          const SizedBox():
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: checkoutButton(context),

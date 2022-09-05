@@ -29,6 +29,7 @@ class _UpdateSingleServiceInventoryScreenState extends State<UpdateSingleService
     return Scaffold(
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white,),
         title: const Text("Update Inventory"),
       ),
       body: CustomLoadingOverlay(

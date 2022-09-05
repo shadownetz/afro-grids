@@ -53,10 +53,11 @@ class _OrderScreenState extends State<OrderScreen> {
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
         title: const Text("Orders"),
+        leading: const BackButton(color: Colors.white,),
         actions: [
           PopupMenuButton(
               position: PopupMenuPosition.under,
-              icon: const Icon(Icons.filter_list),
+              icon: const Icon(Icons.filter_list, color: Colors.white,),
               onSelected: (String item){
                 print(item);
               },

@@ -28,6 +28,7 @@ class _UpdateMultipleServiceInventoryScreenState extends State<UpdateMultipleSer
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
+          leading: const BackButton(color: Colors.white,),
           title: const Text("Update Inventory"),
         ),
         body: CustomLoadingOverlay(

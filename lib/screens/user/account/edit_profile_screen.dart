@@ -27,6 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white,),
         title: const Text("Update Profile"),
       ),
       body: CustomLoadingOverlay(

@@ -86,18 +86,20 @@ class MyApp extends StatelessWidget {
                     ),
                     appBarTheme: const AppBarTheme(
                         backgroundColor: Colours.primary,
-                        foregroundColor: Colors.white
+                        foregroundColor: Colors.white,
+                      iconTheme: IconThemeData(color: Colors.white),
+                      actionsIconTheme: IconThemeData(color: Colors.white)
                     ),
                     elevatedButtonTheme: ElevatedButtonThemeData(
                         style: ElevatedButton.styleFrom(
-                            primary: Colours.secondary,
-                            onPrimary: Colours.primary,
+                            foregroundColor: Colours.primary,
+                            backgroundColor: Colours.secondary,
                             textStyle: const TextStyle(color: Colours.secondary)
                         )
                     ),
                     textButtonTheme: TextButtonThemeData(
                         style: TextButton.styleFrom(
-                            primary: Colours.primary
+                            foregroundColor: Colours.primary
                         )
                     ),
                     textTheme: Theme.of(context).textTheme.apply(

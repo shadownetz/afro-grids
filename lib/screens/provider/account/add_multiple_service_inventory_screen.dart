@@ -25,6 +25,7 @@ class _AddMultipleServiceInventoryScreenState extends State<AddMultipleServiceIn
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
+          leading: const BackButton(color: Colors.white,),
           title: const Text("New Inventory"),
         ),
         body: CustomLoadingOverlay(

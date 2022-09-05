@@ -17,6 +17,7 @@ class UserProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.white,),
         title: const Text("Profile"),
       ),
       body: Container(
