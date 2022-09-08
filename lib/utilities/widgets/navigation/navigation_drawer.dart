@@ -2,7 +2,7 @@ import 'package:afro_grids/blocs/auth/auth_state.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
-import 'package:afro_grids/utilities/widgets/navigation/super_admin_navigation.dart';
+import 'package:afro_grids/utilities/widgets/navigation/admin_navigation.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
@@ -102,12 +102,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               },
             ),
           ),
-          localStorage.user!.accessLevel == AccessLevel.superAdmin?
+          (localStorage.user!.accessLevel == AccessLevel.superAdmin || localStorage.user!.accessLevel == AccessLevel.admin)?
           const Expanded(
               flex: 2,
               child:  Padding(
                 padding: EdgeInsets.all(10),
-                child: SuperAdminNav(),
+                child: AdminNav(),
               )
           ):
           const SizedBox()

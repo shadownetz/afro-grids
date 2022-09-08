@@ -11,15 +11,15 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../blocs/device/device_state.dart';
 
-class PreviewFileAttachmentScreen extends StatefulWidget {
+class PreviewFilesScreen extends StatefulWidget {
   final List<XFile> files;
-  const PreviewFileAttachmentScreen({Key? key, required this.files}) : super(key: key);
+  const PreviewFilesScreen({Key? key, required this.files}) : super(key: key);
 
   @override
-  State<PreviewFileAttachmentScreen> createState() => _PreviewFileAttachmentScreenState();
+  State<PreviewFilesScreen> createState() => _PreviewFilesScreenState();
 }
 
-class _PreviewFileAttachmentScreenState extends State<PreviewFileAttachmentScreen> {
+class _PreviewFilesScreenState extends State<PreviewFilesScreen> {
   final CarouselController carouselController = CarouselController();
   DeviceBloc? _deviceBloc;
 

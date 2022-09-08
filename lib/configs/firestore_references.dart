@@ -37,4 +37,7 @@ class FirestoreRef{
   CollectionReference get reportRef{
     return _db.collection("reports");
   }
+  CollectionReference get adsRef{
+    return _db.collection("ads");
+  }
 }

@@ -7,7 +7,7 @@ import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/models/user_model.dart';
 import 'package:afro_grids/repositories/chat_repo.dart';
-import 'package:afro_grids/screens/user/chat/preview_file_attachment_screen.dart';
+import 'package:afro_grids/screens/user/chat/preview_files_screen.dart';
 import 'package:afro_grids/screens/user/chat/view_chat_content_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
@@ -320,7 +320,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
               child: BlocConsumer<DeviceBloc, DeviceState>(
                 listener: (context, state)async{
                   if(state is NewImagesSelected){
-                    List<XFile>? files = await NavigationService.toPage(PreviewFileAttachmentScreen(files: state.images!,));
+                    List<XFile>? files = await NavigationService.toPage(PreviewFilesScreen(files: state.images!,));
                     if(files != null){
                       try{
                         ChatModel newChat = ChatModel(

@@ -62,6 +62,7 @@ dependencies:
   flutter_treeview: ^1.0.7+1
   flutterwave_standard: ^1.0.4
   timeago: ^3.3.0
+  date_field: ^3.0.1
 
 dev_dependencies:
   flutter_test:

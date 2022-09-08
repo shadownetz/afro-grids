@@ -9,10 +9,8 @@ extension DateTimeFormatter on DateTime{
     var day = this.day;
     var month = months[this.month-1];
     var year = this.year;
-    var hour = this.hour;
-    var minute = this.minute;
-    var marker = DateFormat('a').format(this);
-    return "$day $month $year at $hour:$minute $marker";
+    var marker = DateFormat.jm().format(this);
+    return "$day $month $year at $marker";
   }
 
   String toTimeStr(){

@@ -18,4 +18,8 @@ class FirebaseStorageReferences{
   Reference get chatRef{
     return _storageRef.child("chats/files");
   }
+
+  Reference get adsRef{
+    return _storageRef.child("ads/files");
+  }
 }
