@@ -2,6 +2,7 @@ import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -175,6 +176,35 @@ class Alerts{
               },
             )
           ],
+        );
+      },
+    );
+  }
+
+  showLoadingDialog({required String title, required String message}) {
+    return showDialog<BuildContext>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, style: const TextStyle(fontSize: 16),),
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: const EdgeInsets.only(left: 20),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const SpinKitThreeBounce(
+                  color: Colours.primary,
+                  size: 30,
+                ),
+                // const Icon(Icons.info_outline, color: Colours.primary, size: 50,),
+                const SizedBox(height: 30,),
+                Center(
+                  child: Text(message, textAlign: TextAlign.center,  style: const TextStyle(fontSize: 18),),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

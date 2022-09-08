@@ -331,12 +331,13 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                             createdAt: DateTime.now(),
                             createdFor: widget.user.id
                         );
-                        alerts.showToast("uploading files...please wait", duration: const Duration(seconds: 3));
+                        alerts.showLoadingDialog(title: "Uploading images", message: "Please wait");
                         await ChatRepo(chat: newChat).sendMessageFiles(files);
                         notifySentMsgListener();
-                        alerts.showToast("uploaded files", duration: const Duration(seconds: 3));
                       }catch(e){
                         alerts.showToast(e.toString(), duration: const Duration(seconds: 5));
+                      }finally{
+                        NavigationService.exitPage(); // close loading modal
                       }
                     }
                   }
@@ -439,7 +440,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
 
   void notifySentMsgListener(){
     chatController.clear();
-    _scrollController.animateTo(1000*(chats.length/25), duration: const Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+    _scrollController.jumpTo(5000*(chats.length/25));
     setState(()=>showAttachFileIcon = true);
   }
 }
