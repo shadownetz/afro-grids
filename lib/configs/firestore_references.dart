@@ -31,9 +31,6 @@ class FirestoreRef{
   CollectionReference get serviceRef{
     return _db.collection("services");
   }
-  CollectionReference get usersMetaRef{
-    return _db.collection("usersMeta");
-  }
   CollectionReference get reportRef{
     return _db.collection("reports");
   }

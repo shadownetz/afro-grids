@@ -16,9 +16,9 @@ class ChatRepo{
 
   ChatModel? chat;
   final CollectionReference _chatRef;
-  final CollectionReference _usersMetaRef;
+  final CollectionReference _usersRef;
 
-  ChatRepo({this.chat}): _chatRef = FirestoreRef().chatRef, _usersMetaRef=FirestoreRef().usersMetaRef;
+  ChatRepo({this.chat}): _chatRef = FirestoreRef().chatRef, _usersRef=FirestoreRef().usersRef;
 
   Future<QuerySnapshot> fetchChats({
     required String fromId,
@@ -40,7 +40,7 @@ class ChatRepo{
   }
 
   Future<List<LocalChatListModel>> getChatList(String userId)async{
-    QuerySnapshot snapshot = await _usersMetaRef
+    QuerySnapshot snapshot = await _usersRef
         .doc(userId).collection("chat")
         .orderBy("createdAt", descending: true)
         .get();
@@ -104,7 +104,7 @@ class ChatRepo{
   }
 
   Future<String?> getChatId({required String senderId, required String receiverId})async{
-    var doc = await FirestoreRef().usersMetaRef.doc(senderId).collection("chat").doc(receiverId).get();
+    var doc = await FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId).get();
     if(doc.exists){
       return doc.data()!['chatId'];
     }
@@ -113,11 +113,11 @@ class ChatRepo{
 
   Future<void> saveChatId({required String senderId, required String receiverId})async{
     String chatId = generateChatId(senderId, receiverId);
-    await FirestoreRef().usersMetaRef.doc(senderId).collection("chat").doc(receiverId).set({
+    await FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId).set({
       'chatId': chatId,
       'createdAt': FieldValue.serverTimestamp()
     });
-    await FirestoreRef().usersMetaRef.doc(receiverId).collection("chat").doc(senderId).set({
+    await FirestoreRef().usersRef.doc(receiverId).collection("chat").doc(senderId).set({
       'chatId': chatId,
       'createdAt': FieldValue.serverTimestamp()
     });
