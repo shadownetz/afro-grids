@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../configs/firestorage_references.dart';
 import '../main.dart';
 import '../models/chat_model.dart';
+import '../models/user_chat_info_model.dart';
 
 class ChatRepo{
 
@@ -20,11 +21,15 @@ class ChatRepo{
 
   ChatRepo({this.chat}): _chatRef = FirestoreRef().chatRef, _usersRef=FirestoreRef().usersRef;
 
+  Future<DocumentSnapshot> getMessageDoc(String chatId, String messageId)async{
+    return await _chatRef.doc(chatId).collection("messages").doc(messageId).get();
+  }
+
   Future<QuerySnapshot> fetchChats({
     required String fromId,
     required String toId,
     DocumentSnapshot? cursor,
-    int? limit=25
+    int? limit,
   })
   async {
 
@@ -40,12 +45,13 @@ class ChatRepo{
   }
 
   Future<List<LocalChatListModel>> getChatList(String userId)async{
-    QuerySnapshot snapshot = await _usersRef
+    QuerySnapshot userChatsInfoSnapshot = await _usersRef
         .doc(userId).collection("chat")
         .orderBy("createdAt", descending: true)
         .get();
-    List<String> receiverIds = snapshot.docs.map((doc) => doc.id).toList();
-    var chatIds = snapshot.docs.map((doc) => doc.get("chatId")).toList();
+    Iterable<UserChatInfoModel> userChatsInfo =  userChatsInfoSnapshot.docs.map((doc) => UserChatInfoModel.fromFirestore(doc as DocumentSnapshot<Map<String, dynamic>>));
+    Iterable<String> receiverIds = userChatsInfo.map((chatInfo) => chatInfo.userId);
+    Iterable<String> chatIds = userChatsInfo.map((chatInfo) => chatInfo.chatId);
     var chatMetaFutures = chatIds.map((chatId) => _chatRef.doc(chatId).collection("meta").doc("stats").get());
     var receiversFutures = receiverIds.map((id) => UserRepo().getUser(id));
     var chatMetas = await Future.wait(chatMetaFutures);
@@ -55,7 +61,8 @@ class ChatRepo{
     for(var i=0; i<chatMetas.length; i++){
       results.add(LocalChatListModel(
           user: receivers[i]!,
-          meta: ChatInfoModel.fromFirestore(chatMetas[i])
+          chatMeta: ChatInfoModel.fromFirestore(chatMetas[i]),
+          chatInfo: userChatsInfo.elementAt(i)
       ));
     }
     return results;
@@ -106,21 +113,46 @@ class ChatRepo{
   Future<String?> getChatId({required String senderId, required String receiverId})async{
     var doc = await FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId).get();
     if(doc.exists){
-      return doc.data()!['chatId'];
+      return UserChatInfoModel.fromFirestore(doc).chatId;
     }
     return null;
   }
 
   Future<void> saveChatId({required String senderId, required String receiverId})async{
     String chatId = generateChatId(senderId, receiverId);
-    await FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId).set({
-      'chatId': chatId,
-      'createdAt': FieldValue.serverTimestamp()
-    });
-    await FirestoreRef().usersRef.doc(receiverId).collection("chat").doc(senderId).set({
-      'chatId': chatId,
-      'createdAt': FieldValue.serverTimestamp()
-    });
+    UserChatInfoModel userChatInfoModel = UserChatInfoModel(
+        userId: "",
+        chatId: chatId,
+        lastReadMessageId: "",
+        createdAt: DateTime.now()
+    );
+    await FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId).set(userChatInfoModel.toMap());
+    await FirestoreRef().usersRef.doc(receiverId).collection("chat").doc(senderId).set(userChatInfoModel.toMap());
+  }
+
+  Future<void> saveLastReadMessage(String senderId, String receiverId) async {
+    var docRef = FirestoreRef().usersRef.doc(senderId).collection("chat").doc(receiverId);
+    var snapshot = await docRef.get();
+    if(snapshot.exists){
+      UserChatInfoModel userChatInfoModel = UserChatInfoModel.fromFirestore(snapshot);
+      userChatInfoModel.lastReadMessageId = chat!.id;
+      await docRef.set(userChatInfoModel.toMap());
+    }
+  }
+
+  Future<QuerySnapshot> getUnreadMessages(
+      {
+        required String senderId,
+        required String receiverId,
+        DocumentSnapshot? lastUnreadMsg
+      }) async{
+    Query query = _chatRef.doc(generateChatId(senderId, receiverId))
+        .collection("messages")
+        .orderBy("createdAt");
+    if(lastUnreadMsg != null){
+      query = query.startAfterDocument(lastUnreadMsg);
+    }
+    return await query.get();
   }
 
 }

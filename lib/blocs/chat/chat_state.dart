@@ -26,6 +26,14 @@ class ChatLoadedState extends ChatState{
 
 }
 
+class FetchedUnreadMsgState extends ChatState{
+  final int unreadCount;
+  FetchedUnreadMsgState(this.unreadCount);
+  @override
+  List<Object?> get props =>[];
+
+}
+
 class ChatErrorState extends ChatState{
   final String message;
   ChatErrorState(this.message);

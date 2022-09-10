@@ -82,6 +82,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         fromId: localStorage.user!.id,
         toId: widget.user.id,
         cursor: currentCursor!,
+        limit: 25
       );
       setState(()=>loading=false);
       setNextChats(querySnapshot);
@@ -109,6 +110,9 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         .toList();
     chats2 = chats2.where((chat) => chats.indexWhere((chat2)=>chat2.id==chat.id) < 0).toList();
     chats.addAll(chats2.reversed);
+    ChatRepo(
+        chat: ChatModel.fromFirestore(newChats.docs.first as DocumentSnapshot<Map<String, dynamic>>)
+    ).saveLastReadMessage(localStorage.user!.id, widget.user.id);
     if(!chatInitialized){ // only set cursor once because subsequent update will reflect in app
       if(newChats.docs.isNotEmpty){
         currentCursor = newChats.docs.last;
@@ -210,7 +214,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                           borderRadius: BorderRadius.circular(20)
                       ),
                       child: Container(
-                        width: 100,
+                        width: 130,
                         height: 25,
                         constraints: const BoxConstraints(maxWidth: 150, maxHeight: 30),
                         alignment: Alignment.center,
@@ -383,7 +387,8 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                         createdFor: widget.user.id
                     );
                     ChatRepo(chat: newChat).sendMessage();
-                    notifySentMsgListener();
+                    chatController.clear();
+                    Timer(const Duration(seconds: 1), notifySentMsgListener);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -439,8 +444,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
   }
 
   void notifySentMsgListener(){
-    chatController.clear();
-    _scrollController.jumpTo(5000*(chats.length/25));
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(seconds: 1), curve: Curves.easeIn);
     setState(()=>showAttachFileIcon = true);
   }
 }

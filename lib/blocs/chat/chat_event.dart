@@ -21,3 +21,12 @@ class GetChatListEvent extends ChatEvent{
   List<Object?> get props => [];
 
 }
+
+class GetUnreadMessages extends ChatEvent{
+  final UserModel sender;
+  final UserModel receiver;
+  final String lastReadMsgId;
+  GetUnreadMessages({required this.sender, required this.receiver, required this.lastReadMsgId});
+  @override
+  List<Object?> get props => [];
+}
