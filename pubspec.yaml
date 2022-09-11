@@ -63,6 +63,7 @@ dependencies:
   flutterwave_standard: ^1.0.4
   timeago: ^3.3.0
   date_field: ^3.0.1
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_test:

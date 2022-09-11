@@ -326,7 +326,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                         GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: ()async{
-                              await Navigator.of(context).push(createRoute(const ServiceSearchScreen()));
+                              await NavigationService.toPage(const ServiceSearchScreen());
                               setState(() {});
                             },
                             child: Card(

@@ -1,5 +1,6 @@
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -289,3 +290,16 @@ class CustomLoadingOverlay extends StatelessWidget {
     );
   }
 }
+
+class LoadingThreeBounce extends StatelessWidget {
+  const LoadingThreeBounce({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SpinKitThreeBounce(
+      color: Colours.primary,
+      size: 30,
+    );
+  }
+}
+

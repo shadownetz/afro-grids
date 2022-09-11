@@ -3,6 +3,7 @@ import 'package:afro_grids/blocs/service/service_event.dart';
 import 'package:afro_grids/blocs/serviceCategory/service_category_bloc.dart';
 import 'package:afro_grids/models/service_model.dart';
 import 'package:afro_grids/repositories/service_category_repo.dart';
+import 'package:afro_grids/screens/view_ads_screen.dart';
 import 'package:afro_grids/screens/service/service_map_select_screen.dart';
 import 'package:afro_grids/screens/service/service_search_result_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
@@ -82,7 +83,7 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                           alignment: Alignment(0.8, 0.8)
                       )
                   ),
-                  child: Stack(
+                  child: Column(
                     children: [
                       // Search Section
                       Container(
@@ -191,6 +192,12 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                             ],
                           ),
                         ),
+                      ),
+                      const Expanded(
+                          child: SizedBox(
+                            height: double.infinity,
+                            child: ViewAdsScreen(),
+                          )
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
