@@ -11,7 +11,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../blocs/service/service_event.dart';
 import '../../blocs/service/service_state.dart';
 import '../../main.dart';
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/navigation_guards.dart';
 import '../../utilities/services/gmap_service.dart';

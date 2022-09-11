@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/payment_response_model.dart';
 import '../models/purchase_item_model.dart';
-import '../models/user_model.dart';
+import '../models/user/user_model.dart';
 import '../utilities/services/firebase_analytics_service.dart';
 import '../utilities/services/payment_service.dart';
 

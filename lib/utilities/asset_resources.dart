@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 

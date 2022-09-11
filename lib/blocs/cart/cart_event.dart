@@ -1,5 +1,5 @@
 import 'package:afro_grids/models/local/local_cart_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class CartEvent extends Equatable{}

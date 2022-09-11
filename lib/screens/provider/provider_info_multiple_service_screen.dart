@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../models/inventory_model.dart';
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/provider_widgets.dart';
 import '../../utilities/widgets/widgets.dart';

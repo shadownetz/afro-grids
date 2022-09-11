@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../class_constants.dart';
 import '../colours.dart';
 import '../widgets/button_widget.dart';
@@ -215,12 +215,6 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                 return null;
               },
             ),
-            const SizedBox(height: 20,),
-            const Text(
-              "After you complete the registration process, your account will be temporarily placed on hold until approved. This usually takes not less than 48 hours",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black54),
-            ),
             const SizedBox(height: 50,),
             ElevatedButton(
                 style: buttonLgStyle(),
@@ -247,7 +241,15 @@ class _ProviderSignUpFormState extends State<ProviderSignUpForm> {
                   }
                 },
                 child: const Text("Sign up")
-            )
+            ),
+            const SizedBox(height: 20,),
+            const Center(
+              child: Text(
+                "After registration you will be redirected to complete your payment",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black54),
+              ),
+            ),
           ],
         )
     );

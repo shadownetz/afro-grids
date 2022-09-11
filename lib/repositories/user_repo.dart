@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:afro_grids/configs/firestorage_references.dart';
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/main.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/repositories/auth_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/geofire_service.dart';

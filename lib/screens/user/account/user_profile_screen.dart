@@ -1,4 +1,4 @@
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/screens/user/account/edit_profile_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';

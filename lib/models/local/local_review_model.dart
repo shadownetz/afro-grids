@@ -1,5 +1,5 @@
 import 'package:afro_grids/models/review_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 
 class LocalReviewModel{
   ReviewModel review;

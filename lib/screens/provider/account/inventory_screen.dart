@@ -18,7 +18,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../../blocs/inventory/inventory_state.dart';
 import '../../../blocs/user/user_state.dart';
 import '../../../models/inventory_model.dart';
-import '../../../models/user_model.dart';
+import '../../../models/user/user_model.dart';
 import '../../../utilities/class_constants.dart';
 import '../../../utilities/widgets/provider_widgets.dart';
 

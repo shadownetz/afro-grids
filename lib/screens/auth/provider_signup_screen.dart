@@ -1,5 +1,7 @@
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
+import 'package:afro_grids/screens/auth/provider_membership_info_screen.dart';
 import 'package:afro_grids/utilities/forms/auth_forms.dart';
+import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +24,14 @@ class ProviderSignupScreen extends StatefulWidget {
 }
 
 class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
-  
+  AuthBloc? _authBloc;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
-          title: AppBarLogo(),
+          title: const AppBarLogo(),
         ),
         body: CustomLoadingOverlay(
           widget: BlocConsumer<AuthBloc, AuthState>(
@@ -51,6 +53,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
               }
             },
             builder: (context, state){
+              _authBloc = BlocProvider.of<AuthBloc>(context);
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: SingleChildScrollView(
@@ -68,8 +71,11 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                         ),
                       ),
                       ProviderSignUpForm(
-                        onComplete: (user, placeId, password, avatarFile){
-                          BlocProvider.of<AuthBloc>(context).add(SignUpWithEmailPasswordEvent(user: user, placeId: placeId, password: password, avatar: avatarFile));
+                        onComplete: (user, placeId, password, avatarFile)async{
+                          var status = await NavigationService.toPage(const ProviderMembershipInfoScreen());
+                          if(status == true){
+                            _authBloc!.add(SignUpWithEmailPasswordEvent(user: user, placeId: placeId, password: password, avatar: avatarFile));
+                          }
                         },
                       ),
                       TextButton(
@@ -91,7 +97,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                           Expanded(child: Divider(height: 10, color: Colors.black26,))
                         ],
                       ),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [

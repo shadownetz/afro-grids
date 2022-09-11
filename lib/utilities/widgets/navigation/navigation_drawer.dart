@@ -104,7 +104,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           (localStorage.user!.accessLevel == AccessLevel.superAdmin || localStorage.user!.accessLevel == AccessLevel.admin)?
           const Expanded(
-              flex: 2,
               child:  Padding(
                 padding: EdgeInsets.all(10),
                 child: AdminNav(),

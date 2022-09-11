@@ -3,7 +3,7 @@ import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user_model.dart';
+import '../models/user/user_model.dart';
 import '../screens/provider/provider_info_single_service_screen.dart';
 
 class NavigationGuards{

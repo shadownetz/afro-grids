@@ -7,7 +7,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../blocs/user/user_event.dart';
 import '../../blocs/user/user_state.dart';
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
 

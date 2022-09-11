@@ -7,7 +7,7 @@ import 'package:afro_grids/blocs/service/service_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/review_model.dart';
 import 'package:afro_grids/models/service_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';

@@ -4,7 +4,7 @@ import 'package:afro_grids/blocs/user/user_bloc.dart';
 import 'package:afro_grids/blocs/user/user_event.dart';
 import 'package:afro_grids/main.dart';
 import 'package:afro_grids/models/local/local_cart_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/leave_a_review_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';

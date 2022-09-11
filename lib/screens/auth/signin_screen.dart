@@ -7,7 +7,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../blocs/auth/auth_state.dart';
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../../utilities/alerts.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/navigation_guards.dart';

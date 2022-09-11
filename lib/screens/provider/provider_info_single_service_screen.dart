@@ -1,6 +1,6 @@
 import 'package:afro_grids/blocs/inventory/inventory_bloc.dart';
 import 'package:afro_grids/models/inventory_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:afro_grids/utilities/widgets/widget_models.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';

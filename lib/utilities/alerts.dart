@@ -49,7 +49,7 @@ class Alerts{
         return AlertDialog(
           title: Text(title, style: const TextStyle(fontSize: 16),),
           actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: const EdgeInsets.only(left: 20),
+          actionsPadding: const EdgeInsets.only(left: 20,bottom: 20),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -83,7 +83,7 @@ class Alerts{
         return AlertDialog(
           title: Text(title, style: TextStyle(fontSize: 16),),
           actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: EdgeInsets.only(left: 20),
+          actionsPadding: const EdgeInsets.only(left: 20,bottom: 20),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -117,7 +117,7 @@ class Alerts{
         return AlertDialog(
           title: Text(title, style: TextStyle(fontSize: 16),),
           actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: EdgeInsets.only(left: 20),
+          actionsPadding: const EdgeInsets.only(left: 20,bottom: 20),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

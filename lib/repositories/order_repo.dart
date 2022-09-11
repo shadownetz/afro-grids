@@ -4,7 +4,7 @@ import 'package:afro_grids/models/local/local_order_model.dart';
 import 'package:afro_grids/models/model_types.dart';
 import 'package:afro_grids/models/order_model.dart';
 import 'package:afro_grids/models/payment_response_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/repositories/inventory_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/func_utils.dart';

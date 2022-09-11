@@ -4,8 +4,7 @@ import 'package:afro_grids/blocs/chat/chat_bloc.dart';
 import 'package:afro_grids/blocs/device/device_bloc.dart';
 import 'package:afro_grids/blocs/device/device_event.dart';
 import 'package:afro_grids/main.dart';
-import 'package:afro_grids/models/chat_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/repositories/chat_repo.dart';
 import 'package:afro_grids/screens/user/chat/preview_files_screen.dart';
 import 'package:afro_grids/screens/user/chat/view_chat_content_screen.dart';
@@ -23,6 +22,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../blocs/device/device_state.dart';
+import '../../../models/chat/chat_model.dart';
 import '../../../utilities/services/navigation_service.dart';
 
 class ViewChatScreen extends StatefulWidget {

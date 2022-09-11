@@ -1,16 +1,8 @@
-import 'dart:io';
-
-import 'package:afro_grids/blocs/device/device_bloc.dart';
-import 'package:afro_grids/blocs/device/device_event.dart';
-import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
-import 'package:afro_grids/utilities/widgets/button_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../../../blocs/device/device_state.dart';
+import '../../../models/chat/chat_model.dart';
 
 class ViewChatContentScreen extends StatefulWidget {
   final ChatModel chat;

@@ -3,8 +3,8 @@ import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
-import '../utilities/currency.dart';
-import 'model_types.dart';
+import '../../utilities/currency.dart';
+import '../model_types.dart';
 
 class UserModel{
   late String id;

@@ -1,6 +1,6 @@
 import 'package:afro_grids/blocs/user/user_bloc.dart';
 import 'package:afro_grids/blocs/user/user_event.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/utilities/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

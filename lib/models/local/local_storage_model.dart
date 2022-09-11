@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 
 import 'local_cart_model.dart';
 

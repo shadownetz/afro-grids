@@ -1,6 +1,6 @@
 import 'package:afro_grids/models/inventory_model.dart';
 import 'package:afro_grids/models/local/local_review_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/screens/user/cart_screen.dart';
 import 'package:afro_grids/screens/user/chat/view_chat_screen.dart';
 import 'package:afro_grids/screens/user/report_screen.dart';

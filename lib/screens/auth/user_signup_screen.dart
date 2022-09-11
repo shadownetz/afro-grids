@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../blocs/auth/auth_state.dart';
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import '../../utilities/widgets/button_widget.dart';
 
 class UserSignUpScreen extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:afro_grids/blocs/service/service_bloc.dart';
 import 'package:afro_grids/blocs/service/service_event.dart';
 import 'package:afro_grids/blocs/service/service_state.dart';
 import 'package:afro_grids/models/service_model.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/screens/provider/provider_info_single_service_screen.dart';
 import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/services/gmap_service.dart';

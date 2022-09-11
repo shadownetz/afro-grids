@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as g_map;
 import 'package:http/http.dart' as http;
 
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 
 
 class GMapService{

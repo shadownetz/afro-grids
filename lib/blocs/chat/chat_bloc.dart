@@ -1,10 +1,11 @@
 import 'package:afro_grids/blocs/chat/chat_event.dart';
 import 'package:afro_grids/blocs/chat/chat_state.dart';
-import 'package:afro_grids/models/chat_model.dart';
 import 'package:afro_grids/repositories/chat_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../models/chat/chat_model.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState>{
   ChatBloc(): super(ChatInitialState()){

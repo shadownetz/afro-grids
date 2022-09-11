@@ -1,17 +1,16 @@
 import 'dart:io';
 
 import 'package:afro_grids/configs/firestore_references.dart';
-import 'package:afro_grids/models/chat_info_model.dart';
+import 'package:afro_grids/models/chat/chat_info_model.dart';
 import 'package:afro_grids/models/local/local_chat_list_model.dart';
 import 'package:afro_grids/repositories/user_repo.dart';
-import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../configs/firestorage_references.dart';
 import '../main.dart';
-import '../models/chat_model.dart';
-import '../models/user_chat_info_model.dart';
+import '../models/chat/chat_model.dart';
+import '../models/user/user_chat_info_model.dart';
 
 class ChatRepo{
 

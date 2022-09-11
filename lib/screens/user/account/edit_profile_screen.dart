@@ -1,6 +1,6 @@
 import 'package:afro_grids/blocs/user/user_bloc.dart';
 import 'package:afro_grids/blocs/user/user_event.dart';
-import 'package:afro_grids/models/user_model.dart';
+import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/navigation_guards.dart';
