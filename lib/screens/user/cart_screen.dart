@@ -149,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                           onPressed: (){
                             if(localStorage.user!.deliveryAddress.isNotEmpty){
                               NavigationService.toPage(
-                                  CartBlankScreen(
+                                  BlankScreen(
                                     run: ()=>BlocProvider
                                         .of<CartBloc>(context)
                                         .add(AddCheckoutEvent(localCart: localCart, user: localStorage.user!)),

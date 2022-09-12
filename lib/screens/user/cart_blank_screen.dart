@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../utilities/colours.dart';
 
-class CartBlankScreen extends StatelessWidget {
+class BlankScreen extends StatelessWidget {
   final void Function() run;
 
-  const CartBlankScreen({Key? key, required this.run}) : super(key: key);
+  const BlankScreen({Key? key, required this.run}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +13,9 @@ class CartBlankScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colours.tertiary,
         appBar: AppBar(
-          title: const Text("Checkout"),
+          title: const Text("AfroGrids"),
         ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.height,
       ),

@@ -1,5 +1,6 @@
 import 'package:afro_grids/utilities/currency.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 
 extension DateTimeFormatter on DateTime{
   static List<String> months = [ "January", "February", "March", "April", "May", "June",
@@ -15,6 +16,10 @@ extension DateTimeFormatter on DateTime{
 
   String toTimeStr(){
     return DateFormat.jm().format(this);
+  }
+
+  Future<DateTime> networkTimestamp() async {
+    return await NTP.now();
   }
 }
 

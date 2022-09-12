@@ -5,6 +5,7 @@ import 'package:afro_grids/repositories/auth_repo.dart';
 import 'package:afro_grids/repositories/user_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/gmap_service.dart';
+import 'package:afro_grids/utilities/type_extensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     on<SignInWithGoogleEvent>(_mapSignInWithGoogleEventToEvent);
     on<UpdatePhoneEvent>(_mapUpdatePhoneEventToEvent);
     on<LogoutEvent>(_mapLogoutEventToEvent);
+    on<SubscribeMemberEvent>(_onSubscribeMemberEvent);
   }
 
   void _mapCheckAuthEventToEvent(CheckAuthEvent event, Emitter<AuthState> emit)async{
@@ -30,7 +32,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
           if(user != null){
             localStorage.user = user;
             if(user.phoneVerified){
-              if(!user.isProvider || (user.isProvider && user.isApproved)){
+              if(user.isProvider){
+                final userRepo = UserRepo(user: user);
+                if(!(await userRepo.isSubscribed())){
+                  emit(MembershipSubscriptionState(user: user));
+                  return;
+                }
+              }
+              if(user.isApproved){
                 UserRepo(user: user).persistUser();
                 emit(AuthenticatedState(user: user));
               }else{
@@ -211,6 +220,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
       await UserRepo(user: event.user).updatePhone(event.phone);
       emit(PhoneUpdatedState(phone: event.phone));
       await Future.delayed(Duration(seconds: 1));
+    }catch(e){
+      emit(AuthErrorState(e.toString()));
+    }
+  }
+
+  void _onSubscribeMemberEvent(SubscribeMemberEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+    try{
+      var userRepo = UserRepo(user: event.user);
+      event.subscription.createdAt = await DateTime.now().networkTimestamp();
+      event.subscription.paymentResponse = (await userRepo.subscribe(membership: event.subscription)).toJson();
+      event.subscription.status = SubscriptionStatus.approved;
+      await userRepo.addMembershipSubscription(event.subscription);
+      add(CheckAuthEvent());
     }catch(e){
       emit(AuthErrorState(e.toString()));
     }

@@ -3,16 +3,23 @@ import 'dart:io';
 import 'package:afro_grids/configs/firestorage_references.dart';
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/main.dart';
+import 'package:afro_grids/models/purchase_item_model.dart';
 import 'package:afro_grids/models/user/user_model.dart';
 import 'package:afro_grids/repositories/auth_repo.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/geofire_service.dart';
+import 'package:afro_grids/utilities/type_extensions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/payment_response_model.dart';
+import '../models/user/provider_membership_model.dart';
 import '../utilities/services/device_service.dart';
+import '../utilities/services/firebase_analytics_service.dart';
+import '../utilities/services/navigation_service.dart';
+import '../utilities/services/payment_service.dart';
 
 class UserRepo{
   final UserModel? _user;
@@ -140,6 +147,54 @@ class UserRepo{
   Future<List<UserModel?>> getFavorites()async{
     var futures = _user!.favorites.map((id) => getUser(id));
     return await Future.wait(futures);
+  }
+  
+  Future<void> addMembershipSubscription(UserSubscriptionModel membership) async{
+    await _userRef.doc(_user!.id).collection("subscriptions").add(membership.toMap());
+  }
+
+  Future<UserSubscriptionModel?> getRecentSubscription()async{
+    var subDoc = await _userRef.doc(_user!.id).collection("subscriptions")
+        .orderBy("createdAt", descending: true)
+        .limit(1).get();
+    if(subDoc.docs.isNotEmpty){
+      return UserSubscriptionModel.fromFirestore(subDoc.docs.first);
+    }
+    return null;
+  }
+
+  Future<bool> isSubscribed() async {
+    var subscription = await getRecentSubscription();
+    if(subscription != null){
+      var today = await DateTime.now().networkTimestamp();
+      return today.isAfter(subscription.expireAt);
+    }
+    return false;
+  }
+
+  Future<PaymentResponseModel> subscribe({required UserSubscriptionModel membership}) async {
+    FirebaseAnalyticsService firebaseAnalyticsService = FirebaseAnalyticsService();
+    final label = "Membership Subscription for ${_user!.email}";
+    const description = "Membership Subscription";
+    PaymentResponseModel response = await PaymentService().pay(
+        context: NavigationService.navigatorKey.currentContext!,
+        email: _user!.email,
+        firstName: _user!.firstName,
+        userId: _user!.id,
+        phone: _user!.phone,
+        amount: membership.amount.toString(),
+        paymentLabel: label,
+        description: description,
+        currency: membership.currency
+    );
+    await firebaseAnalyticsService.logPaymentEvent(
+        currency: response.currency!,
+        price: response.amount!,
+        transactionId: response.txRef!,
+        items: [PurchaseItemModel(label, description, membership.amount, 1, membership.currency)]
+    );
+    return response;
+
   }
 
 }

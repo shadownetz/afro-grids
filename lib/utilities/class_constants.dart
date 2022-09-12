@@ -39,3 +39,13 @@ class ChatType{
 class Currency{
   static const ngn = 'NGN';
 }
+
+class SubscriptionContext {
+  static const membership = "MEMBERSHIP";
+}
+
+class SubscriptionStatus{
+  static const pending = 'PENDING';
+  static const approved = 'APPROVED';
+  static const declined = 'DECLINED';
+}

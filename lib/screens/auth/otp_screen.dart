@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
 import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/main.dart';
+import 'package:afro_grids/screens/auth/provider_membership_info_screen.dart';
 import 'package:afro_grids/utilities/forms/auth_forms.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
@@ -59,6 +60,9 @@ class _OTPScreenState extends State<OTPScreen> {
                 }
                 if(state is AuthErrorState){
                   Alerts(context).showErrorDialog(title: "Verification Error", message: state.message);
+                }
+                if(state is MembershipSubscriptionState){
+                  NavigationService.toPage(ProviderMembershipInfoScreen(user: state.user,));
                 }
                 if(state is AuthenticatedState){
                   if(state.user!.isProvider){

@@ -60,3 +60,10 @@ class PhoneUpdatedState extends AuthState{
   @override
   List<Object?> get props => [];
 }
+
+class MembershipSubscriptionState extends AuthState{
+  final UserModel user;
+  MembershipSubscriptionState({required this.user});
+  @override
+  List<Object?> get props => [];
+}

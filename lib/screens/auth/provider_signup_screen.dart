@@ -35,17 +35,20 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
         ),
         body: CustomLoadingOverlay(
           widget: BlocConsumer<AuthBloc, AuthState>(
-            listener: (context, state){
+            listener: (context, state) {
               if(state is AuthLoadingState){
                 context.loaderOverlay.show();
               }else{
                 context.loaderOverlay.hide();
               }
               if(state is AuthErrorState){
-                Alerts(context).showErrorDialog(title: "Road Block", message: state.message);
+                Alerts(context).showErrorDialog(title: "Could not complete operation", message: state.message);
               }
               if(state is PhoneVerificationState){
-                Navigator.of(context).push(createRoute(const OTPScreen()));
+                NavigationService.toPage(const OTPScreen());
+              }
+              if(state is UnAuthenticatedState){
+                NavigationService.pushNamedAndRemoveAll("/signin", state.message);
               }
               if(state is AuthenticatedState){
                 NavigationGuards(user: state.user!).navigateToDashboard();
@@ -72,10 +75,7 @@ class _ProviderSignupScreenState extends State<ProviderSignupScreen> {
                       ),
                       ProviderSignUpForm(
                         onComplete: (user, placeId, password, avatarFile)async{
-                          var status = await NavigationService.toPage(const ProviderMembershipInfoScreen());
-                          if(status == true){
-                            _authBloc!.add(SignUpWithEmailPasswordEvent(user: user, placeId: placeId, password: password, avatar: avatarFile));
-                          }
+                          _authBloc!.add(SignUpWithEmailPasswordEvent(user: user, placeId: placeId, password: password, avatar: avatarFile));
                         },
                       ),
                       TextButton(
