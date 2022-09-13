@@ -25,9 +25,16 @@ class AccessStatus{
 }
 
 class OrderStatus{
-  static const pending = 'PENDING';
-  static const approved = 'APPROVED';
-  static const declined = 'DECLINED';
+  static const accepted = "ACCEPTED";
+}
+
+class DeliveryStatus{
+  static const completed = 'COMPLETED';
+  static const cancelled = 'CANCELLED';
+  static const delayed = "DELAYED";
+  static const processing = "PROCESSING";
+  static const delivering = "DELIVERING";
+  static const delivered = "DELIVERED";
 }
 
 class ChatType{

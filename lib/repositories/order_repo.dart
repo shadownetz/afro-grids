@@ -28,7 +28,7 @@ class OrderRepo{
         deliveryAddress: user.deliveryAddress,
         totalPrice: cart.totalPrice,
         paymentResponse: paymentResponse?.toJson(),
-        status: OrderStatus.approved,
+        status: OrderStatus.accepted,
         createdAt: DateTime.now()
     );
     await _orderRef.add(newOrder.toMap());
