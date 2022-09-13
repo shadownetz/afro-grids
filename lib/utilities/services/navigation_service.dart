@@ -21,6 +21,10 @@ class NavigationService{
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(pageName, (route)=>false);
   }
 
+  static Future<void> pushPageReplacement(Widget screen){
+    return navigatorKey.currentState!.pushReplacement(createRoute(screen));
+  }
+
   static void exitPage([dynamic value]){
     return navigatorKey.currentState!.pop(value);
   }

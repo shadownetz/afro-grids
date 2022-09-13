@@ -34,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
             if(user.phoneVerified){
               if(user.isProvider){
                 final userRepo = UserRepo(user: user);
-                if(!(await userRepo.isSubscribed())){
+                if((await userRepo.isSubscribed()) == false){
                   emit(MembershipSubscriptionState(user: user));
                   return;
                 }

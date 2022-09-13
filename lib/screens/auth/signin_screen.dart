@@ -1,6 +1,7 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
 import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/screens/auth/otp_screen.dart';
+import 'package:afro_grids/screens/auth/provider_membership_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
@@ -53,8 +54,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 NavigationGuards(user: state.user!).navigateToDashboard();
                 Alerts(context).showToast("Logged in");
               }
+              if(state is MembershipSubscriptionState){
+                NavigationService.toPage(ProviderMembershipInfoScreen(user: state.user,));
+              }
               if(state is UnAuthenticatedState){
-                NavigationService.pushNamedAndRemoveAll("/signin", state.message);
+                if(state.message != null){
+                  Alerts(context).showInfoDialog(title: "Message", message: state.message!);
+                }
+                // NavigationService.pushNamedAndRemoveAll("/signin", state.message);
               }
             },
             builder: (context, state){

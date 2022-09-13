@@ -148,13 +148,14 @@ class UserRepo{
     var futures = _user!.favorites.map((id) => getUser(id));
     return await Future.wait(futures);
   }
-  
+
   Future<void> addMembershipSubscription(UserSubscriptionModel membership) async{
     await _userRef.doc(_user!.id).collection("subscriptions").add(membership.toMap());
   }
 
-  Future<UserSubscriptionModel?> getRecentSubscription()async{
+  Future<UserSubscriptionModel?> getRecentMembershipSubscription()async{
     var subDoc = await _userRef.doc(_user!.id).collection("subscriptions")
+        .where("context", isEqualTo: SubscriptionContext.membership)
         .orderBy("createdAt", descending: true)
         .limit(1).get();
     if(subDoc.docs.isNotEmpty){
@@ -164,10 +165,10 @@ class UserRepo{
   }
 
   Future<bool> isSubscribed() async {
-    var subscription = await getRecentSubscription();
+    var subscription = await getRecentMembershipSubscription();
     if(subscription != null){
       var today = await DateTime.now().networkTimestamp();
-      return today.isAfter(subscription.expireAt);
+      return today.isBefore(subscription.expireAt);
     }
     return false;
   }

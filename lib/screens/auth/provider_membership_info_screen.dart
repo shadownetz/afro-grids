@@ -51,148 +51,159 @@ class _ProviderMembershipInfoScreenState extends State<ProviderMembershipInfoScr
       // backgroundColor: Colours.tertiary,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const BackButton(color: Colors.white,),
         title: const AppBarLogo(theme: "light",),
       ),
       body: CustomLoadingOverlay(
-        widget: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state){
-            if(state is AuthLoadingState){
-              context.loaderOverlay.show();
-            }else{
-              context.loaderOverlay.hide();
-            }
-            if(state is UnAuthenticatedState){
-              NavigationService.pushNamedAndRemoveAll("/signin", state.message);
-            }
-            if(state is AuthenticatedState){
-              NavigationGuards(user: state.user!).navigateToDashboard();
-              Alerts(context).showToast("Logged in");
-            }
-          },
-          builder: (context, state){
-            return Container(
-              height: deviceHeight,
-              padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/grid-abstract.jpg"),
-                      fit: BoxFit.cover
-                  )
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const Center(
-                      child: Text(
-                        "Become part of the GRID",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold
+        widget: BlocProvider(
+          create: (context)=>AuthBloc(),
+          child: BlocConsumer<AuthBloc, AuthState>(
+            listener: (context, state){
+              if(state is AuthLoadingState){
+                context.loaderOverlay.show();
+              }else{
+                context.loaderOverlay.hide();
+              }
+              if(state is UnAuthenticatedState){
+                NavigationService.pushNamedAndRemoveAll("/signin", state.message);
+              }
+              if(state is AuthErrorState){
+                Alerts(context).showErrorDialog(title: "Error", message: state.message);
+              }
+              if(state is AuthenticatedState){
+                NavigationGuards(user: state.user!).navigateToDashboard();
+                Alerts(context).showToast("Logged in");
+              }
+            },
+            builder: (context, state){
+              return Container(
+                height: deviceHeight,
+                padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/grid-abstract.jpg"),
+                        fit: BoxFit.cover
+                    )
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Center(
+                        child: Text(
+                          "Become part of the GRID",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 50,),
-                    SizedBox(
-                      height: 200,
-                      child: buildInfo(),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: ()=>setState(()=>selectedAMT=monthlyAMT),
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colours.primary,
-                                border: selectedAMT==monthlyAMT?  Border.all(color: Colours.secondary): null
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                const Text("Monthly",style: TextStyle(color: Colors.white),),
-                                Text("\$$monthlyAMT /month",style: TextStyle(color: Colors.white),),
-                                Text("Recurring payment of \$$monthlyAMT", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: ()=>setState(()=>selectedAMT=yearlyAMT),
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colours.primary,
-                                border: selectedAMT==yearlyAMT?  Border.all(color: Colours.secondary): null
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                const Text("Yearly",style: TextStyle(color: Colors.white),),
-                                Text("\$${yearlyAMT/12} /month",style: TextStyle(color: Colors.white),),
-                                Text("Recurring payment \$$yearlyAMT", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)
-                              ],
+                      const SizedBox(height: 50,),
+                      SizedBox(
+                        height: 200,
+                        child: buildInfo(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: ()=>setState(()=>selectedAMT=monthlyAMT),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colours.primary,
+                                  border: selectedAMT==monthlyAMT?  Border.all(color: Colours.secondary): null
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text("Monthly",style: TextStyle(color: Colors.white),),
+                                  Text("\$$monthlyAMT /month",style: const TextStyle(color: Colors.white),),
+                                  Text("Recurring payment of \$$monthlyAMT", textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey),)
+                                ],
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 50,),
-                    ElevatedButton(
-                        style: buttonSmStyle(),
-                        onPressed: ()async{
-                          DateTime today = await DateTime.now().networkTimestamp();
-                          DateTime expiration;
-                          if(selectedAMT == monthlyAMT){
-                            expiration = DateTime(today.year, today.month+1, today.day);
-                          }else{
-                            expiration = DateTime(today.year+1, today.month, today.day);
-                          }
-                          var subscription = UserSubscriptionModel(
-                              id: "",
-                              context: SubscriptionContext.membership,
-                              amount: selectedAMT,
-                              paymentResponse: null,
-                              status: SubscriptionStatus.pending,
-                              currency: "USD",
-                              createdAt: DateTime.now(),
-                              createdBy: widget.user.id,
-                              expireAt: expiration
-                          );
-                          NavigationService.toPage(
-                              BlankScreen(
-                                run: ()=>BlocProvider
-                                    .of<AuthBloc>(context)
-                                    .add(SubscribeMemberEvent(user: widget.user, subscription: subscription)),
-                              )
-                          );
+                          GestureDetector(
+                            onTap: ()=>setState(()=>selectedAMT=yearlyAMT),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colours.primary,
+                                  border: selectedAMT==yearlyAMT?  Border.all(color: Colours.secondary): null
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text("Yearly",style: TextStyle(color: Colors.white),),
+                                  Text("\$${yearlyAMT/12} /month",style: const TextStyle(color: Colors.white),),
+                                  Text("Recurring payment \$$yearlyAMT", textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey),)
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 50,),
+                      ElevatedButton(
+                          style: buttonSmStyle(),
+                          onPressed: ()async{
+                            DateTime today = await DateTime.now().networkTimestamp();
+                            DateTime expiration;
+                            if(selectedAMT == monthlyAMT){
+                              expiration = DateTime(today.year, today.month+1, today.day);
+                            }else{
+                              expiration = DateTime(today.year+1, today.month, today.day);
+                            }
+                            var subscription = UserSubscriptionModel(
+                                id: "",
+                                context: SubscriptionContext.membership,
+                                amount: selectedAMT,
+                                paymentResponse: null,
+                                status: SubscriptionStatus.pending,
+                                currency: "USD",
+                                createdAt: DateTime.now(),
+                                createdBy: widget.user.id,
+                                expireAt: expiration
+                            );
+                            NavigationService.toPage(
+                                BlankScreen(
+                                  run: ()=>BlocProvider
+                                      .of<AuthBloc>(context)
+                                      .add(SubscribeMemberEvent(user: widget.user, subscription: subscription)),
+                                )
+                            );
+                          },
+                          child: const Text("Join")
+                      ),
+                      const SizedBox(height: 30,),
+                      Text("You will be billed \$$selectedAMT", style: const TextStyle(color: Colors.white, fontSize: 18),),
+                      const SizedBox(height: 10,),
+                      const Text("*you can cancel anytime",
+                        style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+                      ),
+                      const SizedBox(height: 10,),
+                      const Text(
+                        "After completing this process, it takes not less than 24 hours for your account to be activated.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      const SizedBox(height: 20,),
+                      TextButton(
+                        child: const Text("Sign Out", style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
+                        onPressed: (){
+                          BlocProvider.of<AuthBloc>(context).add(LogoutEvent());
                         },
-                        child: const Text("Join")
-                    ),
-                    const SizedBox(height: 30,),
-                    Text("You will be billed \$$selectedAMT", style: const TextStyle(color: Colors.white, fontSize: 18),),
-                    const SizedBox(height: 10,),
-                    const Text("*you can cancel anytime",
-                      style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
-                    ),
-                    const SizedBox(height: 10,),
-                    const Text(
-                      "After completing this process, it takes not less than 24 hours for your account to be activated.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 20,),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

@@ -9,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../utilities/colours.dart';
+import '../utilities/services/navigation_service.dart';
 import '../utilities/widgets/widgets.dart';
+import 'auth/provider_membership_info_screen.dart';
 
 class OnboardScreen extends StatefulWidget {
   const OnboardScreen({Key? key}) : super(key: key);
@@ -42,6 +44,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     context.loaderOverlay.show();
                   }else{
                     context.loaderOverlay.hide();
+                  }
+                  if(state is MembershipSubscriptionState){
+                    NavigationService.pushPageReplacement(ProviderMembershipInfoScreen(user: state.user,));
                   }
                 },
                 builder: (context, state){
