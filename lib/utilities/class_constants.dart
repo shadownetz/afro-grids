@@ -56,3 +56,9 @@ class SubscriptionStatus{
   static const approved = 'APPROVED';
   static const declined = 'DECLINED';
 }
+
+class WithdrawalStatus{
+  static const pending = 'PENDING';
+  static const approved = 'APPROVED';
+  static const declined = 'DECLINED';
+}

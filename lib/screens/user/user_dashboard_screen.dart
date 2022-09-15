@@ -8,6 +8,7 @@ import 'package:afro_grids/screens/user/orders/orders_screen.dart';
 import 'package:afro_grids/screens/service/service_search_screen.dart';
 import 'package:afro_grids/utilities/alerts.dart';
 import 'package:afro_grids/utilities/asset_resources.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:afro_grids/utilities/widgets/navigation/navigation_drawer.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import '../../blocs/dashboard/dashboard_state.dart';
 import '../../main.dart';
 import '../../utilities/colours.dart';
 import '../../utilities/widgets/widgets.dart';
+import '../provider/deliveries/deliveries_screen.dart';
 import 'chat/chats_screen.dart';
 
 class UserDashboardScreen extends StatefulWidget {
@@ -50,7 +52,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
       backgroundColor: Colours.tertiary,
       appBar: AppBar(
         backgroundColor: Colours.tertiary,
-        title: AppBarLogo(theme: 'dark'),
+        title: const AppBarLogo(theme: 'dark'),
         actions: [
           IconButton(
               onPressed: ()=>scaffoldKey.currentState!.isEndDrawerOpen?
@@ -287,6 +289,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                             )
                           ],
                         ),
+                        localStorage.user!.accessLevel == AccessLevel.user?
                         // history section
                         GestureDetector(
                           onTap: ()async{
@@ -315,6 +318,41 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
                                     children: const [
                                       Text("History", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
                                       Text("view your past orders", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ):
+                        // provider deliveries
+                        GestureDetector(
+                          onTap: ()async{
+                            await NavigationService.toPage(const DeliveryScreen());
+                            setState(() {});
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            surfaceTintColor: Colors.white,
+                            margin: const EdgeInsets.only(top: 30),
+                            child: SizedBox(
+                              height: 90,
+                              width: deviceWidth-20,
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 10,),
+                                  Image(
+                                    width: 40,
+                                    height: 40,
+                                    image: AssetResources().cartLogo(),
+                                  ),
+                                  const SizedBox(width: 10,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text("Deliveries", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                                      Text("view your pending deliveries", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),)
                                     ],
                                   )
                                 ],

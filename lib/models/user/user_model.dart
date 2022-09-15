@@ -29,8 +29,8 @@ class UserModel{
   late bool phoneVerified;
   late bool emailVerified;
   late String deliveryAddress;
-  late double outstandingBalance;
-  late double availableBalance;
+  late num outstandingBalance;
+  late num availableBalance;
 
 
   UserModel({

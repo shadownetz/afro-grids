@@ -17,6 +17,10 @@ class AssetResources{
     return const AssetImage('assets/avatars/man.png');
   }
 
+  ImageProvider cartLogo(){
+    return const AssetImage("assets/icons/cart.png");
+  }
+
   Future<Uint8List> getGMapMarkerIcon()async{
     return await getBytesFromAsset("assets/icons/afroGridsLocPin.png", 60);
   }

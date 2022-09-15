@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProviderDeliveryModel{
+class DeliveryModel{
   late String id;
   late String providerId;
   late String inventoryId;
@@ -12,7 +12,7 @@ class ProviderDeliveryModel{
   late String contactAddress;
   late String status;
 
-  ProviderDeliveryModel({
+  DeliveryModel({
     required this.id,
     required this.providerId,
     required this.inventoryId,
@@ -25,7 +25,7 @@ class ProviderDeliveryModel{
     required this.status
   });
 
-  ProviderDeliveryModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> delivery):
+  DeliveryModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> delivery):
         id = delivery.id,
         providerId = delivery.data()!['providerId'],
         inventoryId = delivery.data()!['inventoryId'],
