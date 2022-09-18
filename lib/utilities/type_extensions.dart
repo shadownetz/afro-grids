@@ -1,4 +1,6 @@
+import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/currency.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ntp/ntp.dart';
 
@@ -26,5 +28,15 @@ extension DateTimeFormatter on DateTime{
 extension CurrencyFormatter on String{
   String currencySymbol(){
     return CurrencyUtil().currencySymbol(this);
+  }
+  Color statusColor(){
+    var str = toLowerCase();
+    if(str == 'pending'){
+      return Colours.secondary;
+    }
+    else if(str == 'approved'){
+      return Colours.primary;
+    }
+    return Colors.red;
   }
 }

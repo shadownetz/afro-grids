@@ -1,10 +1,15 @@
 import 'package:afro_grids/models/user/user_model.dart';
+import 'package:afro_grids/screens/provider/account/withdraw_request_screen.dart';
 import 'package:afro_grids/screens/user/account/edit_profile_screen.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/colours.dart';
+import 'package:afro_grids/utilities/currency.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../../../utilities/widgets/widgets.dart';
+import '../../provider/account/view_withdraw_request_screen.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final UserModel user;
@@ -19,6 +24,15 @@ class UserProfileScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const BackButton(color: Colors.white,),
         title: const Text("Profile"),
+        actions: user.accessLevel == AccessLevel.provider ?
+        [
+          IconButton(
+              onPressed: (){
+                NavigationService.toPage(ViewWithdrawRequestScreen(user: user));
+              },
+              icon: const Icon(Ionicons.file_tray, color: Colors.white,)
+          )
+        ]: null,
       ),
       body: Container(
         height: deviceHeight,
@@ -42,6 +56,30 @@ class UserProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30,),
+            user.accessLevel == AccessLevel.provider?
+            ListTile(
+              title: Text(
+                "${CurrencyUtil().currencySymbol(user.currency)}${user.availableBalance}",
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+              ),
+              subtitle: const Text("Available balance", style: TextStyle(fontSize: 15, color: Colors.grey),),
+              trailing: user.availableBalance > 0 ?
+              ElevatedButton(
+                child: const Text(
+                  "withdraw",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                onPressed: (){
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context)=>WithdrawRequestScreen(user: user,)
+                  );
+                },
+              ): null,
+            ):
+            const SizedBox(),
             // phone
             ListTile(
               title: Text(user.phone, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),

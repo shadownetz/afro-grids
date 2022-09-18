@@ -40,4 +40,7 @@ class FirestoreRef{
   CollectionReference get deliveriesRef{
     return _db.collection("deliveries");
   }
+  CollectionReference get withdrawalRef{
+    return _db.collection("withdrawals");
+  }
 }
