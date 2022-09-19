@@ -106,20 +106,26 @@ class _OnboardScreenState extends State<OnboardScreen> {
                         currentScreenIndex != 2 ?
                         Align(
                           alignment: Alignment.bottomCenter,
-                          child: ElevatedButton(
-                            onPressed: ()=>carouselController.nextPage(),
-                            style: buttonSmStyle(),
-                            child: const Text("Next"),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ElevatedButton(
+                              onPressed: ()=>carouselController.nextPage(),
+                              style: buttonSmStyle(),
+                              child: const Text("Next"),
+                            ),
                           ),
                         ):
                         Align(
                           alignment: Alignment.bottomCenter,
-                          child: ElevatedButton(
-                            onPressed: ()=>{
-                              Navigator.of(context).pushReplacementNamed("/user-signup")
-                            },
-                            style: buttonSmStyle(),
-                            child: const Text("Continue"),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ElevatedButton(
+                              onPressed: ()=>{
+                                Navigator.of(context).pushReplacementNamed("/user-signup")
+                              },
+                              style: buttonSmStyle(),
+                              child: const Text("Continue"),
+                            ),
                           ),
                         )
                       ],

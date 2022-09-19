@@ -31,6 +31,7 @@ class UserModel{
   late String deliveryAddress;
   late num outstandingBalance;
   late num availableBalance;
+  late num netFees;
 
 
   UserModel({
@@ -57,7 +58,8 @@ class UserModel{
     this.emailVerified=false,
     this.deliveryAddress="",
     this.outstandingBalance=0,
-    this.availableBalance=0
+    this.availableBalance=0,
+    this.netFees=0
   });
 
   UserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> user):
@@ -84,7 +86,8 @@ class UserModel{
         phoneVerified = user.data()!['phoneVerified'],
         deliveryAddress = user.data()!['deliveryAddress']??"",
         outstandingBalance = user.data()!['outstandingBalance']??0,
-        availableBalance = user.data()!['availableBalance']??0;
+        availableBalance = user.data()!['availableBalance']??0,
+        netFees = user.data()!['netFees']??0;
 
   UserModel.providerInstance():
         id = "",
@@ -110,7 +113,8 @@ class UserModel{
         phoneVerified = false,
         deliveryAddress="",
         outstandingBalance = 0,
-        availableBalance = 0;
+        availableBalance = 0,
+        netFees = 0;
 
   UserModel.userInstance():
         id = "",
@@ -136,35 +140,37 @@ class UserModel{
         phoneVerified = false,
         deliveryAddress="",
         outstandingBalance = 0,
-        availableBalance = 0;
+        availableBalance = 0,
+        netFees = 0;
 
   Map<String, dynamic> toMap(){
     return {
-    'firstName': firstName,
-    'lastName': lastName,
-    'middleName': middleName,
-    'avatar': avatar,
-    'email': email,
-    'phone': phone,
-    'authType': authType,
-    'accessLevel': accessLevel,
-    'currency': currency,
-    'address': address,
-    'location': location.data,
-    'createdAt': Timestamp.fromDate(createdAt),
-    'updatedAt': Timestamp.fromDate(updatedAt),
-    'serviceId': serviceId,
-    'serviceType': serviceType,
-    'ratings': reviews.toMap(),
-    'accessStatus': accessStatus,
-    'reviews': reviews.toMap(),
-    'favorites': favorites.toList(),
-    'emailVerified': emailVerified,
-    'phoneVerified': phoneVerified,
-    'deliveryAddress': deliveryAddress,
-    "outstandingBalance" : outstandingBalance,
-    "availableBalance" : availableBalance
-  };
+      'firstName': firstName,
+      'lastName': lastName,
+      'middleName': middleName,
+      'avatar': avatar,
+      'email': email,
+      'phone': phone,
+      'authType': authType,
+      'accessLevel': accessLevel,
+      'currency': currency,
+      'address': address,
+      'location': location.data,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
+      'serviceId': serviceId,
+      'serviceType': serviceType,
+      'ratings': reviews.toMap(),
+      'accessStatus': accessStatus,
+      'reviews': reviews.toMap(),
+      'favorites': favorites.toList(),
+      'emailVerified': emailVerified,
+      'phoneVerified': phoneVerified,
+      'deliveryAddress': deliveryAddress,
+      "outstandingBalance" : outstandingBalance,
+      "availableBalance" : availableBalance,
+      "netFees": netFees
+    };
   }
 
   UserModel.copyWith(UserModel user):
@@ -191,7 +197,8 @@ class UserModel{
         emailVerified = user.emailVerified,
         deliveryAddress = user.deliveryAddress,
         outstandingBalance = user.outstandingBalance,
-        availableBalance = user.availableBalance;
+        availableBalance = user.availableBalance,
+        netFees = user.netFees;
 
   String get name{
     return "$firstName $lastName";

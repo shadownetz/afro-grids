@@ -4,6 +4,7 @@ import 'package:afro_grids/screens/user/account/edit_profile_screen.dart';
 import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:afro_grids/utilities/colours.dart';
 import 'package:afro_grids/utilities/currency.dart';
+import 'package:afro_grids/utilities/func_utils.dart';
 import 'package:afro_grids/utilities/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -59,7 +60,7 @@ class UserProfileScreen extends StatelessWidget {
             user.accessLevel == AccessLevel.provider?
             ListTile(
               title: Text(
-                "${CurrencyUtil().currencySymbol(user.currency)}${user.availableBalance}",
+                "${CurrencyUtil().currencySymbol(user.currency)}${user.availableBalance.toStringAsPrecision(2)}",
                 style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
               ),
               subtitle: const Text("Available balance", style: TextStyle(fontSize: 15, color: Colors.grey),),
@@ -80,6 +81,15 @@ class UserProfileScreen extends StatelessWidget {
               ): null,
             ):
             const SizedBox(),
+            user.accessLevel == AccessLevel.provider?
+            ListTile(
+              title: Text(
+                "${CurrencyUtil().currencySymbol(user.currency)}${user.outstandingBalance.toStringAsPrecision(2)}",
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+              ),
+              subtitle: const Text("Outstanding balance", style: TextStyle(fontSize: 15, color: Colors.grey),),
+            ):
+            const SizedBox(),
             // phone
             ListTile(
               title: Text(user.phone, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
@@ -89,6 +99,12 @@ class UserProfileScreen extends StatelessWidget {
             ListTile(
               title: Text(user.email, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
               subtitle: const Text("Email", style: TextStyle(fontSize: 15, color: Colors.grey),),
+            ),
+            ListTile(
+              title: const Text("Contact support", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+              onTap: (){
+                FuncUtils.openWhatsappURL(phoneNumber: "+2349065172898", message: "Hello my name is ");
+              },
             ),
           ],
         ),

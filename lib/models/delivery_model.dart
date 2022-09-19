@@ -12,6 +12,7 @@ class DeliveryModel{
   late String contactPhone;
   late String contactAddress;
   late String status;
+  late num amount;
 
   DeliveryModel({
     required this.id,
@@ -24,7 +25,8 @@ class DeliveryModel{
     required this.contactName,
     required this.contactAddress,
     required this.contactPhone,
-    required this.status
+    required this.status,
+    this.amount = 0
   });
 
   DeliveryModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> delivery):
@@ -38,7 +40,8 @@ class DeliveryModel{
         contactName = delivery.data()!['contactName'],
         contactAddress = delivery.data()!['contactAddress'],
         contactPhone = delivery.data()!['contactPhone'],
-        status = delivery.data()!['status'];
+        status = delivery.data()!['status'],
+        amount = delivery.data()!['amount']??0;
 
   Map<String, dynamic> toMap(){
     return {
@@ -51,7 +54,8 @@ class DeliveryModel{
       'contactName': contactName,
       'contactAddress': contactAddress,
       'contactPhone': contactPhone,
-      'status': status
+      'status': status,
+      'amount': amount
     };
   }
 }
