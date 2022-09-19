@@ -10,6 +10,8 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState>{
     on<FetchProviderDeliveriesEvent>(_onFetchProviderDeliveriesEvent);
     on<FetchNextProviderDeliveriesEvent>(_onFetchNextProviderDeliveriesEvent);
     on<UpdateDeliveryEvent>(_onUpdateDeliveryEvent);
+    on<GetOrderDeliveryEvent>(_onGetOrderDeliveryEvent);
+    on<CancelDeliveryEvent>(_onCancelDeliveryEvent);
   }
 
   void _onFetchProviderDeliveriesEvent(FetchProviderDeliveriesEvent event, Emitter<DeliveryState> emit)async{
@@ -43,6 +45,31 @@ class DeliveryBloc extends Bloc<DeliveryEvent, DeliveryState>{
     emit(DeliveryLoadingState());
     try{
       await DeliveryRepo(deliveryModel: event.delivery).updateDelivery();
+      emit(DeliveryUpdatedState());
+    }catch(e){
+      emit(DeliveryErrorState(e.toString()));
+    }
+  }
+  
+  void _onGetOrderDeliveryEvent(GetOrderDeliveryEvent event, Emitter<DeliveryState> emit) async {
+    emit(DeliveryLoadingState());
+    try{
+      var delivery = await DeliveryRepo()
+          .getOrderDelivery(
+          inventoryId: event.inventory.id,
+          orderId: event.order.id,
+          userId: event.user.id
+      );
+      emit(DeliveryLoadedState(delivery: delivery));
+    }catch(e){
+      emit(DeliveryErrorState(e.toString()));
+    }
+  }
+
+  void _onCancelDeliveryEvent(CancelDeliveryEvent event, Emitter<DeliveryState> emit) async {
+    emit(DeliveryLoadingState());
+    try{
+      await DeliveryRepo(deliveryModel: event.delivery).cancelDelivery();
       emit(DeliveryUpdatedState());
     }catch(e){
       emit(DeliveryErrorState(e.toString()));

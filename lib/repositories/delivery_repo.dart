@@ -1,5 +1,6 @@
 import 'package:afro_grids/configs/firestore_references.dart';
 import 'package:afro_grids/models/delivery_model.dart';
+import 'package:afro_grids/utilities/class_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/local/local_delivery_model.dart';
@@ -41,5 +42,23 @@ class DeliveryRepo{
 
   Future<void> updateDelivery() async {
     await _deliveryRef.doc(deliveryModel!.id).update(deliveryModel!.toMap());
+  }
+
+  Future<DeliveryModel?> getOrderDelivery({required String inventoryId, required String orderId, required String userId})async{
+    var queries = await _deliveryRef
+        .where("inventoryId", isEqualTo: inventoryId)
+        .where("orderId", isEqualTo: orderId)
+        .where("contactId", isEqualTo: userId)
+        .limit(1)
+        .get();
+    if(queries.docs.isNotEmpty){
+      return DeliveryModel.fromFirestore(queries.docs.first as DocumentSnapshot<Map<String, dynamic>>);
+    }
+    return null;
+  }
+
+  Future<void> cancelDelivery() async {
+    deliveryModel!.status = DeliveryStatus.cancelled;
+    await updateDelivery();
   }
 }

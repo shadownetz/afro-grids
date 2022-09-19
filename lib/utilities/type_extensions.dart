@@ -34,9 +34,9 @@ extension CurrencyFormatter on String{
     if(str == 'pending'){
       return Colours.secondary;
     }
-    else if(str == 'approved'){
-      return Colours.primary;
+    else if(str == 'declined' || str == 'cancelled'){
+      return Colors.red;
     }
-    return Colors.red;
+    return Colours.primary;
   }
 }

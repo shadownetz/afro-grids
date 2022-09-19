@@ -4,6 +4,7 @@ class DeliveryModel{
   late String id;
   late String providerId;
   late String inventoryId;
+  late String orderId;
   late DateTime createdAt;
   late int deliveryCount;
   late String contactId;
@@ -16,6 +17,7 @@ class DeliveryModel{
     required this.id,
     required this.providerId,
     required this.inventoryId,
+    required this.orderId,
     required this.createdAt,
     required this.deliveryCount,
     required this.contactId,
@@ -29,6 +31,7 @@ class DeliveryModel{
         id = delivery.id,
         providerId = delivery.data()!['providerId'],
         inventoryId = delivery.data()!['inventoryId'],
+        orderId = delivery.data()!['orderId']??"",
         createdAt = delivery.data()!['createdAt'].toDate(),
         deliveryCount = delivery.data()!['deliveryCount'],
         contactId = delivery.data()!['contactId'],
@@ -41,6 +44,7 @@ class DeliveryModel{
     return {
       'providerId': providerId,
       'inventoryId': inventoryId,
+      'orderId': orderId,
       'createdAt': Timestamp.fromDate(createdAt),
       'deliveryCount': deliveryCount,
       'contactId': contactId,

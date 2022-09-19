@@ -59,4 +59,8 @@ class OrderRepo{
     }
     return localOrders;
   }
+
+  Future<void> updateOrder() async {
+    await _orderRef.doc(order!.id).update(order!.toMap());
+  }
 }
