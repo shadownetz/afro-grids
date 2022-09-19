@@ -43,18 +43,18 @@ class FuncUtils{
       tmpUrl.insert(0, "http://");
     }
     url = tmpUrl.join("");
-    await openUrl(url);
+    await openUrl(Uri.parse(url));
   }
   static void openWhatsappURL({required String phoneNumber, required String message})async{
     String whatsappURL = "whatsapp://send?phone=$phoneNumber&text=$message";
     if (Platform.isIOS) {
       whatsappURL = "https://wa.me/$phoneNumber?text=${Uri.parse(message)}";
     }
-    await openUrl(whatsappURL);
+    await openUrl(Uri.parse(whatsappURL));
   }
-  static Future<void> openUrl(String url)async{
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url, mode: LaunchMode.externalApplication);
+  static Future<void> openUrl(Uri url)async{
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     }
   }
 

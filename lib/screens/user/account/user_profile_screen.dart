@@ -103,7 +103,7 @@ class UserProfileScreen extends StatelessWidget {
             ListTile(
               title: const Text("Contact support", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
               onTap: (){
-                FuncUtils.openWhatsappURL(phoneNumber: "+2349065172898", message: "Hello my name is ");
+                FuncUtils.openWhatsappURL(phoneNumber: "2349065172898", message: "Hello my name is ");
               },
             ),
           ],
