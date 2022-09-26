@@ -76,6 +76,7 @@ android {
         }
         release {
             signingConfig signingConfigs.release
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
         }
     }
 }

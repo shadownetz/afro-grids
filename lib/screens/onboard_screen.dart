@@ -23,13 +23,12 @@ class OnboardScreen extends StatefulWidget {
 class _OnboardScreenState extends State<OnboardScreen> {
   var currentScreenIndex = 0;
   CarouselController carouselController = CarouselController();
+  bool? _appInit;
 
   void runAppInit() async {
     final pref = SharedPreferencesService();
-    bool? appInit = await pref.getAppInit();
-    if(appInit == true){
-      NavigationService.pushNamedAndRemoveAll("/signin");
-    }else{
+    _appInit = await pref.getAppInit();
+    if(_appInit != true){
       pref.setAppInit(true);
     }
   }
@@ -63,6 +62,11 @@ class _OnboardScreenState extends State<OnboardScreen> {
                   }
                   if(state is MembershipSubscriptionState){
                     NavigationService.pushPageReplacement(ProviderMembershipInfoScreen(user: state.user,));
+                  }
+                  if(state is UnAuthenticatedState){
+                    if(_appInit == true){
+                      NavigationService.pushNamedAndRemoveAll("/signin");
+                    }
                   }
                 },
                 builder: (context, state){
