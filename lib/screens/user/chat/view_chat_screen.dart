@@ -110,9 +110,11 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
         .toList();
     chats2 = chats2.where((chat) => chats.indexWhere((chat2)=>chat2.id==chat.id) < 0).toList();
     chats.addAll(chats2.reversed);
-    ChatRepo(
-        chat: ChatModel.fromFirestore(newChats.docs.first as DocumentSnapshot<Map<String, dynamic>>)
-    ).saveLastReadMessage(localStorage.user!.id, widget.user.id);
+    if(newChats.docs.isNotEmpty){
+      ChatRepo(
+          chat: ChatModel.fromFirestore(newChats.docs.first as DocumentSnapshot<Map<String, dynamic>>)
+      ).saveLastReadMessage(localStorage.user!.id, widget.user.id);
+    }
     if(!chatInitialized){ // only set cursor once because subsequent update will reflect in app
       if(newChats.docs.isNotEmpty){
         currentCursor = newChats.docs.last;
@@ -205,6 +207,7 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                   ):
                   const SizedBox(),
                   // message timestamp indicator
+                  chats.isNotEmpty?
                   Align(
                     alignment: Alignment.topCenter,
                     child: Card(
@@ -221,7 +224,8 @@ class _ViewChatScreenState extends State<ViewChatScreen> {
                         child: Text(timeago.format(timeAgoStamp)),
                       ),
                     ),
-                  ),
+                  ):
+                  const SizedBox(),
                   // messages section
                   SafeArea(
                       child: Container(
