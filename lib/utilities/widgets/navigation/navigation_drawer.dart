@@ -79,12 +79,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                           onTap: ()=>Navigator.of(context).push(createRoute(UserProfileScreen(user: localStorage.user!,))),
                         ),
                         const Divider(),
+                        localStorage.user!.accessLevel == AccessLevel.provider?
                         ListTile(
                           leading: const Icon(Ionicons.bag_handle, color: Colours.primary),
                           title: const Text("Inventory", style: TextStyle(fontSize: 20),),
                           onTap: ()=>Navigator.of(context).push(createRoute(const InventoryScreen())),
-                        ),
-                        const Divider(),
+                        ): const SizedBox(),
+                        localStorage.user!.accessLevel == AccessLevel.provider? const Divider(): const SizedBox(),
                         ListTile(
                           leading: const Icon(Ionicons.cart, color: Colours.primary),
                           title: const Text("Cart", style: TextStyle(fontSize: 20),),

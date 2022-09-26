@@ -7,7 +7,6 @@ import 'package:afro_grids/screens/auth/provider_signup_screen.dart';
 import 'package:afro_grids/screens/auth/signin_screen.dart';
 import 'package:afro_grids/screens/auth/user_signup_screen.dart';
 import 'package:afro_grids/screens/onboard_screen.dart';
-import 'package:afro_grids/screens/user/chat/chats_screen.dart';
 import 'package:afro_grids/screens/user/user_dashboard_screen.dart';
 import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/colours.dart';
@@ -38,7 +37,6 @@ void main() {
     await FirebaseAppCheck.instance.activate(
       webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     );
-
     FlutterError.onError =
         FirebaseCrashlytics.instance.recordFlutterFatalError;
     if(kDebugMode){
@@ -58,6 +56,7 @@ class MyApp extends StatelessWidget {
     const Duration(seconds: 2),
         () => 'Data Loaded',
   );
+
 
   @override
   Widget build(BuildContext context) {

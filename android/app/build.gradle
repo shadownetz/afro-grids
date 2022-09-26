@@ -71,9 +71,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
+        }
         release {
             signingConfig signingConfigs.release
-            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
         }
     }
 }

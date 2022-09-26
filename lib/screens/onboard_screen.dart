@@ -1,5 +1,4 @@
 import 'package:afro_grids/blocs/auth/auth_bloc.dart';
-import 'package:afro_grids/blocs/auth/auth_event.dart';
 import 'package:afro_grids/blocs/auth/auth_state.dart';
 import 'package:afro_grids/screens/welcome_screen.dart';
 import 'package:afro_grids/utilities/widgets/button_widget.dart';
@@ -10,6 +9,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../utilities/colours.dart';
 import '../utilities/services/navigation_service.dart';
+import '../utilities/services/shared_preferences_service.dart';
 import '../utilities/widgets/widgets.dart';
 import 'auth/provider_membership_info_screen.dart';
 
@@ -23,6 +23,22 @@ class OnboardScreen extends StatefulWidget {
 class _OnboardScreenState extends State<OnboardScreen> {
   var currentScreenIndex = 0;
   CarouselController carouselController = CarouselController();
+
+  void runAppInit() async {
+    final pref = SharedPreferencesService();
+    bool? appInit = await pref.getAppInit();
+    if(appInit == true){
+      NavigationService.pushNamedAndRemoveAll("/signin");
+    }else{
+      pref.setAppInit(true);
+    }
+  }
+
+  @override
+  void initState() {
+    runAppInit();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
