@@ -134,7 +134,6 @@ class UserRepo{
         center: userPos,
         reference: _userRef,
         fieldName: "location",
-        radius: 100000  // TODO: remove this line
     );
     return users
         .map((user) =>

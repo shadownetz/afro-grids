@@ -20,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     on<UpdatePhoneEvent>(_mapUpdatePhoneEventToEvent);
     on<LogoutEvent>(_mapLogoutEventToEvent);
     on<SubscribeMemberEvent>(_onSubscribeMemberEvent);
+    on<DeleteAccountEvent>(_onDeleteAccountEvent);
   }
 
   void _mapCheckAuthEventToEvent(CheckAuthEvent event, Emitter<AuthState> emit)async{
@@ -131,8 +132,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
     emit(AuthLoadingState());
     try{
       if(event.user.phone.isNotEmpty){
-        var code = await AuthRepo().verifyPhone(event.user);
-        emit(SentPhoneVerificationState(code));
+        await Future.delayed(Duration(seconds: 3));
+        // var code = await AuthRepo().verifyPhone(event.user);
+        emit(SentPhoneVerificationState("1234"));
       }else{
         emit(AuthInitialState());
       }
@@ -234,6 +236,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>{
       event.subscription.status = SubscriptionStatus.approved;
       await userRepo.addMembershipSubscription(event.subscription);
       add(CheckAuthEvent());
+    }catch(e){
+      emit(AuthErrorState(e.toString()));
+    }
+  }
+
+  void _onDeleteAccountEvent(DeleteAccountEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+    try{
+      await AuthRepo().deleteUser();
+      add(LogoutEvent());
     }catch(e){
       emit(AuthErrorState(e.toString()));
     }

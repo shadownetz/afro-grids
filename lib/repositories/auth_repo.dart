@@ -66,4 +66,19 @@ class AuthRepo{
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
   }
+
+  Future<void> deleteUser() async {
+    final user = getAuthUser();
+    if(user != null){
+      try{
+        await user.delete();
+      }on FirebaseAuthException catch (e) {
+        if (e.code == 'requires-recent-login') {
+          return Future.error("You need to have been recently signed in to perform this operation. Kindly re-login into your account");
+        }
+      }
+    }else{
+      return Future.error("We are unable to delete your account at this time");
+    }
+  }
 }

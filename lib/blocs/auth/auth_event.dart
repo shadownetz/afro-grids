@@ -63,3 +63,8 @@ class SubscribeMemberEvent extends AuthEvent{
   final UserSubscriptionModel subscription;
   SubscribeMemberEvent({required this.user, required this.subscription});
 }
+
+class DeleteAccountEvent extends AuthEvent{
+  final UserModel user;
+  DeleteAccountEvent({required this.user});
+}
