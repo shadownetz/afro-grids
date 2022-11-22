@@ -48,12 +48,12 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 		<key>NSLocationWhenInUseUsageDescription</key>
-        <string>AfroGrids needs access to your location to function properly.</string>
-        <key>NSLocationAlwaysUsageDescription</key>
-        <string>AfroGrids needs access to your location when running in the background.</string>
-	    <key>NSPhotoLibraryUsageDescription</key>
-	    <string>To upload profile and item images afroGrids needs access to your photo library to function properly</string>
-	    <key>NSCameraUsageDescription</key>
-        <string>To upload profile and item images afroGrids needs access to your camera to function properly</string>
+		<string>AfroGrids needs access to your location to function properly.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>AfroGrids needs access to your location when running in the background.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>To upload profile and item images afroGrids needs access to your photo library to function properly</string>
+		<key>NSCameraUsageDescription</key>
+		<string>To upload profile and item images afroGrids needs access to your camera to function properly</string>
 	</dict>
 </plist>
