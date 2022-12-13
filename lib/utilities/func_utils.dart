@@ -2,7 +2,6 @@ import 'dart:io';
 import "dart:math" as math;
 
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class FuncUtils{
   static bool validateEmail(String email){

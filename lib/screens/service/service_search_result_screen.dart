@@ -3,7 +3,6 @@ import 'package:afro_grids/blocs/service/service_event.dart';
 import 'package:afro_grids/blocs/service/service_state.dart';
 import 'package:afro_grids/models/service_model.dart';
 import 'package:afro_grids/models/user/user_model.dart';
-import 'package:afro_grids/screens/provider/provider_info_single_service_screen.dart';
 import 'package:afro_grids/utilities/navigation_guards.dart';
 import 'package:afro_grids/utilities/services/gmap_service.dart';
 import 'package:flutter/material.dart';
@@ -58,11 +57,11 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceMargin = deviceHeight/3;
     bool dragIsMidScreen = _verticalH > (deviceHeight/2);
-    double _height = _verticalH==0?deviceMargin:_verticalH;
-    AppBar? _appBar ;
+    double height = _verticalH==0?deviceMargin:_verticalH;
+    AppBar? appBar ;
 
     if(dragIsMidScreen){
-      _appBar = AppBar(
+      appBar = AppBar(
         title: const Text("Select a provider"),
         leading: IconButton(
           icon: Icon(Ionicons.arrow_back),
@@ -76,7 +75,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
     }
 
     return Scaffold(
-        appBar: _appBar,
+        appBar: appBar,
         body: CustomLoadingOverlay(
           widget: BlocProvider<ServiceBloc>(
             create: (BuildContext context)=>ServiceBloc()..add(FetchServiceProvidersEvent(widget.serviceModel)),
@@ -118,7 +117,7 @@ class _ServiceSearchResultScreenState extends State<ServiceSearchResultScreen> {
                     ),
                     // provider list container
                     providerList(
-                        height: _height,
+                        height: height,
                         deviceHeight: deviceHeight,
                         deviceMargin: deviceMargin,
                         deviceWidth: deviceWidth,

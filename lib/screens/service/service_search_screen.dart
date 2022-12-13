@@ -121,8 +121,8 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                                       child: Container(
                                         width: 330,
                                         height: 400,
-                                        margin: EdgeInsets.only(top: 10),
-                                        decoration: BoxDecoration(
+                                        margin: const EdgeInsets.only(top: 10),
+                                        decoration: const BoxDecoration(
                                             boxShadow: [
                                               BoxShadow(color: Colors.black26,blurRadius: 5)
                                             ]
@@ -137,7 +137,7 @@ class _ServiceSearchScreenState extends State<ServiceSearchScreen> {
                                                 shrinkWrap: true,
                                                 itemCount: options.length,
                                                 separatorBuilder: (context, i) {
-                                                  return Divider();
+                                                  return const Divider();
                                                 },
                                                 itemBuilder: (BuildContext context, int index) {
                                                   final ServiceModel option = options.elementAt(index);
